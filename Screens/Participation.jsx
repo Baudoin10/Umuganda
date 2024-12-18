@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f9f9f9",
-    padding: 20,
+    padding: 25,
   },
   headerText: {
     fontSize: 24,
@@ -113,11 +113,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    
+   
+  
   },
   overviewCard: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 15,
+    padding: 10,
     marginHorizontal: 5,
     borderRadius: 10,
     alignItems: "center",
@@ -126,6 +129,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
+  
   },
   overviewTitle: {
     fontSize: 14,

@@ -39,13 +39,19 @@ const Login = () => {
           <TextInput
             style={styles.input}
             placeholder="Password"
+            required
             secureTextEntry
             value={password}
             onChangeText={setPassword}
           />
         </View>
 
-        <TouchableOpacity style={styles.submitButton}>
+    
+
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => navigation.navigate("Home")}
+        >
           <Text style={styles.submitText}>Login</Text>
         </TouchableOpacity>
 
@@ -55,7 +61,7 @@ const Login = () => {
 
         <TouchableOpacity style={styles.toggleButton}>
           <Text style={styles.toggleText}>
-            Don't have an account? 
+            Don't have an account?
             <Text
               style={styles.sign}
               onPress={() => navigation.navigate("Signup")}

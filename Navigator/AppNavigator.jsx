@@ -11,6 +11,10 @@ import Task from "../Screens/Task";
 import Participation from "../Screens/Participation";
 import Attendance from "../Screens/Attendance";
 import HistoryEvent from "../Screens/HistoryEvent";
+import Dashboard from "../Dashboard/Dashboard";
+import Feedback from "../Dashboard/Feedback";
+import Notification from "../Dashboard/Notification";
+import Profile from "../Dashboard/Profile";
 
 const Stack = createStackNavigator();
 
@@ -27,11 +31,15 @@ const AppNavigator = () => {
             headerShown: false, // Hides the header when navigating to Home
           }}
         />
-       
+
         <Stack.Screen name="Task" component={Task} />
         <Stack.Screen name="Participation" component={Participation} />
         <Stack.Screen name="Attendance" component={Attendance} />
         <Stack.Screen name="History" component={HistoryEvent} />
+        <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="Feedbac" component={Feedback} />
+        <Stack.Screen name="Notification" component={Notification} />
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

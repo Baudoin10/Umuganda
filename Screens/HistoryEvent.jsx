@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Event = () => {
+const HistoryEvent = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const Event = () => {
   )
 }
 
-export default Event
+export default HistoryEvent

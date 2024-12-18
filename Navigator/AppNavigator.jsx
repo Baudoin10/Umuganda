@@ -1,15 +1,13 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Homescreen from "../Screens/Homescreen";
-import Beanscreen from "../Screens/Beanscreen";
-import Cartscreen from "../Screens/Cartscreen";
-import Paymentscreen from "../Screens/Payementscreen";
-import Orderscreen from "../Screens/Orderscreen";
-import Cofescreen from "../Screens/Cofescreen";
-import Espressoscreen from "../Screens/Espressoscreen";
-import SecondCart from "../Screens/SecondCart";
-import Store from "../Store/Store";
+import Home from "../Screens/Home";
+import Login from "../Screens/Login";
+import Signup from "../Screens/Signup";
+import Task from "../Screens/Task";
+import Participation from "../Screens/Participation";
+import Attendance from "../Screens/Attendance";
+import HistoryEvent from "../Screens/HistoryEvent";
 
 const Stack = createStackNavigator();
 
@@ -17,16 +15,14 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Homescreen} />
-        <Stack.Screen name="Robusta Beans" component={Beanscreen} />
-        <Stack.Screen name="Cofe" component={Cofescreen} />
-        <Stack.Screen name="Cart" component={Cartscreen} />
-        <Stack.Screen name="Payment" component={Paymentscreen} />
-        <Stack.Screen name="OrderHistory" component={Orderscreen} />
-        <Stack.Screen name="Cappuccino" component={Espressoscreen} />
-        <Stack.Screen name="Second" component={SecondCart} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Task" component={Task} />
+        <Stack.Screen name="Participation" component={Participation} />
+        <Stack.Screen name="Attendance" component={Attendance} />
+        <Stack.Screen name="History" component={HistoryEvent} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup} />
       </Stack.Navigator>
-      <Stack.Screen name="Store" component={Store} />
     </NavigationContainer>
   );
 };

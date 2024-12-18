@@ -6,11 +6,15 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 
 const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -53,7 +57,15 @@ const Signup = () => {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.toggleButton}>
-          <Text style={styles.toggleText}>Already have an account? Login</Text>
+          <Text style={styles.toggleText}>
+            Already have an account?{" "}
+            <Text
+              style={styles.log}
+              onPress={() => navigation.navigate("Login")}
+            >
+              Login
+            </Text>
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

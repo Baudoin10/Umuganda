@@ -7,9 +7,13 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigation = useNavigation()
 
   return (
     <View style={styles.container}>
@@ -50,7 +54,15 @@ const Login = () => {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.toggleButton}>
-          <Text style={styles.toggleText}>Don't have an account? Signup</Text>
+          <Text style={styles.toggleText}>
+            Don't have an account? 
+            <Text
+              style={styles.sign}
+              onPress={() => navigation.navigate("Signup")}
+            >
+              Signup
+            </Text>
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

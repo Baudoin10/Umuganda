@@ -14,6 +14,9 @@ const Login = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <Text style={styles.headerText}>Welcome to umuganda</Text>
+      </View>
+      <View style={styles.header}>
         <Text style={styles.headerText}>Login</Text>
       </View>
 

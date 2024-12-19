@@ -1,7 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
+
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       {/* Profile Header */}
@@ -52,9 +56,13 @@ const Profile = () => {
 
       {/* Buttons */}
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("EditProfile")}
+        >
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Change Password</Text>
         </TouchableOpacity>

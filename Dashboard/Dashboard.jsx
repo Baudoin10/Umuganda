@@ -21,7 +21,7 @@ const Dashboard = ({ navigation }) => {
     {
       id: "2",
       title: "Notifications",
-      screen: "Notifications",
+      screen: "Notification",
       icon: "notifications",
     },
     { id: "3", title: "Feedback", screen: "Feedback", icon: "feedback" },

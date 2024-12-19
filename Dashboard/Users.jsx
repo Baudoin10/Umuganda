@@ -13,6 +13,9 @@ import {
 } from "react-native";
 
 const Users = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   const [users, setUsers] = useState([
     {
       id: "1",
@@ -31,6 +34,25 @@ const Users = () => {
       email: "mikebrown@example.com",
       phone: "0788987654",
       address: "Kacyiru, Rwanda",
+    },
+    // Adding more sample data to demonstrate pagination
+    {
+      id: "4",
+      email: "sarah@example.com",
+      phone: "0788111222",
+      address: "Remera, Rwanda",
+    },
+    {
+      id: "5",
+      email: "peter@example.com",
+      phone: "0788333444",
+      address: "Kimihurura, Rwanda",
+    },
+    {
+      id: "6",
+      email: "mary@example.com",
+      phone: "0788555666",
+      address: "Gisozi, Rwanda",
     },
   ]);
 
@@ -70,15 +92,54 @@ const Users = () => {
     </View>
   );
 
+  // Pagination logic
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedUsers = users.slice(startIndex, startIndex + itemsPerPage);
+
+  const renderPagination = () => (
+    <View style={styles.paginationContainer}>
+      <TouchableOpacity
+        style={[
+          styles.paginationButton,
+          currentPage === 1 && styles.paginationButtonDisabled,
+        ]}
+        onPress={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+        disabled={currentPage === 1}
+      >
+        <Text style={styles.paginationButtonText}>Previous</Text>
+      </TouchableOpacity>
+
+      <View style={styles.paginationInfo}>
+        <Text style={styles.paginationText}>
+          Page {currentPage} of {totalPages}
+        </Text>
+      </View>
+
+      <TouchableOpacity
+        style={[
+          styles.paginationButton,
+          currentPage === totalPages && styles.paginationButtonDisabled,
+        ]}
+        onPress={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+        disabled={currentPage === totalPages}
+      >
+        <Text style={styles.paginationButtonText}>Next</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Users</Text>
       <FlatList
-        data={users}
+        data={paginatedUsers}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={renderHeader}
         renderItem={renderItem}
         stickyHeaderIndices={[0]}
+        ListFooterComponent={renderPagination}
+        ListFooterComponentStyle={styles.paginationWrapper}
       />
     </View>
   );
@@ -126,6 +187,37 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 12,
     fontWeight: "bold",
+  },
+  paginationWrapper: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  paginationContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  paginationButton: {
+    backgroundColor: "#007AFF",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+  },
+  paginationButtonDisabled: {
+    backgroundColor: "#CCCCCC",
+  },
+  paginationButtonText: {
+    color: "#FFF",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  paginationInfo: {
+    marginHorizontal: 20,
+  },
+  paginationText: {
+    fontSize: 14,
+    color: "#666",
   },
 });
 

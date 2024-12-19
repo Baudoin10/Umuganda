@@ -10,10 +10,10 @@ import Participation from "../Screens/Participation";
 import Attendance from "../Screens/Attendance";
 import HistoryEvent from "../Screens/HistoryEvent";
 import Dashboard from "../Dashboard/Dashboard";
-import Feedback from "../Dashboard/Feedback";
 import Notification from "../Dashboard/Notification";
 import Profile from "../Dashboard/Profile";
 import EditProfile from "../Dashboard/EditProfile";
+import Users from "../Dashboard/Users";
 
 const Stack = createStackNavigator();
 
@@ -36,10 +36,10 @@ const AppNavigator = () => {
         <Stack.Screen name="Attendance" component={Attendance} />
         <Stack.Screen name="History" component={HistoryEvent} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
-        <Stack.Screen name="Feedbac" component={Feedback} />
         <Stack.Screen name="Notification" component={Notification} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Users" component={Users} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -24,7 +24,7 @@ const Dashboard = ({ navigation }) => {
       screen: "Notification",
       icon: "notifications",
     },
-    { id: "3", title: "Feedback", screen: "Feedback", icon: "feedback" },
+    { id: "3", title: "Users", screen: "Users", icon: "feedback" },
     {
       id: "4",
       title: "Profile/Settings",

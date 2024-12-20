@@ -1,5 +1,4 @@
 
-
 import React, { useState } from "react";
 import {
   View,
@@ -17,34 +16,45 @@ const Dashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   const menuItems = [
-    { id: "1", title: "Reports", screen: "Reports", icon: "bar-chart" },
+    {
+      id: "1",
+      title: "Events",
+      screen: "Events",
+      icon: "event",
+    },
     {
       id: "2",
+      title: "Tasks",
+      screen: "Tasks",
+      icon: "assignment",
+    },
+    {
+      id: "3",
       title: "Notifications",
       screen: "Notification",
       icon: "notifications",
     },
-    { id: "3", title: "Users", screen: "Users", icon: "feedback" },
     {
       id: "4",
+      title: "Users",
+      screen: "Users",
+      icon: "group",
+    },
+    {
+      id: "5",
       title: "Profile/Settings",
       screen: "Profile",
       icon: "settings",
     },
-    { id: "5", title: "Logout", screen: "Login", icon: "logout" },
+    { id: "6", title: "Logout", screen: "Login", icon: "logout" },
   ];
 
   const dashboardCards = [
     { id: "1", title: "Users", count: "120", icon: "people", color: "#4CAF50" },
-    { id: "2", title: "Events", count: "120", icon: "event", color: "#2196F3" },
-    {
-      id: "3",
-      title: "History",
-      count: "100",
-      icon: "history",
-      color: "#FF9800",
-    },
+    { id: "2", title: "Events", count: "110", icon: "event", color: "#2196F3" },
+    { id: "3", title: "Tasks", count: "100", icon: "task", color: "#FF9800" },
   ];
+
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);

@@ -77,7 +77,7 @@ const Dashboard = ({ navigation }) => {
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Icon name="menu" size={28} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.topBarTitle}>Dashboard</Text>
+        <Text style={styles.topBarTitle}>Admin</Text>
         <TouchableOpacity style={styles.profileButton}>
           <Icon name="account-circle" size={28} color="#333" />
         </TouchableOpacity>
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  
   },
   menuButton: {
     padding: 8,
@@ -214,6 +215,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#EEE",
+    marginTop: 60
   },
   menuTitle: {
     fontSize: 20,

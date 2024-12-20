@@ -84,12 +84,12 @@ const Attendance = ({ navigation }) => {
       />
 
       {/* Back to Home Button */}
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Text style={styles.backButtonText}>Back to Home</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Text style={styles.backButtonText}>Back to Home</Text>
+            </TouchableOpacity>
     </View>
   );
 };
@@ -166,12 +166,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   backButton: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: "#007BFF",
-    borderRadius: 10,
-    alignSelf: "center",
-    width: "60%",
+    margin: 20,
+    paddingVertical: 16,
+    backgroundColor: "#2196F3",
+    borderRadius: 12,
+    shadowColor: "#2196F3",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    }
   },
   backButtonText: {
     color: "#fff",

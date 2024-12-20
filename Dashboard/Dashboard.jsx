@@ -31,7 +31,7 @@ const Dashboard = ({ navigation }) => {
       screen: "Profile",
       icon: "settings",
     },
-    { id: "5", title: "Logout", screen: "Logout", icon: "logout" },
+    { id: "5", title: "Logout", screen: "Login", icon: "logout" },
   ];
 
   const dashboardCards = [

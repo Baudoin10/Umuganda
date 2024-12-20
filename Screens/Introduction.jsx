@@ -15,7 +15,7 @@ function Introduction() {
   const navigation = useNavigation();
 
   const handleNext = () => {
-    navigation.navigate("Login");
+    navigation.navigate("Home");
   };
 
   return (

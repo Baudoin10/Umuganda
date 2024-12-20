@@ -19,13 +19,13 @@ const Dashboard = ({ navigation }) => {
     {
       id: "1",
       title: "Events",
-      screen: "Events",
+      screen: "Event",
       icon: "event",
     },
     {
       id: "2",
       title: "Tasks",
-      screen: "Tasks",
+      screen: "ListTask",
       icon: "assignment",
     },
     {

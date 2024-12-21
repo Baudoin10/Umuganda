@@ -62,7 +62,7 @@ const Login = () => {
 
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={() => navigation.navigate("Dashboard")}
+              onPress={() => navigation.navigate("Home")}
             >
               <Text style={styles.submitText}>Sign In</Text>
             </TouchableOpacity>

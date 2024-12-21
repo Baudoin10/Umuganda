@@ -1,4 +1,5 @@
 
+
 import React, { useState } from "react";
 import {
   View,
@@ -9,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -16,6 +18,16 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  const handleLogin = () => {
+    if (email === "yvon@gmail.com" && password === "12345") {
+      // Navigate to Admin Dashboard
+      navigation.navigate("Dashboard");
+    } else {
+      // Navigate to Home
+      navigation.navigate("Home");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,14 +68,7 @@ const Login = () => {
               />
             </View>
 
-            <TouchableOpacity style={styles.forgotButton} onPress={() => {}}>
-              <Text style={styles.forgotText}>Forgot Password?</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={() => navigation.navigate("Home")}
-            >
+            <TouchableOpacity style={styles.submitButton} onPress={handleLogin}>
               <Text style={styles.submitText}>Sign In</Text>
             </TouchableOpacity>
 
@@ -127,15 +132,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontSize: 16,
     color: "#333",
-  },
-  forgotButton: {
-    alignSelf: "flex-end",
-    marginBottom: 24,
-  },
-  forgotText: {
-    color: "#666",
-    fontSize: 14,
-    fontWeight: "600",
   },
   submitButton: {
     backgroundColor: "#4CAF50",

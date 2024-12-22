@@ -18,28 +18,20 @@ const Chart = () => {
 
   return (
     <View style={{ padding: 10 }}>
-      <Text
-        style={{
-          fontSize: 18,
-          fontWeight: "bold",
-          textAlign: "center",
-          marginBottom: 10,
-        }}
-      >
-        Community Participation
-      </Text>
+    
 
       {/* Line Chart */}
       <LineChart
         data={data}
-        width={screenWidth - 20} // Adjust width dynamically
-        height={220} // Fixed height
-        yAxisSuffix=" ppl" // Add a suffix for numbers (e.g., 'ppl' for people)
+        width={screenWidth - 20} 
+        height={270} 
+        yAxisSuffix=" ppl" 
+        
         chartConfig={{
           backgroundColor: "#022173",
           backgroundGradientFrom: "#1E2923",
           backgroundGradientTo: "#08130D",
-          decimalPlaces: 0, // No decimals
+          decimalPlaces: 0, 
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {
@@ -47,30 +39,12 @@ const Chart = () => {
           },
         }}
         style={{
-          marginVertical: 8,
+          marginVertical: 20,
           borderRadius: 16,
+          marginTop: -20
         }}
       />
-
-      {/* Bar Chart */}
-      <BarChart
-        data={data}
-        width={screenWidth - 20}
-        height={220}
-        yAxisSuffix=" ppl"
-        chartConfig={{
-          backgroundColor: "#000",
-          backgroundGradientFrom: "#3b3b3b",
-          backgroundGradientTo: "#3b3b3b",
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        }}
-        style={{
-          marginTop: 20,
-          borderRadius: 16,
-        }}
-      />
+   
     </View>
   );
 };

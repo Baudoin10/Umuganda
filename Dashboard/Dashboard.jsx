@@ -11,6 +11,7 @@ import {
   StatusBar,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Chart from "./Chart";
 
 const Dashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -95,6 +96,8 @@ const Dashboard = ({ navigation }) => {
         />
       </View>
 
+      <Chart />
+
       {/* Side Menu Modal */}
       <Modal
         animationType="fade"
@@ -114,6 +117,8 @@ const Dashboard = ({ navigation }) => {
                 <Icon name="close" size={24} color="#333" />
               </TouchableOpacity>
             </View>
+
+           
 
             <FlatList
               data={menuItems}

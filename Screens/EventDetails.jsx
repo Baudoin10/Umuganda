@@ -408,25 +408,25 @@ const EventDetails = ({ navigation }) => {
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNavContainer}>
-          <TouchableOpacity
-                 style={styles.navButton}
-                 onPress={() => navigation.navigate("Home")}
-               >
-                 <Ionicons name="home-outline" size={24} color="#333" />
-               </TouchableOpacity>
-
-          <TouchableOpacity
-                 style={styles.navButton}
-                 onPress={() => navigation.navigate("EventDetails")}
-               >
-                 <Ionicons name="calendar-outline" size={24} color="#333" />
-               </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Ionicons name="home-outline" size={24} color="#333" />
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.navButton}
           onPress={() => navigation.navigate("Profile")}
         >
           <Ionicons name="settings-outline" size={24} color="#333" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => navigation.navigate("EventDetails")}
+        >
+          <Ionicons name="calendar-outline" size={24} color="#333" />
         </TouchableOpacity>
       </View>
     </View>

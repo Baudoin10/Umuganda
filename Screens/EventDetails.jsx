@@ -49,7 +49,7 @@ const EventDetails = ({ route }) => {
       {/* Key Info Cards */}
       <View style={styles.infoContainer}>
         <View style={styles.infoCard}>
-          <MaterialCommunityIcons name="calendar" size={24} color="#2E7D32" />
+          <MaterialCommunityIcons name="calendar" size={24} color="#2196F3" />
           <Text style={styles.infoText}>{eventDetails.date}</Text>
         </View>
         <View style={styles.infoCard}>
@@ -65,7 +65,7 @@ const EventDetails = ({ route }) => {
       {/* Location Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <MaterialCommunityIcons name="map-marker" size={24} color="#2E7D32" />
+          <MaterialCommunityIcons name="map-marker" size={24} color="#2196F3" />
           <Text style={styles.sectionTitle}>Location</Text>
         </View>
         <Text style={styles.sectionContent}>{eventDetails.location}</Text>
@@ -80,7 +80,7 @@ const EventDetails = ({ route }) => {
           <MaterialCommunityIcons
             name="information"
             size={24}
-            color="#2E7D32"
+            color="#2196F3"
           />
           <Text style={styles.sectionTitle}>Description</Text>
         </View>
@@ -93,7 +93,7 @@ const EventDetails = ({ route }) => {
           <MaterialCommunityIcons
             name="clipboard-list"
             size={24}
-            color="#2E7D32"
+            color="#2196F3"
           />
           <Text style={styles.sectionTitle}>Requirements</Text>
         </View>
@@ -102,7 +102,7 @@ const EventDetails = ({ route }) => {
             <MaterialCommunityIcons
               name="check-circle"
               size={20}
-              color="#2E7D32"
+              color="#2196F3"
             />
             <Text style={styles.requirementText}>{requirement}</Text>
           </View>
@@ -115,7 +115,7 @@ const EventDetails = ({ route }) => {
           <MaterialCommunityIcons
             name="account-group"
             size={24}
-            color="#2E7D32"
+            color="#2196F3"
           />
           <Text style={styles.sectionTitle}>Participants</Text>
         </View>
@@ -155,16 +155,13 @@ const styles = StyleSheet.create({
     height: 200,
     position: "relative",
   },
-  headerImage: {
-    width: "100%",
-    height: "100%",
-  },
+ 
   overlay: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "#2196F3",
     padding: 15,
   },
   eventTitle: {
@@ -215,14 +212,14 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   mapButton: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#2196F3",
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
     alignItems: "center",
   },
   mapButtonText: {
-    color: "#2E7D32",
+    color: "white",
     fontWeight: "bold",
   },
   requirementItem: {
@@ -248,10 +245,10 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#2E7D32",
+    backgroundColor: "#2196F3",
   },
   joinButton: {
-    backgroundColor: "#2E7D32",
+    backgroundColor: "#2196F3",
     margin: 15,
     padding: 15,
     borderRadius: 10,

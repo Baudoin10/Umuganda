@@ -66,7 +66,7 @@ const Profile = () => {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Change Password</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutButton}>
+        <TouchableOpacity style={styles.logoutButton} onPress={()=> navigation.navigate("Login")}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>

@@ -9,7 +9,6 @@ import {
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
 const ListTask = () => {
   const [tasks, setTasks] = useState([
     { id: "1", title: "Task 1", description: "Description for Task 1" },

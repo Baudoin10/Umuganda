@@ -405,7 +405,7 @@ const EventDetails = ({ navigation }) => {
         </TouchableOpacity>
       </ScrollView>
 
-      {/* Bottom Navigation */}
+    
       <View style={styles.bottomNavContainer}>
         <TouchableOpacity
           style={styles.navButton}

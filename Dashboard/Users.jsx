@@ -35,7 +35,7 @@ const Users = () => {
       phone: "0788987654",
       address: "Kacyiru, Rwanda",
     },
-    // Adding more sample data to demonstrate pagination
+   
     {
       id: "4",
       email: "sarah@example.com",

@@ -97,8 +97,7 @@ const Dashboard = ({ navigation }) => {
       </View>
 
       <Chart />
-
-      {/* Side Menu Modal */}
+      
       <Modal
         animationType="fade"
         transparent={true}

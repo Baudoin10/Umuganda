@@ -16,7 +16,7 @@ const EditProfile = ({ navigation, route }) => {
   const handleSave = () => {
     // Save the updated details
     console.log("Updated Profile:", { name, email, phone, location });
-    navigation.goBack(); // Navigate back to Profile screen
+    navigation.goBack(); 
   };
 
   return (

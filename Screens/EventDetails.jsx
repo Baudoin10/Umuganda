@@ -400,7 +400,6 @@ const EventDetails = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Join Button */}
         <TouchableOpacity style={styles.joinButton}>
           <Text style={styles.joinButtonText}>Join This Activity</Text>
         </TouchableOpacity>

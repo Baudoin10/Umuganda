@@ -16,7 +16,7 @@ import Notification from "../Dashboard/Notification";
 import Profile from "../Dashboard/Profile";
 import EditProfile from "../Dashboard/EditProfile";
 import Users from "../Dashboard/Users";
-import Introduction from "../Screens/Introduction"; // Import the Introduction component
+import Introduction from "../Screens/Introduction"; 
 import ListTask from "../Dashboard/ListTask";
 import Event from "../Dashboard/Event";
 import Chart from "../Dashboard/Chart";

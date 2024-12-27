@@ -35,7 +35,6 @@ const Users = () => {
       phone: "0788987654",
       address: "Kacyiru, Rwanda",
     },
-   
     {
       id: "4",
       email: "sarah@example.com",

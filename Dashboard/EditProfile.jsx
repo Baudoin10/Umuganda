@@ -14,7 +14,7 @@ const EditProfile = ({ navigation, route }) => {
   const [location, setLocation] = useState("Kigali, Rwanda");
 
   const handleSave = () => {
-    // Save the updated details
+
     console.log("Updated Profile:", { name, email, phone, location });
     navigation.goBack(); 
   };

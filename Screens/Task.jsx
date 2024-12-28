@@ -234,17 +234,18 @@
 // export default Task;
 
 
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Image,
   TouchableOpacity,
 } from "react-native";
-import { launchCamera } from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 
 const Task = () => {
@@ -256,29 +257,40 @@ const Task = () => {
     longitude: 0,
   });
 
-  // Handle taking a picture
-  const handleTakePicture = () => {
-    const options = {
-      mediaType: "photo",
-      cameraType: "back",
+  // Request camera and location permissions
+  useEffect(() => {
+    const requestPermissions = async () => {
+      const cameraPermission =
+        await ImagePicker.requestCameraPermissionsAsync();
+      const locationPermission =
+        await Location.requestForegroundPermissionsAsync();
+
+      if (!cameraPermission.granted) {
+        alert("Camera permission is required to take photos.");
+      }
+
+      if (!locationPermission.granted) {
+        alert("Location permission is required to get the current location.");
+      }
     };
 
-    launchCamera(options, (response) => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.errorMessage) {
-        console.log("Error: ", response.errorMessage);
-      } else {
-        const uri = response.assets[0].uri;
-        setPhoto(uri);
+    requestPermissions();
+  }, []);
 
-        // Simulate location tracking (replace with actual location tracking logic)
-        setLocation({
-          latitude: 37.78825,
-          longitude: -122.4324,
-        });
-      }
+  // Handle taking a picture
+  const handleTakePicture = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaType: ImagePicker.MediaTypeOptions.Images,
     });
+
+    if (!result.cancelled) {
+      setPhoto(result.uri);
+
+      // Get the location if the picture was successfully taken
+      if (result.location) {
+        setLocation(result.location);
+      }
+    }
   };
 
   // Handle task submission
@@ -409,4 +421,3 @@ const styles = StyleSheet.create({
 });
 
 export default Task;
-

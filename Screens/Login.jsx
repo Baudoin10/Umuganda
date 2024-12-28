@@ -23,7 +23,7 @@ const Login = () => {
       // Navigate to Admin Dashboard
       navigation.navigate("Dashboard");
     } else {
-      // Navigate to Home
+     
       navigation.navigate("Home");
     }
   };

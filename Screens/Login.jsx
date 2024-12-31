@@ -1,4 +1,5 @@
 
+
 import React, { useState } from "react";
 import {
   View,
@@ -11,20 +12,44 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    if (email === "yvon@gmail.com" && password === "12345") {
-      // Navigate to Admin Dashboard
-      navigation.navigate("Dashboard");
-    } else {
-      // Navigate to Home
-      navigation.navigate("Home");
+  const handleLogin = async () => {
+    try {
+      // Call the login API
+      const response = await fetch("http://192.168.1.81:3000/api/v1/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store the user role and token in AsyncStorage
+        await AsyncStorage.setItem("user", JSON.stringify(data.user));
+        await AsyncStorage.setItem("token", data.token);
+
+        // Navigate based on role
+        if (data.user.role === "admin") {
+          navigation.navigate("Dashboard");
+        } else {
+          navigation.navigate("Home");
+        }
+      } else {
+        Alert.alert("Login Failed", data.message || "Invalid credentials");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "An error occurred during login. Please try again.");
     }
   };
 
@@ -42,14 +67,13 @@ const Login = () => {
 
           <View style={styles.form}>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>Username</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your email"
+                placeholder="Enter your username"
                 placeholderTextColor="#999"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
+                value={username}
+                onChangeText={setUsername}
                 autoCapitalize="none"
               />
             </View>
@@ -169,3 +193,4 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
+

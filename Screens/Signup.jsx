@@ -24,12 +24,15 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/users", {
-        firstName,
-        username,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://192.168.1.81:3000/api/v1/users",
+        {
+          firstName,
+          username,
+          email,
+          password,
+        }
+      );
       console.log(response.data);
       Toast.show({
         type: "success",

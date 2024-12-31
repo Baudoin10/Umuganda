@@ -1,5 +1,4 @@
 
-
 import React, { useState } from "react";
 import {
   View,
@@ -10,14 +9,45 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Alert,
 } from "react-native";
+import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const Signup = () => {
+  const [firstName, setFirstName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  const handleSignup = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/api/v1/users", {
+        firstName,
+        username,
+        email,
+        password,
+      });
+      console.log(response.data);
+      Toast.show({
+        type: "success",
+        position: "bottom",
+        text1: "Success",
+        text2: "Account created successfully!",
+      });
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Error",
+        text2: "There was an issue creating the account.",
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,6 +62,18 @@ const Signup = () => {
           </View>
 
           <View style={styles.form}>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Firstname</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Choose a firstname"
+                placeholderTextColor="#999"
+                value={firstName}
+                onChangeText={setFirstName}
+                autoCapitalize="none"
+              />
+            </View>
+
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Username</Text>
               <TextInput
@@ -70,7 +112,10 @@ const Signup = () => {
               />
             </View>
 
-            <TouchableOpacity style={styles.submitButton} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSignup}
+            >
               <Text style={styles.submitText}>Create Account</Text>
             </TouchableOpacity>
 
@@ -83,6 +128,7 @@ const Signup = () => {
           </View>
         </View>
       </KeyboardAvoidingView>
+      <Toast />
     </SafeAreaView>
   );
 };

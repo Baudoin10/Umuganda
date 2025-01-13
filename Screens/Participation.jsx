@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+
 const Participation = ({ navigation }) => {
   const participationData = [
     {

@@ -31,7 +31,7 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Introduction"
           component={Introduction}
-          options={{ headerShown: false }} // Hide the header for the Introduction screen
+          options={{ headerShown: false }} 
         />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />

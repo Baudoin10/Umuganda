@@ -23,7 +23,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       // Call the login API
-      const response = await fetch("http://192.168.1.81:3000/api/v1/login", {
+      const response = await fetch("http://192.168.1.70:3000/api/v1/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

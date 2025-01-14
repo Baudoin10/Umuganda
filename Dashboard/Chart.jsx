@@ -11,7 +11,7 @@ const Chart = () => {
     datasets: [
       {
         data: [45, 60, 80, 70, 100, 90], 
-        color: (opacity = 1) => `rgba(0, 128, 255, ${opacity})`, // Line color
+        color: (opacity = 1) => `rgba(0, 128, 255, ${opacity})`, 
       },
     ],
   };

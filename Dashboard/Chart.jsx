@@ -10,7 +10,7 @@ const Chart = () => {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], 
     datasets: [
       {
-        data: [45, 60, 80, 70, 100, 90], // Participation or impact data
+        data: [45, 60, 80, 70, 100, 90], 
         color: (opacity = 1) => `rgba(0, 128, 255, ${opacity})`, // Line color
       },
     ],

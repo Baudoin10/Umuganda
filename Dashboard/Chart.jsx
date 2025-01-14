@@ -7,7 +7,7 @@ const Chart = () => {
 
   // Example data
   const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], // Example months
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], 
     datasets: [
       {
         data: [45, 60, 80, 70, 100, 90], // Participation or impact data

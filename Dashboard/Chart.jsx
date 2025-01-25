@@ -23,8 +23,6 @@ const Chart = () => {
         width={screenWidth - 20} 
         height={270} 
         yAxisSuffix=" ppl" 
-
-        
         chartConfig={{
           backgroundColor: "#022173",
           backgroundGradientFrom: "#1E2923",

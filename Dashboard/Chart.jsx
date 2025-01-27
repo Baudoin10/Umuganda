@@ -4,7 +4,6 @@ import { LineChart, BarChart } from "react-native-chart-kit";
 
 const Chart = () => {
   const screenWidth = Dimensions.get("window").width;
-
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], 
     datasets: [

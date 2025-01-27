@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Dimensions } from "react-native";
 import { LineChart, BarChart } from "react-native-chart-kit";
 
+
 const Chart = () => {
   const screenWidth = Dimensions.get("window").width;
   const data = {

@@ -17,7 +17,6 @@ const Chart = () => {
 
   return (
     <View style={{ padding: 10 }}>
-     
       <LineChart
         data={data}
         width={screenWidth - 20} 

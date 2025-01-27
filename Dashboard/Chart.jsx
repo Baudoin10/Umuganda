@@ -15,7 +15,6 @@ const Chart = () => {
     ],
   };
 
-  
   return (
     <View style={{ padding: 10 }}>
       <LineChart

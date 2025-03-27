@@ -19,6 +19,7 @@ import ListTask from "../Dashboard/ListTask";
 import Event from "../Dashboard/Event";
 import Chart from "../Dashboard/Chart";
 import EventDetails from "../Screens/EventDetails";
+import UserDashboard from "../UserDashboard/UserDashboard";
 
 const Stack = createStackNavigator();
 

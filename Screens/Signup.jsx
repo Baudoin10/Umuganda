@@ -69,7 +69,7 @@ const Signup = () => {
               <Text style={styles.label}>Firstname</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Choose a firstname"
+                placeholder="Enter your Firstname"
                 placeholderTextColor="#999"
                 value={firstName}
                 onChangeText={setFirstName}
@@ -78,10 +78,10 @@ const Signup = () => {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Username</Text>
+              <Text style={styles.label}>Lastname</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Choose a username"
+                placeholder="Enter your Lastname"
                 placeholderTextColor="#999"
                 value={username}
                 onChangeText={setUsername}
@@ -93,7 +93,7 @@ const Signup = () => {
               <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your email"
+                placeholder="Enter your Email"
                 placeholderTextColor="#999"
                 value={email}
                 onChangeText={setEmail}
@@ -106,7 +106,7 @@ const Signup = () => {
               <Text style={styles.label}>Password</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Create a password"
+                placeholder="password"
                 placeholderTextColor="#999"
                 secureTextEntry
                 value={password}

@@ -1,5 +1,4 @@
 
-
 // import React, { useState } from "react";
 // import {
 //   View,
@@ -10,13 +9,19 @@
 //   KeyboardAvoidingView,
 //   Platform,
 //   SafeAreaView,
-//   Alert,
 // } from "react-native";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useNavigation } from "@react-navigation/native";
 
 // const Login = () => {
+//   const navigation = useNavigation();
+//   const [username, setUsername] = useState("");
+//   const [password, setPassword] = useState("");
 
+//   const handleLogin = () => {
+//     if (username === "john" && password === "12345") {
+//       navigation.navigate("Dashboard");
+//     }
+//   };
 
 //   return (
 //     <SafeAreaView style={styles.container}>
@@ -37,8 +42,9 @@
 //                 style={styles.input}
 //                 placeholder="Enter your username"
 //                 placeholderTextColor="#999"
-               
 //                 autoCapitalize="none"
+//                 value={username}
+//                 onChangeText={setUsername}
 //               />
 //             </View>
 
@@ -49,8 +55,9 @@
 //                 placeholder="Enter your password"
 //                 placeholderTextColor="#999"
 //                 secureTextEntry
-               
 //                 autoCapitalize="none"
+//                 value={password}
+//                 onChangeText={setPassword}
 //               />
 //             </View>
 
@@ -179,6 +186,10 @@ const Login = () => {
   const handleLogin = () => {
     if (username === "john" && password === "12345") {
       navigation.navigate("Dashboard");
+    } else if (username === "credo" && password === "12345") {
+      navigation.navigate("user");
+    } else {
+      alert("Invalid credentials!");
     }
   };
 

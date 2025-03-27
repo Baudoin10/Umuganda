@@ -40,9 +40,15 @@ const UserDashboard = ({ navigation }) => {
   ];
 
   const dashboardCards = [
-    { id: "1", title: "Users", count: "120", icon: "people", color: "#4CAF50" },
-    { id: "2", title: "Events", count: "110", icon: "event", color: "#2196F3" },
-    { id: "3", title: "Tasks", count: "100", icon: "task", color: "#FF9800" },
+    { id: "1", title: "Tasks", count: "10", icon: "people", color: "#1976D2" },
+    { id: "2", title: "Events", count: "110", icon: "event", color: "#00897B" },
+    {
+      id: "3",
+      title: "Events joined",
+      count: "100",
+      icon: "task",
+      color: "#D81B60",
+    },
   ];
 
 
@@ -67,10 +73,10 @@ const UserDashboard = ({ navigation }) => {
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Icon name="menu" size={28} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.topBarTitle}>Admin</Text>
-        <TouchableOpacity style={styles.profileButton}>
+        <Text style={styles.topBarTitle}>User</Text>
+        {/* <TouchableOpacity style={styles.profileButton}>
           <Icon name="account-circle" size={28} color="#333" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Main Content */}
@@ -100,7 +106,7 @@ const UserDashboard = ({ navigation }) => {
         >
           <View style={styles.menuContent}>
             <View style={styles.menuHeader}>
-              <Text style={styles.menuTitle}>Menu</Text>
+              <Text style={styles.menuTitle}>UserDashboard</Text>
               <TouchableOpacity onPress={toggleMenu}>
                 <Icon name="close" size={24} color="#333" />
               </TouchableOpacity>

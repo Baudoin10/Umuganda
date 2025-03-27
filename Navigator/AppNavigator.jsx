@@ -30,7 +30,7 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Introduction"
           component={Introduction}
-          options={{ headerShown: false }} 
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
@@ -46,6 +46,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Attendance" component={Attendance} />
         <Stack.Screen name="History" component={HistoryEvent} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="user" component={UserDashboard} />
         <Stack.Screen name="Notification" component={Notification} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="Profile" component={Profile} />

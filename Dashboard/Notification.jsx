@@ -43,6 +43,7 @@ const Notification = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -80,5 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 });
+
 
 export default Notification;

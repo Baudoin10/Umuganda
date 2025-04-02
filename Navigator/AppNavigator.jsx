@@ -21,6 +21,7 @@ import Chart from "../Dashboard/Chart";
 import EventDetails from "../Screens/EventDetails";
 import UserDashboard from "../UserDashboard/UserDashboard";
 
+
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
@@ -55,6 +56,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Event" component={Event} />
         <Stack.Screen name="Chart" component={Chart} />
         <Stack.Screen name="EventDetails" component={EventDetails} />
+     
       </Stack.Navigator>
     </NavigationContainer>
   );

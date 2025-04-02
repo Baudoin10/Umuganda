@@ -1,43 +1,24 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
-const ListTask = () => {
-  const [tasks, setTasks] = useState([
-    { id: "1", title: "Task 1", description: "Description for Task 1" },
-    { id: "2", title: "Task 2", description: "Description for Task 2" },
-  ]);
-  const [newTask, setNewTask] = useState({ title: "", description: "" });
 
-  const addTask = () => {
-    if (newTask.title && newTask.description) {
-      setTasks([...tasks, { id: `${tasks.length + 1}`, ...newTask }]);
-      setNewTask({ title: "", description: "" });
+
+import React, { useState } from "react";
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, Alert } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+
+const ListTask = () => {
+  const [newTask, setNewTask] = useState({ title: "", description: "", location: "", date: "", timeSpent: "" });
+
+  const createTask = () => {
+    if (newTask.title && newTask.description && newTask.location && newTask.date && newTask.timeSpent) {
+      setNewTask({ title: "", description: "", location: "", date: "", timeSpent: "" });
     } else {
-      Alert.alert(
-        "Error",
-        "Please provide both title and description for the task."
-      );
+      Alert.alert("Error", "Please provide all fields for the task.");
     }
   };
 
-  const renderTask = ({ item }) => (
-    <View style={styles.taskCard}>
-      <Text style={styles.taskTitle}>{item.title}</Text>
-      <Text style={styles.taskDescription}>{item.description}</Text>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Manage Tasks</Text>
+      <Text style={styles.header}>Create Task</Text>
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -51,16 +32,33 @@ const ListTask = () => {
           value={newTask.description}
           onChangeText={(text) => setNewTask({ ...newTask, description: text })}
         />
-        <TouchableOpacity style={styles.addButton} onPress={addTask}>
+        <TextInput
+          style={styles.input}
+          placeholder="Task Location"
+          value={newTask.location}
+          onChangeText={(text) => setNewTask({ ...newTask, location: text })}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Task Date"
+          value={newTask.date}
+          onChangeText={(text) => setNewTask({ ...newTask, date: text })}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Time Spent"
+          value={newTask.timeSpent}
+          onChangeText={(text) => setNewTask({ ...newTask, timeSpent: text })}
+        />
+
+        <TouchableOpacity style={styles.addButton} onPress={createTask}>
           <Icon name="add" size={24} color="#FFF" />
-          <Text style={styles.addButtonText}>Add Task</Text>
+          <Text style={styles.addButtonText}>Create Task</Text>
         </TouchableOpacity>
       </View>
+
       <FlatList
-        data={tasks}
-        keyExtractor={(item) => item.id}
-        renderItem={renderTask}
-        contentContainerStyle={styles.taskList}
+       
       />
     </View>
   );
@@ -99,28 +97,6 @@ const styles = StyleSheet.create({
     color: "#FFF",
     marginLeft: 8,
     fontSize: 16,
-  },
-  taskList: {
-    marginTop: 16,
-  },
-  taskCard: {
-    padding: 16,
-    marginBottom: 8,
-    borderRadius: 8,
-    backgroundColor: "#FFF",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  taskTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  taskDescription: {
-    fontSize: 16,
-    color: "#666",
-    marginTop: 4,
   },
 });
 

@@ -79,9 +79,9 @@ const Dashboard = ({ navigation }) => {
           <Icon name="menu" size={28} color="#333" />
         </TouchableOpacity>
         <Text style={styles.topBarTitle}>Admin</Text>
-        <TouchableOpacity style={styles.profileButton}>
+        {/* <TouchableOpacity style={styles.profileButton}>
           <Icon name="account-circle" size={28} color="#333" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Main Content */}

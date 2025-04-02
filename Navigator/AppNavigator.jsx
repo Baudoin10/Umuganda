@@ -22,6 +22,8 @@ import EventDetails from "../Screens/EventDetails";
 import UserDashboard from "../UserDashboard/UserDashboard";
 import ViewEvent from "../UserDashboard/ViewEvent";
 import ViewTask from "../UserDashboard/ViewTask";
+import joinEvent from "../UserDashboard/joinEvent";
+import EventForm from "../UserDashboard/EventForm";
 
 
 const Stack = createStackNavigator();
@@ -60,6 +62,8 @@ const AppNavigator = () => {
         <Stack.Screen name="EventDetails" component={EventDetails} />
         <Stack.Screen name="ViewEvent" component={ViewEvent} />
         <Stack.Screen name="ViewTask" component={ViewTask} />
+        <Stack.Screen name="joinEvent" component={joinEvent} />
+        <Stack.Screen name="EventForm" component={EventForm} />
       </Stack.Navigator>
     </NavigationContainer>
   );

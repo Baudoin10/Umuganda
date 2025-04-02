@@ -32,7 +32,7 @@ const UserDashboard = ({ navigation }) => {
     {
       id: "3",
       title: "Join Events",
-      screen: "",
+      screen: "joinEvent",
       icon: "event",
     },
     

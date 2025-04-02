@@ -23,10 +23,16 @@ const Dashboard = ({ navigation }) => {
       screen: "Event",
       icon: "event",
     },
+    // {
+    //   id: "2",
+    //   title: "Tasks",
+    //   screen: "ListTask",
+    //   icon: "assignment",
+    // },
     {
       id: "2",
-      title: "Tasks",
-      screen: "ListTask",
+      title: "Task creation",
+      screen: "Task",
       icon: "assignment",
     },
     {
@@ -41,12 +47,7 @@ const Dashboard = ({ navigation }) => {
       screen: "Users",
       icon: "group",
     },
-    {
-      id: "5",
-      title: "Task creation",
-      screen: "Task",
-      icon: "assignment",
-    },
+   
     { id: "6", title: "Logout", screen: "Login", icon: "logout" },
   ];
 

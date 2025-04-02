@@ -20,7 +20,7 @@ const UserDashboard = ({ navigation }) => {
     {
       id: "1",
       title: "View Events",
-      screen: "",
+      screen: "ViewEvent",
       icon: "event",
     },
     {

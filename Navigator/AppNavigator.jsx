@@ -20,6 +20,7 @@ import Event from "../Dashboard/Event";
 import Chart from "../Dashboard/Chart";
 import EventDetails from "../Screens/EventDetails";
 import UserDashboard from "../UserDashboard/UserDashboard";
+import ViewEvent from "../UserDashboard/ViewEvent";
 
 
 const Stack = createStackNavigator();
@@ -56,7 +57,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Event" component={Event} />
         <Stack.Screen name="Chart" component={Chart} />
         <Stack.Screen name="EventDetails" component={EventDetails} />
-     
+        <Stack.Screen name="ViewEvent" component={ViewEvent} />
       </Stack.Navigator>
     </NavigationContainer>
   );

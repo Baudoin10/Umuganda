@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather'; // For icons like calendar and check-circle
+import { View, Text, FlatList } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 
 // Sample tasks data
 const tasks = [
@@ -54,19 +54,6 @@ const TaskCard = ({ task }) => (
       Status: {task.status}
     </Text>
     <Text style={{ fontSize: 12, marginTop: 4, color: '#6e6e6e' }}>Priority: {task.priority}</Text>
-
-    <TouchableOpacity 
-      style={{
-        marginTop: 10,
-        backgroundColor: '#4CAF50',
-        paddingVertical: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-      }}
-      onPress={() => alert(`Task ${task.id} marked as completed!`)}
-    >
-      <Text style={{ color: 'white', fontWeight: 'bold' }}>Mark as Completed</Text>
-    </TouchableOpacity>
   </View>
 );
 
@@ -75,7 +62,6 @@ const ViewTask = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#f5f5f5', padding: 15 }}>
       <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15 }}>Your Tasks</Text>
-      
       <FlatList
         data={tasks}
         keyExtractor={(item) => item.id.toString()}

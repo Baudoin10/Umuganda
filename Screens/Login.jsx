@@ -18,7 +18,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    if (username === "john" && password === "12345") {
+    if (username === "fido" && password === "12345") {
       navigation.navigate("Dashboard");
     } else if (username === "credo" && password === "12345") {
       navigation.navigate("user");

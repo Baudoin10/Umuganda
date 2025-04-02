@@ -26,7 +26,7 @@ const UserDashboard = ({ navigation }) => {
     {
       id: "2",
       title: "View Tasks",
-      screen: "",
+      screen: "ViewTask",
       icon: "assignment",
     },
     {

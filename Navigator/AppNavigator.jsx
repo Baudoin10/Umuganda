@@ -21,6 +21,7 @@ import Chart from "../Dashboard/Chart";
 import EventDetails from "../Screens/EventDetails";
 import UserDashboard from "../UserDashboard/UserDashboard";
 import ViewEvent from "../UserDashboard/ViewEvent";
+import ViewTask from "../UserDashboard/ViewTask";
 
 
 const Stack = createStackNavigator();
@@ -58,6 +59,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Chart" component={Chart} />
         <Stack.Screen name="EventDetails" component={EventDetails} />
         <Stack.Screen name="ViewEvent" component={ViewEvent} />
+        <Stack.Screen name="ViewTask" component={ViewTask} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -106,13 +106,11 @@ const Dashboard = ({ navigation }) => {
         >
           <View style={styles.menuContent}>
             <View style={styles.menuHeader}>
-              <Text style={styles.menuTitle}>Menu</Text>
+              <Text style={styles.menuTitle}>Admin Dashboard</Text>
               <TouchableOpacity onPress={toggleMenu}>
                 <Icon name="close" size={24} color="#333" />
               </TouchableOpacity>
             </View>
-
-           
 
             <FlatList
               data={menuItems}

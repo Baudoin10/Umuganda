@@ -11,6 +11,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Task = () => {
   const [photo, setPhoto] = useState(null);
@@ -108,10 +109,19 @@ const Task = () => {
       {/* Input fields for task details and address */}
       <TextInput
         style={styles.input}
-        placeholder="Enter Task Details"
+        placeholder="Enter Title"
         value={taskDetails}
         onChangeText={setTaskDetails}
       />
+
+<TextInput
+        style={styles.input}
+        placeholder="description"
+        value={taskDetails}
+        onChangeText={setTaskDetails}
+      />
+
+
       <TextInput
         style={styles.input}
         placeholder="Enter Address"
@@ -119,9 +129,18 @@ const Task = () => {
         onChangeText={setAddress}
       />
 
+
+<TextInput
+        style={styles.input}
+        placeholder="Time spent"
+        value={taskDetails}
+        onChangeText={setTaskDetails}
+      />
+
       {/* Submit button */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmitTask}>
-        <Text style={styles.submitButtonText}>Submit Task</Text>
+      <Icon name="add" size={24} color="#FFF" />
+        <Text style={styles.submitButtonText}>Create a task</Text>
       </TouchableOpacity>
     </View>
   );
@@ -140,7 +159,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    backgroundColor: "#6200ea",
+    backgroundColor: "#4CAF50",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
@@ -172,13 +191,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   submitButton: {
-    backgroundColor: "#03dac6",
+    backgroundColor: "#4CAF50",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
   },
   submitButtonText: {
-    color: "#000",
+    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },

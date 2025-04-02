@@ -41,7 +41,12 @@ const Dashboard = ({ navigation }) => {
       screen: "Users",
       icon: "group",
     },
-   
+    {
+      id: "5",
+      title: "Task creation",
+      screen: "Task",
+      icon: "assignment",
+    },
     { id: "6", title: "Logout", screen: "Login", icon: "logout" },
   ];
 

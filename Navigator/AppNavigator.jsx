@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../Screens/Home";
 import Login from "../Screens/Login";
 import Signup from "../Screens/Signup";
-import Task from "../Screens/Task";
+import Task from "../Dashboard/Task";
 import Dashboard from "../Dashboard/Dashboard";
 import Notification from "../Dashboard/Notification";
 import Profile from "../UserDashboard/Profile";

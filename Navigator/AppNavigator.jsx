@@ -11,7 +11,7 @@ import Attendance from "../Screens/Attendance";
 import HistoryEvent from "../Screens/HistoryEvent";
 import Dashboard from "../Dashboard/Dashboard";
 import Notification from "../Dashboard/Notification";
-import Profile from "../Dashboard/Profile";
+import Profile from "../UserDashboard/Profile";
 import EditProfile from "../Dashboard/EditProfile";
 import Users from "../Dashboard/Users";
 import Introduction from "../Screens/Introduction"; 

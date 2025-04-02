@@ -1,48 +1,60 @@
-import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+
+
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 
 const Notification = () => {
-  const notifications = [
-    {
-      title: "Umuganda Scheduled",
-      description:
-        "Your Umuganda session is scheduled for this Saturday at 7:00 AM at Nyarutarama.",
-      time: "2 days ago",
-    },
-    {
-      title: "Umuganda Confirmation",
-      description:
-        "Thank you for confirming your participation in this month's Umuganda activity.",
-      time: "1 day ago",
-    },
-    {
-      title: "Umuganda Completion",
-      description:
-        "You have successfully completed this week's Umuganda activities at Kagugu.",
-      time: "4 hours ago",
-    },
-  ];
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [time, setTime] = useState("");
+
+  const handleCreateNotification = () => {
+    if (title && description && time) {
+      // In a real app, you would send this data to the server or store it in the database
+      Alert.alert("Notification Created", `Title: ${title}\nDescription: ${description}\nTime: ${time}`);
+      // Clear the input fields after creating the notification
+      setTitle("");
+      setDescription("");
+      setTime("");
+    } else {
+      Alert.alert("Error", "Please fill out all fields.");
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Notifications</Text>
-      {notifications.map((notification, index) => (
-        <View key={index} style={styles.notificationCard}>
-          <Text style={styles.notificationTitle}>{notification.title}</Text>
-          <Text style={styles.notificationDescription}>
-            {notification.description}
-          </Text>
-          <Text style={styles.notificationTime}>{notification.time}</Text>
-          <View style={styles.buttonContainer}>
-            <Button title="Mark as Read" color="#007BFF" />
-            <Button title="Delete" color="#DC3545" />
-          </View>
-        </View>
-      ))}
+      <Text style={styles.title}>Create a New Notification</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Notification Title"
+        value={title}
+        onChangeText={(text) => setTitle(text)}
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Notification Description"
+        value={description}
+        onChangeText={(text) => setDescription(text)}
+        multiline
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Time (e.g., 2 days ago)"
+        value={time}
+        onChangeText={(text) => setTime(text)}
+      />
+      
+      <TouchableOpacity style={styles.createButton}>
+  <Text style={styles.createButtonText}>Create Notification</Text>
+</TouchableOpacity>
+
+
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -54,33 +66,31 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    textAlign: "center",
   },
-  notificationCard: {
-    backgroundColor: "#FFFFFF",
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
+  input: {
+    backgroundColor: "#FFF",
+    borderWidth: 1,
+    borderColor: "#DDD",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 16,
   },
-  notificationTitle: {
-    fontWeight: "bold",
+
+
+  createButton: {
+    backgroundColor: "#007BFF", 
+    paddingVertical: 12,        
+    paddingHorizontal: 20,      
+    borderRadius: 5,           
+    alignItems: "center",       
+    marginTop: 20,              
   },
-  notificationDescription: {
-    marginVertical: 5,
-  },
-  notificationTime: {
-    color: "#555",
-    fontSize: 12,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    marginTop: 10,
-    justifyContent: "space-between",
+  createButtonText: {
+    color: "#FFF",              
+    fontSize: 16,              
+    fontWeight: "bold",       
   },
 });
-
 
 export default Notification;

@@ -35,6 +35,13 @@ const UserDashboard = ({ navigation }) => {
       screen: "joinEvent",
       icon: "event",
     },
+
+    {
+      id: "5",
+      title: "Profile/Settings",
+      screen: "Profile",
+      icon: "settings",
+    },
     
     { id: "6", title: "Logout", screen: "Login", icon: "logout" },
   ];

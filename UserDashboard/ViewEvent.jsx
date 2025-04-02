@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
-import { Card, CardContent } from '@/components/ui/card';
 import { CalendarDays, MapPin } from 'lucide-react-native';
 
 const events = [
@@ -25,24 +24,34 @@ const events = [
 ];
 
 const EventCard = ({ event }) => (
-  <Card className="m-2 p-4 bg-white shadow-lg rounded-2xl">
-    <Text className="text-xl font-bold">{event.title}</Text>
-    <Text className="text-base text-gray-600">{event.description}</Text>
-    <View className="flex-row items-center mt-2">
-      <CalendarDays className="text-gray-500" />
-      <Text className="text-sm ml-1">{event.date} ({event.day})</Text>
+  <View style={{
+    margin: 10,
+    padding: 15,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  }}>
+    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{event.title}</Text>
+    <Text style={{ fontSize: 14, color: '#6e6e6e' }}>{event.description}</Text>
+    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+      <CalendarDays color="#6e6e6e" />
+      <Text style={{ fontSize: 12, marginLeft: 5 }}>{event.date} ({event.day})</Text>
     </View>
-    <View className="flex-row items-center mt-1">
-      <MapPin className="text-gray-500" />
-      <Text className="text-sm ml-1">{event.address}</Text>
+    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+      <MapPin color="#6e6e6e" />
+      <Text style={{ fontSize: 12, marginLeft: 5 }}>{event.address}</Text>
     </View>
-  </Card>
+  </View>
 );
 
 const ViewEvent = () => {
   return (
-    <View className="flex-1 bg-gray-100 p-4">
-      <Text className="text-2xl font-semibold mb-4">Upcoming Events</Text>
+    <View style={{ flex: 1, backgroundColor: '#f5f5f5', padding: 15 }}>
+      <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15 }}>Upcoming Events</Text>
       <FlatList
         data={events}
         keyExtractor={(item) => item.id.toString()}

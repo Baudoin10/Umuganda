@@ -17,13 +17,34 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    if (username === "fido" && password === "12345") {
-      navigation.navigate("Dashboard");
-    } else if (username === "credo" && password === "12345") {
-      navigation.navigate("user");
-    } else {
-      alert("Invalid credentials!");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
+
+      const { token, role } = response.data; 
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role); 
+
+      toast.success("Login successful!");
+
+      setTimeout(() => {
+        if (role === "admin") {
+          navigate("/Admindashboard/Dashboard");
+        } else {
+          navigate("/");
+        }
+      }, 2000);
+    } catch (err) {
+      setError("Invalid credentials. Please try again.");
+      console.error("Login failed:", err);
     }
   };
 

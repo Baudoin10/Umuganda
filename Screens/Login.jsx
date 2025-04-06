@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   View,
@@ -9,41 +8,40 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/api/auth/login", {
+        email,
+        password,
+      });
 
-      const { token, role } = response.data; 
+      const { token, role } = response.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role); 
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("role", role);
 
-      toast.success("Login successful!");
+      Alert.alert("Success", "Login successful!");
 
       setTimeout(() => {
         if (role === "admin") {
-          navigate("/Admindashboard/Dashboard");
+          navigation.navigate("AdminDashboard");
         } else {
-          navigate("/");
+          navigation.navigate("UserDashboard");
         }
-      }, 2000);
+      }, 1000);
     } catch (err) {
-      setError("Invalid credentials. Please try again.");
+      Alert.alert("Error", "Invalid credentials. Please try again.");
       console.error("Login failed:", err);
     }
   };
@@ -62,14 +60,15 @@ const Login = () => {
 
           <View style={styles.form}>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Username</Text>
+              <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your username"
+                placeholder="Enter your email"
                 placeholderTextColor="#999"
                 autoCapitalize="none"
-                value={username}
-                onChangeText={setUsername}
+                keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 

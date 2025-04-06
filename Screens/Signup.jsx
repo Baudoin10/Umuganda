@@ -25,7 +25,7 @@ const Signup = () => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.1.70:3000/api/v1/users",
+        "http://localhost:3000/api/auth/login",
         {
           firstName,
           username,

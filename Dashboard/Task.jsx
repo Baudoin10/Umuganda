@@ -1,6 +1,5 @@
 
 
-
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -17,11 +16,13 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 
 const Task = () => {
+  
   const [photo, setPhoto] = useState(null);
   const [taskDetails, setTaskDetails] = useState({
     title: "",
     description: "",
-    // timeSpent: "",
+    date: "",  // Ensure date is in taskDetails
+    location: "",
   });
   const [address, setAddress] = useState("");
   const [location, setLocation] = useState({
@@ -63,9 +64,9 @@ const Task = () => {
 
   // Submit task
   const handleSubmitTask = async () => {
-    const { title, description, timeSpent } = taskDetails;
+    const { title, description, date } = taskDetails;
 
-    if (!photo || !title || !description || !timeSpent || !address) {
+    if (!photo || !title || !description || !date || !address) {
       Toast.show({
         type: "error",
         text1: "Please fill all fields and take a picture",
@@ -74,14 +75,14 @@ const Task = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/tasks", {
+      const response = await fetch("http://192.168.1.39:3000/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           photo,
           title,
           description,
-          // timeSpent,
+          date,
           address,
           location,
         }),
@@ -90,7 +91,7 @@ const Task = () => {
       if (response.ok) {
         Toast.show({ type: "success", text1: "Task submitted successfully!" });
         setPhoto(null);
-        setTaskDetails({ title: "", description: "", timeSpent: "" });
+        setTaskDetails({ title: "", description: "", date: "", location: "" });
         setAddress("");
       } else {
         Toast.show({ type: "error", text1: "Failed to submit task" });
@@ -152,14 +153,14 @@ const Task = () => {
         onChangeText={setAddress}
       />
 
-      {/* <TextInput
+      <TextInput
         style={styles.input}
-        placeholder="Time Spent"
-        value={taskDetails.timeSpent}
+        placeholder="Date (YYYY-MM-DD)"
+        value={taskDetails.date}  // Corrected to taskDetails.date
         onChangeText={(text) =>
-          setTaskDetails({ ...taskDetails, timeSpent: text })
+          setTaskDetails({ ...taskDetails, date: text })
         }
-      /> */}
+      />
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmitTask}>
         <Icon name="add" size={24} color="#FFF" />

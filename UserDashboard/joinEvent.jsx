@@ -1,37 +1,9 @@
 
 
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather'; // For icons like map-pin and calendar
-
-// Sample events data
-const events = [
-  {
-    id: 1,
-    title: 'Community Cleanup',
-    description: 'Join us for a community park cleanup. Make a difference!',
-    address: 'Kigali Park, Nyarugenge',
-    date: '2025-04-05',
-    status: 'Open',
-  },
-  {
-    id: 2,
-    title: 'Tree Planting Day',
-    description: 'Help us plant trees at Gisozi Hill to preserve nature.',
-    address: 'Gisozi Hill, Kigali',
-    date: '2025-04-12',
-    status: 'Full',
-  },
-  {
-    id: 3,
-    title: 'Beach Clean-Up',
-    description: 'Volunteer to clean the beaches along Lake Kivu.',
-    address: 'Kibuye, Lake Kivu',
-    date: '2025-04-19',
-    status: 'Open',
-  },
-];
+import Icon from 'react-native-vector-icons/Feather'; 
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
@@ -58,12 +30,40 @@ const EventCard = ({ event, navigation }) => (
 );
 
 const JoinEvent = ({ navigation }) => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://192.168.1.39:3000/api/events');
+        const data = await response.json();
+
+        if (response.ok) {
+          setEvents(data);
+        } else {
+          console.error('Failed to fetch events');
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return <Text>Loading events...</Text>;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.pageTitle}>Upcoming Events</Text>
       <FlatList
         data={events}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}  // No need to use .toString() if id is already unique
         renderItem={({ item }) => <EventCard event={item} navigation={navigation} />}
       />
     </View>

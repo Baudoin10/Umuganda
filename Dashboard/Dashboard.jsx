@@ -12,9 +12,70 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Chart from "./Chart";
+import { useEffect } from "react";
 
 const Dashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
+   const [users, setUsers] = useState([]);
+   const [events, setEvents] = useState([]);
+   const [tasks, setTasks] = useState([]);
+
+   const fetchUsers = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios.get("http://192.168.1.39:3000/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchUsers();
+    }, []);
+
+
+
+    const fetchTasks = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios.get("http://192.168.1.39:3000/api/tasks", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setTasks(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchTasks();
+    }, []);
+
+
+    const fetchEvents = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios.get("http://192.168.1.39:3000/api/events", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchEvents();
+    }, []);
 
   const menuItems = [
     {
@@ -51,11 +112,18 @@ const Dashboard = ({ navigation }) => {
     { id: "6", title: "Logout", screen: "Login", icon: "logout" },
   ];
 
+  // const dashboardCards = [
+  //   { id: "1", title: "Users", count: "120", icon: "people", color: "#4CAF50" },
+  //   { id: "2", title: "Events", count: "110", icon: "event", color: "#2196F3" },
+  //   { id: "3", title: "Tasks", count: "100", icon: "task", color: "#FF9800" },
+  // ];
+
   const dashboardCards = [
-    { id: "1", title: "Users", count: "120", icon: "people", color: "#4CAF50" },
-    { id: "2", title: "Events", count: "110", icon: "event", color: "#2196F3" },
-    { id: "3", title: "Tasks", count: "100", icon: "task", color: "#FF9800" },
+    { id: "1", title: "Users", count: users.length, icon: "people", color: "#4CAF50" },
+    { id: "2", title: "Events", count: events.length, icon: "event", color: "#2196F3" },
+    { id: "3", title: "Tasks", count: tasks.length, icon: "task", color: "#FF9800" },
   ];
+  
 
 
   const toggleMenu = () => {
@@ -77,12 +145,10 @@ const Dashboard = ({ navigation }) => {
       {/* Top Bar with Menu Icon */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
-          <Icon name="menu" size={28} color="#333" />
+          <Icon name="menu" size={20} color="#333" />
         </TouchableOpacity>
         <Text style={styles.topBarTitle}>Admin</Text>
-        {/* <TouchableOpacity style={styles.profileButton}>
-          <Icon name="account-circle" size={28} color="#333" />
-        </TouchableOpacity> */}
+      
       </View>
 
       {/* Main Content */}

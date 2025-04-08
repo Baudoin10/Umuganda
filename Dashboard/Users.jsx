@@ -114,7 +114,7 @@ const Users = () => {
         stickyHeaderIndices={[0]}
         initialNumToRender={10}
       />
-      <Toast /> {/* Toast container */}
+      <Toast /> 
     </View>
   );
 };

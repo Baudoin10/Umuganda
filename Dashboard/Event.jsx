@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Event = () => {
 
@@ -94,6 +95,7 @@ const Event = () => {
         onChangeText={(text) => handleChange("date", text)}
       />
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Icon name="add" size={24} color="#FFF" />
         <Text style={styles.submitText}>Create Event</Text>
       </TouchableOpacity>
     </View>
@@ -110,18 +112,38 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 5,
   },
-  submitButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 15,
-  },
-  submitText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+  // submitButton: {
+  //   backgroundColor: "#4CAF50",
+  //   paddingVertical: 12,
+  //   borderRadius: 5,
+  //   alignItems: "center",
+  //   marginTop: 15,
+  // },
+  // submitText: {
+  //   color: "#fff",
+  //   fontSize: 16,
+  //   fontWeight: "bold",
+  // },
+
+submitButton: {
+  backgroundColor: "#4CAF50",
+  padding: 15,
+  borderRadius: 8,
+  alignItems: "center",
+  flexDirection: "row",
+  justifyContent: "center",
+ 
+},
+submitButtonText: {
+  color: "white",
+  fontSize: 16,
+  fontWeight: "bold",
+  marginLeft: 8,
+},
+
+submitText: {
+  color: "white"
+},
 });
 
 export default Event;

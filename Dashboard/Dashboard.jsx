@@ -13,6 +13,9 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Chart from "./Chart";
 import { useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+
 
 const Dashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -67,7 +70,7 @@ const Dashboard = ({ navigation }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUsers(response.data);
+        setEvents(response.data);
       } catch (error) {
         console.log(error);
       }

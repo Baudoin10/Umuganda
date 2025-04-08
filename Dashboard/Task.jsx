@@ -277,7 +277,7 @@ const Task = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/events", {
+      const response = await fetch("http://localhost:3000/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

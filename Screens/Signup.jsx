@@ -1,4 +1,5 @@
 
+
 import React, { useState } from "react";
 import {
   View,
@@ -9,7 +10,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  Alert,
 } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
@@ -24,33 +24,27 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post(
-        "http://192.168.1.39:3000/api/auth/register",
-        {
-          firstname,
-          lastname,
-          email,
-          password,
-        }
-      );
-      console.log(response.data);
+      await axios.post("http://192.168.1.39:3000/api/auth/register", {
+        firstname,
+        lastname,
+        email,
+        password,
+      });
+
       Toast.show({
         type: "success",
-        position: "bottom",
-        text1: "Success",
+        position: "top",
         text2: "Account created successfully!",
       });
 
       setTimeout(() => {
         navigation.navigate("Login");
-      }, 3000);
-     
+      }, 2000);
     } catch (error) {
       console.error(error);
       Toast.show({
         type: "error",
-        position: "bottom",
-        text1: "Error",
+        position: "top",
         text2: "There was an issue creating the account.",
       });
     }
@@ -110,7 +104,7 @@ const Signup = () => {
               <Text style={styles.label}>Password</Text>
               <TextInput
                 style={styles.input}
-                placeholder="password"
+                placeholder="Password"
                 placeholderTextColor="#999"
                 secureTextEntry
                 value={password}
@@ -225,3 +219,4 @@ const styles = StyleSheet.create({
 });
 
 export default Signup;
+

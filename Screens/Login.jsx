@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import {
   View,
@@ -8,11 +10,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -31,7 +33,10 @@ const Login = () => {
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("role", role);
 
-      Alert.alert("Success", "Login successful!");
+      Toast.show({
+        type: "success",
+        text1: "Login successful!",
+      });
 
       setTimeout(() => {
         if (role === "admin") {
@@ -41,7 +46,10 @@ const Login = () => {
         }
       }, 1500);
     } catch (err) {
-      Alert.alert("Error", "Invalid credentials. Please try again.");
+      Toast.show({
+        type: "error",
+        text1: "Invalid credentials. Please try again.",
+      });
       console.error("Login failed:", err);
     }
   };
@@ -98,6 +106,7 @@ const Login = () => {
           </View>
         </View>
       </KeyboardAvoidingView>
+      <Toast />
     </SafeAreaView>
   );
 };

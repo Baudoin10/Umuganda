@@ -1,5 +1,8 @@
+
+
+
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import Toast from "react-native-toast-message";
 
 const Event = () => {
@@ -17,6 +20,7 @@ const Event = () => {
   const handleSubmit = async () => {
     const { title, description, address, date } = formData;
 
+    // Check if all fields are filled
     if (!title || !description || !address || !date) {
       Toast.show({
         type: "error",
@@ -25,11 +29,17 @@ const Event = () => {
       return;
     }
 
+    const dateObj = new Date(date);
+    const day = dateObj.getDate().toString();
+    const month = (dateObj.getMonth() + 1).toString(); 
+
+    const eventData = { ...formData, day, month };
+
     try {
-      const response = await fetch("http://localhost:3000/api/events", {
+      const response = await fetch("http://192.168.1.39:3000/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(eventData),
       });
 
       if (!response.ok) throw new Error("Failed to create event");
@@ -38,6 +48,10 @@ const Event = () => {
         type: "success",
         text1: "Event created successfully!",
       });
+
+      setTimeout(() => {
+        navigation.navigate("Dashboard");
+      }, 3000);
 
       setFormData({ title: "", description: "", address: "", date: "" });
     } catch (error) {
@@ -75,7 +89,9 @@ const Event = () => {
         value={formData.date}
         onChangeText={(text) => handleChange("date", text)}
       />
-      <Button title="Create Event" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <Text style={styles.submitText}>Create Event</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -89,6 +105,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 8,
     borderRadius: 5,
+  },
+  submitButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  submitText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

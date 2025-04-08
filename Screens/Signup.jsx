@@ -44,7 +44,7 @@ const Signup = () => {
       setTimeout(() => {
         navigation.navigate("Login");
       }, 3000);
-      // navigation.navigate("Login");
+     
     } catch (error) {
       console.error(error);
       Toast.show({

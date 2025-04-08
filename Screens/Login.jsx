@@ -39,7 +39,7 @@ const Login = () => {
         } else {
           navigation.navigate("user");
         }
-      }, 3000);
+      }, 1500);
     } catch (err) {
       Alert.alert("Error", "Invalid credentials. Please try again.");
       console.error("Login failed:", err);

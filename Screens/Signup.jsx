@@ -16,8 +16,8 @@ import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 
 const Signup = () => {
-  const [firstName, setFirstName] = useState("");
-  const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
@@ -25,10 +25,10 @@ const Signup = () => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "http://192.168.1.39:3000/api/auth/register",
         {
-          firstName,
-          username,
+          firstname,
+          lastname,
           email,
           password,
         }
@@ -40,7 +40,11 @@ const Signup = () => {
         text1: "Success",
         text2: "Account created successfully!",
       });
-      navigation.navigate("Login");
+
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 3000);
+      // navigation.navigate("Login");
     } catch (error) {
       console.error(error);
       Toast.show({
@@ -71,8 +75,8 @@ const Signup = () => {
                 style={styles.input}
                 placeholder="Enter your Firstname"
                 placeholderTextColor="#999"
-                value={firstName}
-                onChangeText={setFirstName}
+                value={firstname}
+                onChangeText={setFirstname}
                 autoCapitalize="none"
               />
             </View>
@@ -83,8 +87,8 @@ const Signup = () => {
                 style={styles.input}
                 placeholder="Enter your Lastname"
                 placeholderTextColor="#999"
-                value={username}
-                onChangeText={setUsername}
+                value={lastname}
+                onChangeText={setLastname}
                 autoCapitalize="none"
               />
             </View>

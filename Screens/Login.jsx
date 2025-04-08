@@ -21,7 +21,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/login", {
+      const response = await axios.post("http://192.168.1.39:3000/api/auth/login", {
         email,
         password,
       });
@@ -35,11 +35,11 @@ const Login = () => {
 
       setTimeout(() => {
         if (role === "admin") {
-          navigation.navigate("AdminDashboard");
+          navigation.navigate("Dashboard");
         } else {
-          navigation.navigate("UserDashboard");
+          navigation.navigate("user");
         }
-      }, 1000);
+      }, 3000);
     } catch (err) {
       Alert.alert("Error", "Invalid credentials. Please try again.");
       console.error("Login failed:", err);

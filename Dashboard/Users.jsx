@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -7,29 +9,25 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  ScrollView,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
 
-  const fetchUsers = () => {
-    let token = localStorage.getItem("token");
-    axios({
-      url: "http://localhost:3000/api/users",
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        const allUsers = response.data;
-        setUsers(allUsers);
-      })
-      .catch((error) => {
-        console.log(error);
+  const fetchUsers = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get("http://192.168.1.39:3000/api/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+      setUsers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -37,42 +35,55 @@ const Users = () => {
   }, []);
 
   const handleDeleteUser = async (id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
-      let token = localStorage.getItem("token");
-      axios({
-        url: `http://localhost:3000/api/users/${id}`,
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
+    Alert.alert(
+      "Delete User",
+      "Are you sure you want to delete this user?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
         },
-      })
-        .then((response) => {
-          fetchUsers();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+        {
+          text: "Delete",
+          onPress: async () => {
+            try {
+              const token = await AsyncStorage.getItem("token");
+              await axios.delete(
+                `http://192.168.1.39:3000/api/users/${id}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+              fetchUsers();
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const renderHeader = () => (
     <View style={[styles.row, styles.header]}>
       <Text style={[styles.headerCell, { flex: 2 }]}>Firstname</Text>
       <Text style={[styles.headerCell, { flex: 1 }]}>Lastname</Text>
-      <Text style={[styles.headerCell, { flex: 1 }]}>username</Text>
-      <Text style={[styles.headerCell, { width: 70 }]}>Email</Text>
+      <Text style={[styles.headerCell, { flex: 1 }]}>Email</Text>
     </View>
   );
 
-  const renderItem = ({ item: user }) => (
+  const renderItem = ({ item }) => (
     <View style={styles.row}>
-      <Text style={[styles.cell, { flex: 2 }]}>{user.firstname}</Text>
-      <Text style={[styles.cell, { flex: 1 }]}>{user.lastname}</Text>
-      <Text style={[styles.cell, { flex: 1 }]}>{user.username}</Text>
-      <Text style={[styles.cell, { flex: 1 }]}>{user.email}</Text>
+      <Text style={[styles.cell, { flex: 2 }]}>{item.firstname}</Text>
+      <Text style={[styles.cell, { flex: 1 }]}>{item.lastname}</Text>
+      <Text style={[styles.cell, { flex: 1 }]}>{item.email}</Text>
       <TouchableOpacity
         style={[styles.cell, styles.deleteButton, { width: 70 }]}
-        onPress={() => handleDeleteUser(user._id)}
+        onPress={() => handleDeleteUser(item._id)}
       >
         <Text style={styles.deleteButtonText}>Delete</Text>
       </TouchableOpacity>
@@ -84,7 +95,7 @@ const Users = () => {
       <Text style={styles.title}>Users</Text>
       <FlatList
         data={users}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         ListHeaderComponent={renderHeader}
         renderItem={renderItem}
         stickyHeaderIndices={[0]}
@@ -139,3 +150,5 @@ const styles = StyleSheet.create({
 });
 
 export default Users;
+
+

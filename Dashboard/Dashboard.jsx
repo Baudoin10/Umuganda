@@ -24,34 +24,33 @@ const Dashboard = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
   const [user, setUser] = useState(null);
  
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = await AsyncStorage.getItem("token");  
         if (!token) {
           console.error("No token found");
-          console.log("response", response)
           return;
         }
-
+  
         const response = await axios.get(
-          "http://192.168.1.39:3000/api/users",
+          "http://192.168.1.39:3000/api/me",  
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-
-        setUser(response.data);
+  
+        setUser(response.data);  
       } catch (error) {
         console.error("Error fetching user:", error);
       }
     };
-
+  
     fetchUser();
   }, []);
-
   // Fetch users data
   const fetchUsers = async () => {
     try {
@@ -108,6 +107,9 @@ const Dashboard = ({ navigation }) => {
   useEffect(() => {
     fetchEvents();
   }, []);
+
+
+  
 
   // Menu items for navigation
   const menuItems = [
@@ -211,7 +213,8 @@ const Dashboard = ({ navigation }) => {
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Icon name="menu" size={20} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.topBarTitle}>Admin</Text>
+        <Text style={styles.topBarTitle}>{user ? user.email : "Loading..."}</Text>
+
       </View>
 
       {/* Main Content */}

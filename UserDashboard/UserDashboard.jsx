@@ -15,37 +15,36 @@ import Chart from "./Chart";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Toast from 'react-native-toast-message';
+import { useEffect } from "react";
 
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState(null);
 
-
     useEffect(() => {
       const fetchUser = async () => {
         try {
-          const token = localStorage.getItem("token");
+          const token = await AsyncStorage.getItem("token");  
           if (!token) {
             console.error("No token found");
-            console.log("response", response)
             return;
           }
-  
+    
           const response = await axios.get(
-            "http://192.168.1.39:3000/api/users",
+            "http://192.168.1.39:3000/api/me",  
             {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }
           );
-  
-          setUser(response.data);
+    
+          setUser(response.data);  
         } catch (error) {
           console.error("Error fetching user:", error);
         }
       };
-  
+    
       fetchUser();
     }, []);
 
@@ -123,14 +122,13 @@ const UserDashboard = ({ navigation }) => {
       await AsyncStorage.removeItem("role");
       await AsyncStorage.removeItem("user");
 
-      // Show toast on success
       Toast.show({
         type: "success",
         position: "top",
         text1: "Logout successful!",
       });
 
-      // Redirect to login after a brief delay
+     
       setTimeout(() => {
         navigation.navigate("Login");
       }, 3000);
@@ -148,12 +146,12 @@ const UserDashboard = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
 
-      {/* Top Bar with Menu Icon */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Icon name="menu" size={28} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.topBarTitle}>User</Text>
+        {/* <Text style={styles.topBarTitle}>User</Text> */}
+        <Text style={styles.topBarTitle}>{user ? user.email : "Loading..."}</Text>
       </View>
 
       <View style={styles.mainContent}>

@@ -346,6 +346,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#FFF",
     paddingTop: StatusBar.currentHeight,
+    marginTop: "15%",
   },
   menuHeader: {
     flexDirection: "row",

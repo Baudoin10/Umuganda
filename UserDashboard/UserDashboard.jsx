@@ -18,6 +18,36 @@ import Toast from 'react-native-toast-message';
 
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
+  const [user, setUser] = useState(null);
+
+
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("No token found");
+            console.log("response", response)
+            return;
+          }
+  
+          const response = await axios.get(
+            "http://192.168.1.39:3000/api/users",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+  
+          setUser(response.data);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+  
+      fetchUser();
+    }, []);
 
   const menuItems = [
     {

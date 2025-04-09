@@ -1,16 +1,18 @@
-import React from "react";
-import { View, Text, Dimensions } from "react-native";
-import { LineChart, BarChart } from "react-native-chart-kit";
 
+
+
+import React from "react";
+import { View, Dimensions } from "react-native";
+import { LineChart } from "react-native-chart-kit";
 
 const Chart = () => {
   const screenWidth = Dimensions.get("window").width;
   const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], 
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
       {
-        data: [45, 60, 80, 70, 100, 90], 
-        color: (opacity = 1) => `rgba(0, 128, 255, ${opacity})`, 
+        data: [45, 60, 80, 70, 100, 90],
+        color: (opacity = 1) => `rgba(255, 87, 34, ${opacity})`, 
       },
     ],
   };
@@ -21,14 +23,14 @@ const Chart = () => {
         data={data}
         width={screenWidth - 20} 
         height={270} 
-        yAxisSuffix=" ppl" 
+        yAxisSuffix="" 
         chartConfig={{
-          backgroundColor: "#022173",
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientTo: "#08130D",
-          decimalPlaces: 0, 
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          backgroundColor: "#00897B", 
+          backgroundGradientFrom: "#00897B", 
+          backgroundGradientTo: "#00897B",
+          decimalPlaces: 0,
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, 
+          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, 
           style: {
             borderRadius: 16,
           },
@@ -36,7 +38,7 @@ const Chart = () => {
         style={{
           marginVertical: 20,
           borderRadius: 16,
-          marginTop: -20
+          marginTop: -20,
         }}
       />
     </View>
@@ -44,3 +46,4 @@ const Chart = () => {
 };
 
 export default Chart;
+

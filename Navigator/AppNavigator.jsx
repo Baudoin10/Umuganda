@@ -9,7 +9,6 @@ import Task from "../Dashboard/Task";
 import Dashboard from "../Dashboard/Dashboard";
 import Notification from "../Dashboard/Notification";
 import Profile from "../UserDashboard/Profile";
-// import EditProfile from "../Dashboard/EditProfile";
 import Users from "../Dashboard/Users";
 import Introduction from "../Screens/Introduction"; 
 import ListTask from "../Dashboard/ListTask";
@@ -46,7 +45,6 @@ const AppNavigator = () => {
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="user" component={UserDashboard} />
         <Stack.Screen name="Notification" component={Notification} />
-        {/* <Stack.Screen name="EditProfile" component={EditProfile} /> */}
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Users" component={Users} />
         <Stack.Screen name="ListTask" component={ListTask} />

@@ -9,6 +9,11 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
@@ -24,10 +29,9 @@ const Task = () => {
     description: "",
     date: "",
     location: "",
-    status: "pending" // Default status
+    status: "Pending",
   });
-  
-  // Request permissions
+
   useEffect(() => {
     const requestPermissions = async () => {
       const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
@@ -45,7 +49,6 @@ const Task = () => {
     requestPermissions();
   }, []);
 
-  // Take a picture
   const handleTakePicture = async () => {
     try {
       let result = await ImagePicker.launchCameraAsync({
@@ -57,32 +60,30 @@ const Task = () => {
 
       if (!result.canceled && result.assets && result.assets[0]) {
         setPhoto(result.assets[0].uri);
-        
-        // Get location after taking photo
+
         const currentLocation = await Location.getCurrentPositionAsync({});
         setTaskDetails({
           ...taskDetails,
           location: JSON.stringify({
             latitude: currentLocation.coords.latitude,
-            longitude: currentLocation.coords.longitude
-          })
+            longitude: currentLocation.coords.longitude,
+          }),
         });
       }
     } catch (error) {
       Toast.show({
         type: "error",
         text1: "Error taking picture",
-        text2: error.message
+        text2: error.message,
       });
     }
   };
 
-  // Submit task
   const handleSubmitTask = async () => {
     if (!photo || !taskDetails.title || !taskDetails.description || !taskDetails.date) {
       Toast.show({
         type: "error",
-        text1: "Please fill all fields and take a picture"
+        text1: "Please fill all fields and take a picture",
       });
       return;
     }
@@ -95,136 +96,137 @@ const Task = () => {
         date: taskDetails.date,
         location: taskDetails.location,
         status: taskDetails.status,
-        photo: photo
+        photo: photo,
       };
 
       const response = await fetch("http://192.168.1.39:3000/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       const result = await response.json();
 
       if (response.ok) {
         Toast.show({ type: "success", text1: "Task created successfully!" });
-        // Reset form
         setPhoto(null);
         setTaskDetails({
           title: "",
           description: "",
           date: "",
           location: "",
-          status: "pending"
+          status: "Pending",
         });
       } else {
-        Toast.show({ 
-          type: "error", 
+        Toast.show({
+          type: "error",
           text1: "Failed to create task",
-          text2: result.message || "Please try again"
+          text2: result.message || "Please try again",
         });
       }
     } catch (error) {
       Toast.show({
         type: "error",
         text1: "Network error",
-        text2: "Please check your connection"
+        text2: "Please check your connection",
       });
     } finally {
       setLoading(false);
     }
   };
-  
-  // Parse location for map display
-  const getMapLocation = () => {
-    if (!taskDetails.location) return null;
-    
-    try {
-      return JSON.parse(taskDetails.location);
-    } catch {
-      return null;
-    }
-  };
 
-  const mapLocation = getMapLocation();
+  const mapLocation = taskDetails.location ? JSON.parse(taskDetails.location) : null;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Umuganda Task</Text>
-
-      <TouchableOpacity style={styles.button} onPress={handleTakePicture}>
-        <Icon name="camera-alt" size={20} color="#FFF" style={styles.buttonIcon} />
-        <Text style={styles.buttonText}>Take Picture of Location</Text>
-      </TouchableOpacity>
-
-      {photo && <Image source={{ uri: photo }} style={styles.image} />}
-
-      {mapLocation && (
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: mapLocation.latitude,
-            longitude: mapLocation.longitude,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          }}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
         >
-          <Marker coordinate={mapLocation} />
-        </MapView>
-      )}
+          <View style={styles.container}>
+            <Text style={styles.title}>Create Umuganda Task</Text>
 
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Task Title</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter task title"
-          value={taskDetails.title}
-          onChangeText={(text) => setTaskDetails({ ...taskDetails, title: text })}
-        />
-      </View>
+            <TouchableOpacity style={styles.button} onPress={handleTakePicture}>
+              <Icon name="camera-alt" size={20} color="#FFF" style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Take Picture of Location</Text>
+            </TouchableOpacity>
 
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Description</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Describe the task"
-          value={taskDetails.description}
-          onChangeText={(text) => setTaskDetails({ ...taskDetails, description: text })}
-          multiline
-          numberOfLines={3}
-        />
-      </View>
+            {photo && <Image source={{ uri: photo }} style={styles.image} />}
 
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Date (YYYY-MM-DD)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="When will this task take place?"
-          value={taskDetails.date}
-          onChangeText={(text) => setTaskDetails({ ...taskDetails, date: text })}
-        />
-      </View>
+            {mapLocation && (
+              <View style={{ height: 180, marginBottom: 16 }}>
+                <MapView
+                  style={{ flex: 1, borderRadius: 8 }}
+                  initialRegion={{
+                    latitude: mapLocation.latitude,
+                    longitude: mapLocation.longitude,
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005,
+                  }}
+                >
+                  <Marker coordinate={mapLocation} />
+                </MapView>
+              </View>
+            )}
 
-      <TouchableOpacity 
-        style={[
-          styles.submitButton,
-          loading ? styles.disabledButton : null
-        ]} 
-        onPress={handleSubmitTask}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#FFF" size="small" />
-        ) : (
-          <>
-            <Icon name="add-task" size={24} color="#FFF" />
-            <Text style={styles.submitButtonText}>Create Task</Text>
-          </>
-        )}
-      </TouchableOpacity>
-      
-      <Toast />
-    </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Task Title</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter task title"
+                value={taskDetails.title}
+                onChangeText={(text) => setTaskDetails({ ...taskDetails, title: text })}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Description</Text>
+              <TextInput
+                style={[styles.input, styles.textArea]}
+                placeholder="Describe the task"
+                value={taskDetails.description}
+                onChangeText={(text) =>
+                  setTaskDetails({ ...taskDetails, description: text })
+                }
+                multiline
+                numberOfLines={3}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Date (YYYY-MM-DD)</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="When will this task take place?"
+                value={taskDetails.date}
+                onChangeText={(text) => setTaskDetails({ ...taskDetails, date: text })}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={[styles.submitButton, loading ? styles.disabledButton : null]}
+              onPress={handleSubmitTask}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#FFF" size="small" />
+              ) : (
+                <>
+                  <Icon name="add-task" size={24} color="#FFF" />
+                  <Text style={styles.submitButtonText}>Create Task</Text>
+                </>
+              )}
+            </TouchableOpacity>
+            
+            <Toast />
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

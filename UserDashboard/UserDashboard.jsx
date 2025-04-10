@@ -68,6 +68,12 @@ const UserDashboard = ({ navigation }) => {
       icon: "event",
     },
     {
+      id: "4",
+      title: "Notifications",
+      screen: "view",
+      icon: "notifications",
+    },
+    {
       id: "5",
       title: "Profile/Settings",
       screen: "Profile",

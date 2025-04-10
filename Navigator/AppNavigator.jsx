@@ -19,6 +19,7 @@ import ViewEvent from "../UserDashboard/ViewEvent";
 import ViewTask from "../UserDashboard/ViewTask";
 import joinEvent from "../UserDashboard/joinEvent";
 import EventForm from "../UserDashboard/EventForm";
+import Viewnotifications from "../UserDashboard/Viewnotifications";
 
 
 const Stack = createStackNavigator();
@@ -54,6 +55,7 @@ const AppNavigator = () => {
         <Stack.Screen name="ViewTask" component={ViewTask} />
         <Stack.Screen name="joinEvent" component={joinEvent} />
         <Stack.Screen name="EventForm" component={EventForm} />
+        <Stack.Screen name="view" component={Viewnotifications} />
       </Stack.Navigator>
     </NavigationContainer>
   );

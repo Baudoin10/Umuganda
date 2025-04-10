@@ -1,6 +1,4 @@
 
-
-
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import Toast from "react-native-toast-message";
@@ -49,10 +47,11 @@ const Event = () => {
 
       if (!response.ok) throw new Error("Failed to create event");
 
-      Toast.show({
-        type: "success",
-        text1: "Event created successfully!",
-      });
+        Toast.show({
+              type: "success",
+              position: "top",
+              text1: "Event created successfully!",
+            });
 
       setTimeout(() => {
         navigation.navigate("Dashboard");

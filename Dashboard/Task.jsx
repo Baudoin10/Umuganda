@@ -117,6 +117,11 @@ const Task = () => {
           location: "",
           status: "Pending",
         });
+
+        setTimeout(() => {
+          navigation.navigate("Dashboard");
+        }, 3000);
+
       } else {
         Toast.show({
           type: "error",

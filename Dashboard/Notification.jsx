@@ -1,23 +1,85 @@
 
-
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  StyleSheet, 
+  ActivityIndicator,
+  Switch
+} from "react-native";
+import Toast from 'react-native-toast-message'; 
 
 const Notification = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [time, setTime] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isBroadcast, setIsBroadcast] = useState(true);
 
-  const handleCreateNotification = () => {
-    if (title && description && time) {
-      // In a real app, you would send this data to the server or store it in the database
-      Alert.alert("Notification Created", `Title: ${title}\nDescription: ${description}\nTime: ${time}`);
-      // Clear the input fields after creating the notification
-      setTitle("");
-      setDescription("");
-      setTime("");
-    } else {
-      Alert.alert("Error", "Please fill out all fields.");
+  const handleCreateNotification = async () => {
+    if (!title || !description) {
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Incomplete Form',
+        text2: 'Please fill out both title and description.',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch('http://192.168.1.39:3000/api/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          message: description,
+          targetUserIds: isBroadcast ? "all" : [] 
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          text1: 'Notification Created',
+          text2: `Successfully sent to ${isBroadcast ? 'all users' : 'selected users'}`,
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+
+        // Reset the form
+        setTitle("");
+        setDescription("");
+      } else {
+        Toast.show({
+          type: 'error',
+          position: 'top',
+          text1: 'Error',
+          text2: data.message || 'Failed to create notification.',
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Error',
+        text2: 'Network error. Please check your connection.',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -25,33 +87,53 @@ const Notification = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Create a New Notification</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Notification Title"
-        value={title}
-        onChangeText={(text) => setTitle(text)}
-      />
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Notification Title</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter title here"
+          value={title}
+          onChangeText={setTitle}
+        />
+      </View>
       
-      <TextInput
-        style={styles.input}
-        placeholder="Notification Description"
-        value={description}
-        onChangeText={(text) => setDescription(text)}
-        multiline
-      />
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Notification Description</Text>
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Enter description here"
+          value={description}
+          onChangeText={setDescription}
+          multiline
+          numberOfLines={4}
+        />
+      </View>
       
-      <TextInput
-        style={styles.input}
-        placeholder="Time (e.g., 2 days ago)"
-        value={time}
-        onChangeText={(text) => setTime(text)}
-      />
+      <View style={styles.formGroup}>
+        <View style={styles.broadcastRow}>
+          <Text style={styles.label}>Send to all users</Text>
+          <Switch
+            value={isBroadcast}
+            onValueChange={setIsBroadcast}
+            trackColor={{ false: "#cccccc", true: "#a0d8a3" }}
+            thumbColor={isBroadcast ? "#4CAF50" : "#f4f3f4"}
+          />
+        </View>
+      </View>
       
-      <TouchableOpacity style={styles.createButton}>
-  <Text style={styles.createButtonText}>Create Notification</Text>
-</TouchableOpacity>
+      <TouchableOpacity 
+        style={[styles.createButton, (isLoading || !title || !description) && styles.disabledButton]} 
+        onPress={handleCreateNotification}
+        disabled={isLoading || !title || !description}
+      >
+        {isLoading ? (
+          <ActivityIndicator color="#FFF" size="small" />
+        ) : (
+          <Text style={styles.createButtonText}>Create Notification</Text>
+        )}
+      </TouchableOpacity>
 
-
+      <Toast /> 
     </View>
   );
 };
@@ -67,28 +149,51 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    color: "#333",
+  },
+  formGroup: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 6,
+    color: "#333",
+    fontWeight: "500",
   },
   input: {
     backgroundColor: "#FFF",
     borderWidth: 1,
     borderColor: "#DDD",
     borderRadius: 8,
-    padding: 10,
-    marginBottom: 16,
+    padding: 12,
+    fontSize: 16,
   },
-
-
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  broadcastRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
   createButton: {
-    backgroundColor: "#4CAF50", 
-    paddingVertical: 12,        
+    backgroundColor: "#4CAF50",
+    paddingVertical: 14,        
     paddingHorizontal: 20,      
-    borderRadius: 5,           
+    borderRadius: 8,           
     alignItems: "center",       
     marginTop: 20,              
+    elevation: 2,
+  },
+  disabledButton: {
+    backgroundColor: "#A0D8A3",
+    elevation: 0,
   },
   createButtonText: {
     color: "#FFF",              
-    fontSize: 16,              
+    fontSize: 17,              
     fontWeight: "bold",       
   },
 });

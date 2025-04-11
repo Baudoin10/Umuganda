@@ -1,12 +1,9 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet,TouchableOpacity } from 'react-native';
-import Toast from 'react-native-toast-message';
-import { useState } from 'react';
-import axios from 'axios';
 
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 const EventForm = () => {
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
@@ -57,84 +54,155 @@ const EventForm = () => {
     }
   };
 
-
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Join Event</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.formContainer}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Join Event</Text>
+            <Text style={styles.subtitle}>Fill in the details to participate</Text>
+          </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Event Title"
-        value={title}
-        onChangeText={setTitle}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Event Title</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter event title"
+              placeholderTextColor="#aaa"
+              value={title}
+              onChangeText={setTitle}
+            />
+          </View>
 
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Description</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="Describe the event"
+              placeholderTextColor="#aaa"
+              value={description}
+              onChangeText={setDescription}
+              multiline
+              numberOfLines={4}
+            />
+          </View>
 
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Address"
-        value={address}
-        onChangeText={setAddress}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Address</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Event location"
+              placeholderTextColor="#aaa"
+              value={address}
+              onChangeText={setAddress}
+            />
+          </View>
 
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Date"
-        value={date}
-        onChangeText={setDate}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Date</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="MM/DD/YYYY"
+              placeholderTextColor="#aaa"
+              value={date}
+              onChangeText={setDate}
+            />
+          </View>
 
-      />
-  
- <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity>
-
-
-    </View>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={handleSubmit}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.submitButtonText}>JOIN EVENT</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f9fafc',
+  },
+  formContainer: {
+    flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    borderRadius: 10,
+  },
+  header: {
+    borderRadius: 12,
+    padding: 24,
+    marginBottom: 25,
+    backgroundColor: '#4CAF50',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
   },
   title: {
-    fontSize: 22,
-    fontWeight: '600',
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontWeight: '400',
+  },
+  inputContainer: {
     marginBottom: 20,
   },
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 8,
+  },
   input: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 10,
+    fontSize: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
+    borderColor: '#e1e1e8',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 1,
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+    paddingTop: 14,
   },
   submitButton: {
-    marginTop: 15,
+    marginTop: 10,
+    borderRadius: 10,
     backgroundColor: '#4CAF50',
-    paddingVertical: 12,
-    borderRadius: 5,
+    paddingVertical: 16,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   submitButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: '#fff',
+    fontWeight: '700',
     fontSize: 16,
+    letterSpacing: 1,
   },
 });
 
 export default EventForm;
-
-
-
-

@@ -21,6 +21,7 @@ import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 
+
 const Task = () => {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);

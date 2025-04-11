@@ -1,30 +1,64 @@
 
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
 
-const EventForm = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [address, setAddress] = useState('');
-  const [date, setDate] = useState('');
+const EventJoinForm = () => {
+  const [events, setEvents] = useState([]);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmit = async () => {
-    if (!title || !description || !address || !date) {
+  
+  const userId = "your-user-id-here"; 
+  
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+  
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://192.168.1.39:3000/api/events');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setEvents(data);
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to fetch events',
+        });
+      }
+    } catch (error) {
+      console.error(error);
       Toast.show({
         type: 'error',
-        text1: 'All fields are required',
+        text1: 'Error connecting to server',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleJoinEvent = async () => {
+    if (!selectedEventId) {
+      Toast.show({
+        type: 'error',
+        text1: 'Please select an event to join',
       });
       return;
     }
 
     try {
-      const response = await fetch('http://192.168.1.39:3000/api/join', {
+      const response = await fetch('http://192.168.1.39:3000/api/events/join', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, description, address, date }),
+        body: JSON.stringify({ 
+          eventId: selectedEventId,
+          userId: userId
+        }),
       });
 
       const data = await response.json();
@@ -35,10 +69,15 @@ const EventForm = () => {
           text1: 'Joined the event successfully!',
         });
 
-        setTitle('');
-        setDescription('');
-        setAddress('');
-        setDate('');
+        setTimeout(() => {
+          navigation.navigate("user");
+        }, 1500);
+        
+        // Refresh the events list
+        fetchEvents();
+        
+        // Reset selection
+        setSelectedEventId(null);
       } else {
         Toast.show({
           type: 'error',
@@ -54,6 +93,26 @@ const EventForm = () => {
     }
   };
 
+  const renderEventItem = (event) => {
+    const isSelected = selectedEventId === event._id;
+    return (
+      <TouchableOpacity
+        key={event._id}
+        style={[styles.eventItem, isSelected && styles.selectedEvent]}
+        onPress={() => setSelectedEventId(event._id)}
+      >
+        <Text style={styles.eventTitle}>{event.title}</Text>
+        <Text style={styles.eventDate}>{event.date}</Text>
+        <Text style={styles.eventAddress} numberOfLines={1}>{event.address}</Text>
+        <View style={styles.participantsCount}>
+          <Text style={styles.participantsText}>
+            {event.participants?.length || 0} participants
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -63,61 +122,31 @@ const EventForm = () => {
         <View style={styles.formContainer}>
           <View style={styles.header}>
             <Text style={styles.title}>Join Event</Text>
-            <Text style={styles.subtitle}>Fill in the details to participate</Text>
+            <Text style={styles.subtitle}>Select an event to participate</Text>
           </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Event Title</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter event title"
-              placeholderTextColor="#aaa"
-              value={title}
-              onChangeText={setTitle}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Description</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              placeholder="Describe the event"
-              placeholderTextColor="#aaa"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-              numberOfLines={4}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Address</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Event location"
-              placeholderTextColor="#aaa"
-              value={address}
-              onChangeText={setAddress}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Date</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="MM/DD/YYYY"
-              placeholderTextColor="#aaa"
-              value={date}
-              onChangeText={setDate}
-            />
-          </View>
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#4CAF50" />
+              <Text style={styles.loadingText}>Loading events...</Text>
+            </View>
+          ) : events.length === 0 ? (
+            <View style={styles.noEventsContainer}>
+              <Text style={styles.noEventsText}>No events available</Text>
+            </View>
+          ) : (
+            <View style={styles.eventsContainer}>
+              {events.map(renderEventItem)}
+            </View>
+          )}
 
           <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleSubmit}
+            style={[styles.joinButton, !selectedEventId && styles.disabledButton]}
+            onPress={handleJoinEvent}
+            disabled={!selectedEventId}
             activeOpacity={0.8}
           >
-            <Text style={styles.submitButtonText}>JOIN EVENT</Text>
+            <Text style={styles.joinButtonText}>JOIN EVENT</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -157,21 +186,31 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.8)',
     fontWeight: '400',
   },
-  inputContainer: {
+  loadingContainer: {
+    padding: 30,
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  noEventsContainer: {
+    padding: 30,
+    alignItems: 'center',
+  },
+  noEventsText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  eventsContainer: {
     marginBottom: 20,
   },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-  },
-  input: {
+  eventItem: {
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
     borderRadius: 10,
-    fontSize: 16,
+    padding: 16,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: '#e1e1e8',
     shadowColor: '#000',
@@ -180,12 +219,39 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 1,
   },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-    paddingTop: 14,
+  selectedEvent: {
+    borderColor: '#4CAF50',
+    borderWidth: 2,
+    backgroundColor: 'rgba(76, 175, 80, 0.05)',
   },
-  submitButton: {
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+    color: '#333',
+  },
+  eventDate: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  eventAddress: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  participantsCount: {
+    backgroundColor: '#f0f0f0',
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 12,
+  },
+  participantsText: {
+    fontSize: 12,
+    color: '#555',
+  },
+  joinButton: {
     marginTop: 10,
     borderRadius: 10,
     backgroundColor: '#4CAF50',
@@ -197,7 +263,11 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
-  submitButtonText: {
+  disabledButton: {
+    backgroundColor: '#a5d6a7',
+    opacity: 0.7,
+  },
+  joinButtonText: {
     color: '#fff',
     fontWeight: '700',
     fontSize: 16,
@@ -205,4 +275,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventForm;
+export default EventJoinForm;

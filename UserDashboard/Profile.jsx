@@ -25,29 +25,12 @@ const Profile = () => {
           <Text style={styles.label}>Email:</Text>
           <Text style={styles.value}>johndoe@example.com</Text>
         </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Phone:</Text>
-          <Text style={styles.value}>+250 788 123 456</Text>
-        </View>
+      
         <View style={styles.infoRow}>
           <Text style={styles.label}>Location:</Text>
           <Text style={styles.value}>Kigali, Rwanda</Text>
         </View>
       </View>
-
-      {/* Settings */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Settings</Text>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Language:</Text>
-          <Text style={styles.value}>English</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Notifications:</Text>
-          <Text style={styles.value}>Enabled</Text>
-        </View>
-      </View>
-
       {/* Buttons */}
       <View style={styles.actions}>
         <TouchableOpacity
@@ -60,9 +43,7 @@ const Profile = () => {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Change Password</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutButton} onPress={()=> navigation.navigate("Login")}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
+       
       </View>
     </View>
   );
@@ -92,14 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#555",
   },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
+  
   infoRow: {
     flexDirection: "row",
     justifyContent: "space-between",

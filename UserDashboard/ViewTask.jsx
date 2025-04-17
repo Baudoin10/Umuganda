@@ -1,178 +1,156 @@
-// import React from 'react';
-// import { View, Text, FlatList } from 'react-native';
-// import Icon from 'react-native-vector-icons/Feather';
 
-// // Sample tasks data
-// const tasks = [
-//   {
-//     id: 1,
-//     title: 'Clean the Park',
-//     description: 'Clean the community park near Nyarugenge area.',
-//     dueDate: '2025-04-05',
-//     status: 'Pending',
-//     priority: 'High',
-//   },
-//   {
-//     id: 2,
-//     title: 'Tree Planting',
-//     description: 'Help plant trees at Gisozi Hill.',
-//     dueDate: '2025-04-12',
-//     status: 'In Progress',
-//     priority: 'Medium',
-//   },
-//   {
-//     id: 3,
-//     title: 'Community Meeting',
-//     description: 'Attend the monthly community meeting.',
-//     dueDate: '2025-04-15',
-//     status: 'Completed',
-//     priority: 'Low',
-//   },
-// ];
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// // Task card component
-// const TaskCard = ({ task }) => (
-//   <View style={{
-//     margin: 10,
-//     padding: 15,
-//     backgroundColor: 'white',
-//     borderRadius: 10,
-//     shadowColor: '#000',
-//     shadowOffset: { width: 0, height: 4 },
-//     shadowOpacity: 0.3,
-//     shadowRadius: 5,
-//     elevation: 5,
-//   }}>
-//     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{task.title}</Text>
-//     <Text style={{ fontSize: 14, color: '#6e6e6e', marginTop: 5 }}>{task.description}</Text>
-//     <Text style={{ fontSize: 12, marginTop: 8, color: '#6e6e6e' }}>Due: {task.dueDate}</Text>
-//     <Text style={{
-//       fontSize: 12,
-//       marginTop: 4,
-//       color: task.status === 'Completed' ? 'green' : task.status === 'In Progress' ? 'orange' : 'red',
-//     }}>
-//       Status: {task.status}
-//     </Text>
-//     <Text style={{ fontSize: 12, marginTop: 4, color: '#6e6e6e' }}>Priority: {task.priority}</Text>
-//   </View>
-// );
-
-// // Main component for the View Task page
-// const ViewTask = () => {
-
-
-//   const fetchTasks = async () => {
-//     try {
-//       const token = await AsyncStorage.getItem("token");
-//       const response = await axios.get("http://192.168.1.39:3000/api/tasks", {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-//       setTasks(response.data);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchTasks();
-//   }, []);
-
-
-
-
-//   return (
-//     <View style={{ flex: 1, backgroundColor: '#f5f5f5', padding: 15 }}>
-//       <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15 }}>Your Tasks</Text>
-//       <FlatList
-//         data={tasks}
-//         keyExtractor={(item) => item.id.toString()}
-//         renderItem={({ item }) => <TaskCard task={item} />}
-//       />
-//     </View>
-//   );
-// };
-
-// export default ViewTask;
-
-import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-
-const Task = ({ taskDetails, photo }) => {
-  const mapLocation = taskDetails.location ? JSON.parse(taskDetails.location) : null;
+// Task card component
+const TaskCard = ({ task }) => {
+  // Map status to colors
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Completed': return 'green';
+      case 'In Progress': return 'orange';
+      case 'Pending': return 'red';
+      default: return 'gray';
+    }
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{taskDetails.title}</Text>
-      <Text style={styles.label}>Description:</Text>
-      <Text style={styles.text}>{taskDetails.description}</Text>
+    <View style={styles.taskCard}>
+      <Text style={styles.taskTitle}>{task.title}</Text>
+      <Text style={styles.taskDescription}>{task.description}</Text>
+      <Text style={styles.taskDetail}>Location: {task.location}</Text>
+      <Text style={styles.taskDetail}>Date: {task.date}</Text>
+      <Text style={[styles.taskStatus, { color: getStatusColor(task.status) }]}>
+        Status: {task.status}
+      </Text>
+    </View>
+  );
+};
 
-      <Text style={styles.label}>Date:</Text>
-      <Text style={styles.text}>{taskDetails.date}</Text>
+// Main component for the View Task page
+const ViewTask = () => {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-      <Text style={styles.label}>Status:</Text>
-      <Text style={styles.text}>{taskDetails.status}</Text>
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get("http://192.168.1.39:3000/api/tasks", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTasks(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error fetching tasks:", error);
+      setError("Failed to load tasks. Please try again.");
+      setLoading(false);
+    }
+  };
 
-      {photo && (
-        <>
-          <Text style={styles.label}>Photo:</Text>
-          <Image source={{ uri: photo }} style={styles.image} />
-        </>
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text style={styles.loadingText}>Loading tasks...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Your Tasks</Text>
+      {tasks.length === 0 ? (
+        <Text style={styles.noTasksText}>No tasks available</Text>
+      ) : (
+        <FlatList
+          data={tasks}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item }) => <TaskCard task={item} />}
+        />
       )}
-
-      {mapLocation && (
-        <>
-          <Text style={styles.label}>Location:</Text>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: mapLocation.latitude,
-              longitude: mapLocation.longitude,
-              latitudeDelta: 0.005,
-              longitudeDelta: 0.005,
-            }}
-          >
-            <Marker coordinate={mapLocation} />
-          </MapView>
-        </>
-      )}
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: "#fff",
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    padding: 15,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
+  header: {
+    fontSize: 22,
+    fontWeight: '600',
+    marginBottom: 15,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginTop: 10,
-  },
-  text: {
-    fontSize: 16,
-    color: "#333",
-  },
-  image: {
-    width: "100%",
-    height: 200,
+  taskCard: {
+    margin: 10,
+    padding: 15,
+    backgroundColor: 'white',
     borderRadius: 10,
-    marginTop: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
   },
-  map: {
-    height: 180,
-    borderRadius: 10,
+  taskTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  taskDescription: {
+    fontSize: 14,
+    color: '#6e6e6e',
+    marginTop: 5,
+  },
+  taskDetail: {
+    fontSize: 12,
+    marginTop: 4,
+    color: '#6e6e6e',
+  },
+  taskStatus: {
+    fontSize: 12,
+    marginTop: 4,
+    fontWeight: '500',
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
     marginTop: 10,
+    fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+  },
+  noTasksText: {
+    textAlign: 'center',
+    marginTop: 50,
+    fontSize: 16,
+    color: '#6e6e6e',
   },
 });
 
-export default Task;
-
+export default ViewTask;

@@ -126,17 +126,24 @@ const Dashboard = ({ navigation }) => {
       icon: "assignment",
     },
     {
-      id: "3",
-      title: "Notifications",
-      screen: "Notification",
-      icon: "notifications",
-    },
-    {
       id: "4",
       title: "Users",
       screen: "Users",
       icon: "group",
     },
+    {
+      id: "2",
+      title: "Task Overview",
+      screen: "ListTask",
+      icon: "assignment",
+    },
+    {
+      id: "3",
+      title: "Notifications",
+      screen: "Notification",
+      icon: "notifications",
+    },
+   
     { id: "6", title: "Logout", screen: "Login", icon: "logout" },
   ];
 

@@ -20,9 +20,10 @@ import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
-
+import { useNavigation } from "@react-navigation/native";
 
 const Task = () => {
+   const navigation = useNavigation();
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [taskDetails, setTaskDetails] = useState({

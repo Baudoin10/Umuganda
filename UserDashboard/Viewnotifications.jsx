@@ -28,9 +28,6 @@ const Viewnotifications = () => {
     fetchNotifications();
   }, []);
   
-  
-
-  // Render each notification item
   const renderItem = ({ item }) => (
     <View style={styles.notificationItem}>
       <Text style={styles.title}>{item.title}</Text>

@@ -14,7 +14,6 @@ const TaskCard = ({ task, onStatusUpdate }) => {
       default: return 'gray';
     }
   };
-
   
   const renderActionButtons = () => {
     switch (task.status) {

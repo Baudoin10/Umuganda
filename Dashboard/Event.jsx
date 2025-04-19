@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Event = () => {
 
-    const navigation = useNavigation();
+const navigation = useNavigation();
 
   const [formData, setFormData] = useState({
     title: "",

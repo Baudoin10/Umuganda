@@ -20,6 +20,7 @@ import ViewTask from "../UserDashboard/ViewTask";
 import joinEvent from "../UserDashboard/joinEvent";
 import EventForm from "../UserDashboard/EventForm";
 import Viewnotifications from "../UserDashboard/Viewnotifications";
+import EditProfile from "../UserDashboard/EditProfile";
 
 
 const Stack = createStackNavigator();
@@ -55,6 +56,7 @@ const AppNavigator = () => {
         <Stack.Screen name="ViewTask" component={ViewTask} />
         <Stack.Screen name="joinEvent" component={joinEvent} />
         <Stack.Screen name="EventForm" component={EventForm} />
+        <Stack.Screen name="Editprofile" component={EditProfile} />
         <Stack.Screen name="view" component={Viewnotifications} />
       </Stack.Navigator>
     </NavigationContainer>

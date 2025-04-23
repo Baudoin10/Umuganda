@@ -18,18 +18,20 @@ const Profile = () => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Personal Information</Text>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Full Name:</Text>
+          <Text style={styles.label}>Firstname</Text>
+          <Text style={styles.value}>John Doe</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Lastname</Text>
           <Text style={styles.value}>John Doe</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.label}>Email</Text>
           <Text style={styles.value}>johndoe@example.com</Text>
         </View>
       
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Location:</Text>
-          <Text style={styles.value}>Kigali, Rwanda</Text>
-        </View>
+      
       </View>
       {/* Buttons */}
       <View style={styles.actions}>
@@ -39,11 +41,6 @@ const Profile = () => {
         >
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Change Password</Text>
-        </TouchableOpacity>
-       
       </View>
     </View>
   );

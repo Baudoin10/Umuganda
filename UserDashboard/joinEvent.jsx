@@ -73,11 +73,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 15,
+   
   },
   pageTitle: {
     fontSize: 22,
     fontWeight: '600',
-    marginBottom: 20,
+    marginTop: 50,
+   
   },
   card: {
     backgroundColor: 'white',

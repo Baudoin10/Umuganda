@@ -63,8 +63,12 @@ const ViewEvent = () => {
   );
 
   return (
+
+    
+   
     <View style={{ flex: 1, backgroundColor: '#f5f5f5', padding: 15 }}>
-      <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15 }}>Upcoming Events</Text>
+    
+      <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15, marginTop: 80, }}>Upcoming Events</Text>
       <FlatList
         data={events}
         keyExtractor={(item) => item._id.toString()}

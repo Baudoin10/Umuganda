@@ -56,7 +56,7 @@ const AppNavigator = () => {
         <Stack.Screen name="ViewTask" component={ViewTask} />
         <Stack.Screen name="joinEvent" component={joinEvent} />
         <Stack.Screen name="EventForm" component={EventForm} />
-        <Stack.Screen name="Editprofile" component={EditProfile} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="view" component={Viewnotifications} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -20,6 +20,8 @@ import { useEffect } from "react";
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState(null);
+    const [events, setEvents] = useState([]);
+    const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
       const fetchUser = async () => {
@@ -46,6 +48,43 @@ const UserDashboard = ({ navigation }) => {
       };
     
       fetchUser();
+    }, []);
+
+
+    const fetchTasks = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios.get("http://192.168.1.39:3000/api/tasks", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setTasks(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchTasks();
+    }, []);
+
+    const fetchEvents = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios.get("http://192.168.1.39:3000/api/events", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setEvents(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchEvents();
     }, []);
 
   const menuItems = [
@@ -83,12 +122,12 @@ const UserDashboard = ({ navigation }) => {
   ];
 
   const dashboardCards = [
-    { id: "1", title: "Tasks", count: "10", icon: "people", color: "#1976D2" },
-    { id: "2", title: "Events", count: "110", icon: "event", color: "#00897B" },
+    { id: "1", title: "Tasks", count: tasks.length, icon: "people", color: "#1976D2" },
+    { id: "2", title: "Events", count: events.length, icon: "event", color: "#00897B" },
     {
       id: "3",
       title: "Events joined",
-      count: "100",
+      count: events.length,
       icon: "task",
       color: "#D81B60",
     },

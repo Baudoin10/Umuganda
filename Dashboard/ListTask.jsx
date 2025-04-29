@@ -11,8 +11,13 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 const ListTask = () => {
+  const navigation = useNavigation();
+
+
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -76,6 +81,13 @@ const ListTask = () => {
 
   return (
     <ScrollView style={styles.container}>
+        <TouchableOpacity
+                   onPress={() =>  navigation.navigate("user")}
+                   style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
+                 >
+                   <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
+                   <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
+                 </TouchableOpacity>
       <Text style={styles.title}>Task Management</Text>
 
       {/* Filters */}

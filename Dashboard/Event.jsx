@@ -103,7 +103,11 @@ const navigation = useNavigation();
 
 const styles = StyleSheet.create({
   container: { padding: 20 },
-  heading: { fontSize: 20, marginBottom: 10 },
+  heading: { 
+    fontSize: 20, 
+    marginBottom: 10,
+    marginTop: '20%'
+   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",

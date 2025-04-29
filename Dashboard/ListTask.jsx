@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 16,
+    // marginTop: '20%'
   },
   filterRow: {
     flexDirection: 'row',

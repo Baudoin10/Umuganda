@@ -291,6 +291,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F7FA",
+   
   },
   topBar: {
     flexDirection: "row",

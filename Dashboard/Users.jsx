@@ -11,9 +11,14 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import Toast from 'react-native-toast-message';  // Import Toast
+import Toast from 'react-native-toast-message';  
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from '@expo/vector-icons';
 
 const Users = () => {
+
+   const navigation = useNavigation();
+
   const [users, setUsers] = useState([]);
   const screenWidth = Dimensions.get('window').width;
   const isSmallScreen = screenWidth < 380;
@@ -105,6 +110,13 @@ const Users = () => {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity
+             onPress={() =>  navigation.navigate("Dashboard")}
+             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
+           >
+             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
+             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
+           </TouchableOpacity>
       <Text style={styles.title}>Users</Text>
       <FlatList
         data={users}

@@ -10,6 +10,7 @@ import {
   Switch
 } from "react-native";
 import Toast from 'react-native-toast-message'; 
+import { useNavigation } from "@react-navigation/native";
 
 const Notification = () => {
   const [title, setTitle] = useState("");
@@ -55,6 +56,10 @@ const Notification = () => {
           visibilityTime: 3000,
           autoHide: true,
         });
+
+        setTimeout(() => {
+          navigation.navigate("Dashboard");
+        }, 3000);
 
         // Reset the form
         setTitle("");
@@ -147,9 +152,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
+    marginBottom: '10%',
+    textAlign: "left",
     color: "#333",
+    marginTop: '22%',
   },
   formGroup: {
     marginBottom: 16,
@@ -188,7 +194,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   disabledButton: {
-    backgroundColor: "#A0D8A3",
+    backgroundColor: "#4CAF50",
     elevation: 0,
   },
   createButtonText: {

@@ -1,4 +1,4 @@
-// EditProfile.js
+
 
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
@@ -12,15 +12,15 @@ const EditProfile = () => {
   const [email, setEmail] = useState("johndoe@example.com");
 
   const handleSave = () => {
-    // You can send updated data to your backend here
+    
     console.log("Updated info:", { firstName, lastName, email });
-    navigation.goBack(); // Go back to the profile screen
+    navigation.goBack(); 
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Edit Profile</Text>
-
+      <Text style={styles.title}>Edit your Profile</Text>
+      <Text style={styles.share}>Please don't share this information with any one else. keep it for yourself.</Text>
       <TextInput
         style={styles.input}
         value={firstName}
@@ -60,6 +60,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    marginTop: '20%'
+  },
+  share:{
+   marginBottom : '25',
   },
   input: {
     borderWidth: 1,

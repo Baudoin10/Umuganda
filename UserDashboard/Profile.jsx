@@ -16,7 +16,8 @@ const Profile = () => {
 
       {/* Profile Details */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Personal Information</Text>
+      <Text style={styles.name}>Profile Overview</Text>
+        <Text style={styles.sectionTitle}>This is your Personal Information and it's will not be sharing to any one else.</Text>
         <View style={styles.infoRow}>
           <Text style={styles.label}>Firstname</Text>
           <Text style={styles.value}>John Doe</Text>
@@ -55,6 +56,11 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 20,
+    marginTop: '15%'
+  },
+  sectionTitle: {
+   marginTop: '4%',
+   marginBottom: '13%',
   },
   profileImage: {
     borderRadius: 50,

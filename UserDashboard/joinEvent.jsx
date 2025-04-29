@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'; 
+import { Ionicons } from '@expo/vector-icons';
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
@@ -28,6 +29,10 @@ const EventCard = ({ event, navigation }) => (
 );
 
 const JoinEvent = ({ navigation }) => {
+
+ 
+
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,6 +63,13 @@ const JoinEvent = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity
+             onPress={() =>  navigation.navigate("user")}
+             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
+           >
+             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
+             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
+           </TouchableOpacity>
       <Text style={styles.pageTitle}>Upcoming Events</Text>
       <FlatList
         data={events}
@@ -78,7 +90,7 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 22,
     fontWeight: '600',
-    marginTop: 50,
+    marginTop: '3%'
    
   },
   card: {

@@ -1,9 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator,TouchableOpacity } from 'react-native';
 import { CalendarDays, MapPin } from 'lucide-react-native';
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from '@expo/vector-icons';
 
 const ViewEvent = () => {
+
+  const navigation = useNavigation();
+
   const [events, setEvents] = useState([]); 
   const [loading, setLoading] = useState(true); 
   useEffect(() => {
@@ -67,8 +72,14 @@ const ViewEvent = () => {
     
    
     <View style={{ flex: 1, backgroundColor: '#f5f5f5', padding: 15 }}>
-    
-      <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15, marginTop: 80, }}>Upcoming Events</Text>
+       <TouchableOpacity
+             onPress={() =>  navigation.navigate("user")}
+             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
+           >
+             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
+             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
+           </TouchableOpacity>
+      <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15,marginTop: '3%' }}>Upcoming Events</Text>
       <FlatList
         data={events}
         keyExtractor={(item) => item._id.toString()}

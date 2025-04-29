@@ -1,11 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator,TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 const Viewnotifications = () => {
+
+  const navigation = useNavigation();
+
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,6 +50,13 @@ const Viewnotifications = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+      <TouchableOpacity
+             onPress={() =>  navigation.navigate("user")}
+             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
+           >
+             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
+             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
+           </TouchableOpacity>
         <Text style={styles.headerTitle}>Notifications</Text>
       </View>
       
@@ -68,13 +79,13 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 16,
-    backgroundColor: '#4CAF50',
-    alignItems: 'center',
+    backgroundColor: '#0000',
+    alignItems: 'left',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
   },
   loadingContainer: {
     flex: 1,

@@ -4,8 +4,13 @@ import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, 
 import Icon from 'react-native-vector-icons/Feather';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+
 const TaskCard = ({ task, onStatusUpdate }) => {
   
+
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Completed': return 'green';
@@ -74,6 +79,7 @@ const TaskCard = ({ task, onStatusUpdate }) => {
 
 // Main component for the View Task page
 const ViewTask = () => {
+  const navigation = useNavigation();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -204,6 +210,15 @@ const ViewTask = () => {
 
   return (
     <View style={styles.container}>
+      
+
+<TouchableOpacity
+      onPress={() =>  navigation.navigate("user")}
+      style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
+    >
+      <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
+      <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
+    </TouchableOpacity>
       <Text style={styles.header}>{userRole === 'admin' ? 'All Tasks' : 'Your Tasks'}</Text>
       {tasks.length === 0 ? (
         <Text style={styles.noTasksText}>No tasks available</Text>
@@ -233,6 +248,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
     marginBottom: 15,
+    marginTop: '3%'
   },
   taskCard: {
     margin: 10,

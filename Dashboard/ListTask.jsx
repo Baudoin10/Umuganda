@@ -82,7 +82,7 @@ const ListTask = () => {
   return (
     <ScrollView style={styles.container}>
         <TouchableOpacity
-                   onPress={() =>  navigation.navigate("user")}
+                   onPress={() =>  navigation.navigate("Dashboard")}
                    style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
                  >
                    <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />

@@ -49,7 +49,6 @@ const Signup = () => {
     }
   };
 
-  
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView

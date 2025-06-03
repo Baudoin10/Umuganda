@@ -1,5 +1,4 @@
 
-
 import React, { useState } from "react";
 import {
   View,
@@ -50,6 +49,7 @@ const Signup = () => {
     }
   };
 
+  
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView

@@ -11,7 +11,6 @@ const Profile = () => {
    
       <View style={styles.header}>
         <Text style={styles.name}>John Doe</Text>
-        <Text style={styles.email}>johndoe@example.com</Text>
       </View>
 
       {/* Profile Details */}

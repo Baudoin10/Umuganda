@@ -8,7 +8,6 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
-   
       <View style={styles.header}>
         <Text style={styles.name}>John Doe</Text>
       </View>

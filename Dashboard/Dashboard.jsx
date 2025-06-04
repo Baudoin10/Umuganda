@@ -107,9 +107,6 @@ const Dashboard = ({ navigation }) => {
     fetchEvents();
   }, []);
 
-
-  
-
   // Menu items for navigation
   const menuItems = [
     {

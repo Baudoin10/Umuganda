@@ -4,13 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 
 
 const Profile = () => {
-
-  
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      {/* Profile Header */}
+   
       <View style={styles.header}>
         <Text style={styles.name}>John Doe</Text>
         <Text style={styles.email}>johndoe@example.com</Text>

@@ -30,9 +30,6 @@ const EventCard = ({ event, navigation }) => (
 
 const JoinEvent = ({ navigation }) => {
 
- 
-
-
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 

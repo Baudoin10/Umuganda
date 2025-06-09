@@ -73,7 +73,7 @@ const JoinEvent = ({ navigation }) => {
       <Text style={styles.pageTitle}>Upcoming Events</Text>
       <FlatList
         data={events}
-        keyExtractor={(item) => item.id}  // No need to use .toString() if id is already unique
+        keyExtractor={(item) => item.id}  
         renderItem={({ item }) => <EventCard event={item} navigation={navigation} />}
       />
     </View>

@@ -167,7 +167,6 @@ const Dashboard = ({ navigation }) => {
   // Handle logout
   const handleLogout = async () => {
     const token = await AsyncStorage.getItem("token");
-
     if (!token) {
       console.warn("No token found, user already logged out.");
       navigation.navigate("Login");
@@ -220,7 +219,6 @@ const Dashboard = ({ navigation }) => {
 
       </View>
 
-      {/* Main Content */}
       <View style={styles.mainContent}>
         <FlatList
           data={dashboardCards}

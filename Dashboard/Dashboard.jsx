@@ -216,7 +216,6 @@ const Dashboard = ({ navigation }) => {
           <Icon name="menu" size={20} color="#333" />
         </TouchableOpacity>
         <Text style={styles.topBarTitle}>{user ? user.email : "Loading..."}</Text>
-
       </View>
 
       <View style={styles.mainContent}>
@@ -229,9 +228,7 @@ const Dashboard = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         />
       </View>
-
       <Chart />
-
       {/* Menu Modal */}
       <Modal
         animationType="fade"

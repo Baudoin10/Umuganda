@@ -60,18 +60,30 @@ const JoinEvent = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-       <TouchableOpacity
-             onPress={() =>  navigation.navigate("user")}
-             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
-           >
-             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
-             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
-           </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("user")}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginTop: "10%",
+          paddingVertical: 10,
+        }}
+      >
+        <Ionicons
+          name='arrow-back'
+          size={24}
+          color='black'
+          style={{ marginRight: 5 }}
+        />
+        <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
+      </TouchableOpacity>
       <Text style={styles.pageTitle}>Upcoming Events</Text>
       <FlatList
         data={events}
-        keyExtractor={(item) => item.id}  
-        renderItem={({ item }) => <EventCard event={item} navigation={navigation} />}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <EventCard event={item} navigation={navigation} />
+        )}
       />
     </View>
   );

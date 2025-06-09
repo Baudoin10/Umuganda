@@ -272,7 +272,6 @@ const Dashboard = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </Modal>
-
       {/* Toast component */}
       <Toast ref={(ref) => Toast.setRef(ref)} />
     </SafeAreaView>
@@ -282,8 +281,7 @@ const Dashboard = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F7FA",
-   
+    backgroundColor: "#F5F7FA", 
   },
   topBar: {
     flexDirection: "row",

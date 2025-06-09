@@ -68,18 +68,34 @@ const ViewEvent = () => {
   );
 
   return (
-
-    
-   
-    <View style={{ flex: 1, backgroundColor: '#f5f5f5', padding: 15 }}>
-       <TouchableOpacity
-             onPress={() =>  navigation.navigate("user")}
-             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
-           >
-             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
-             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
-           </TouchableOpacity>
-      <Text style={{ fontSize: 22, fontWeight: '600', marginBottom: 15,marginTop: '3%' }}>Upcoming Events</Text>
+    <View style={{ flex: 1, backgroundColor: "#f5f5f5", padding: 15 }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("user")}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginTop: "10%",
+          paddingVertical: 10,
+        }}
+      >
+        <Ionicons
+          name='arrow-back'
+          size={24}
+          color='black'
+          style={{ marginRight: 5 }}
+        />
+        <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
+      </TouchableOpacity>
+      <Text
+        style={{
+          fontSize: 22,
+          fontWeight: "600",
+          marginBottom: 15,
+          marginTop: "3%",
+        }}
+      >
+        Upcoming Events
+      </Text>
       <FlatList
         data={events}
         keyExtractor={(item) => item._id.toString()}

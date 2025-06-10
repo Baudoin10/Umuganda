@@ -21,6 +21,7 @@ import EventForm from "../UserDashboard/EventForm";
 import Viewnotifications from "../UserDashboard/Viewnotifications";
 import EditProfile from "../UserDashboard/EditProfile";
 
+
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {

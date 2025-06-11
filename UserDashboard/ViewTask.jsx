@@ -89,7 +89,7 @@ const ViewTask = () => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get("http://192.168.1.39:3000/api/tasks", {
+      const response = await axios.get(" 192.168.50.129/api/tasks", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -130,10 +130,10 @@ const ViewTask = () => {
               onPress: async () => {
                 // Update task status
                 await axios.put(
-                  `http://192.168.1.39:3000/api/tasks/${taskId}`,
-                  { 
+                  ` 192.168.50.129/api/tasks/${taskId}`,
+                  {
                     status: newStatus,
-                    lastUpdated: new Date().toISOString() 
+                    lastUpdated: new Date().toISOString(),
                   },
                   {
                     headers: {
@@ -160,10 +160,10 @@ const ViewTask = () => {
       } else {
         // For other status updates that don't need confirmation
         await axios.put(
-          `http://192.168.1.39:3000/api/tasks/${taskId}`,
-          { 
+          ` 192.168.50.129/api/tasks/${taskId}`,
+          {
             status: newStatus,
-            lastUpdated: new Date().toISOString() 
+            lastUpdated: new Date().toISOString(),
           },
           {
             headers: {

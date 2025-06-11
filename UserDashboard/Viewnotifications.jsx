@@ -16,7 +16,7 @@ const Viewnotifications = () => {
   const fetchNotifications = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get("http://192.168.1.39:3000/api/notifications", {
+      const response = await axios.get(" 192.168.50.129/api/notifications", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

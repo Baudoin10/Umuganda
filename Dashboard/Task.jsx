@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -101,7 +100,7 @@ const Task = () => {
         photo: photo,
       };
 
-      const response = await fetch("http://192.168.1.39:3000/api/tasks", {
+      const response = await fetch(" 192.168.50.129/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -33,14 +33,11 @@ const Dashboard = ({ navigation }) => {
           return;
         }
   
-        const response = await axios.get(
-          "http://192.168.1.39:3000/api/me",  
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(" 192.168.50.129/api/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
   
         setUser(response.data);  
       } catch (error) {

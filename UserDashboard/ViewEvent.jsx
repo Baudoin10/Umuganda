@@ -14,7 +14,7 @@ const ViewEvent = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://192.168.1.39:3000/api/events'); 
+        const response = await fetch(" 192.168.50.129/api/events"); 
         const data = await response.json();
 
         if (response.ok) {

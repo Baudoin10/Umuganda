@@ -23,7 +23,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      await axios.post("http://192.168.1.39:3000/api/auth/register", {
+      await axios.post(" 192.168.50.129/api/auth/register", {
         firstname,
         lastname,
         email,

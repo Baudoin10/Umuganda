@@ -27,7 +27,7 @@ const ListTask = () => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.get('http://192.168.1.39:3000/api/tasks', {
+      const response = await axios.get(" 192.168.50.129/api/tasks", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

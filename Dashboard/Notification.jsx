@@ -33,15 +33,15 @@ const Notification = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://192.168.1.39:3000/api/notifications', {
-        method: 'POST',
+      const response = await fetch(" 192.168.50.129/api/notifications", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title,
           message: description,
-          targetUserIds: isBroadcast ? "all" : [] 
+          targetUserIds: isBroadcast ? "all" : [],
         }),
       });
 

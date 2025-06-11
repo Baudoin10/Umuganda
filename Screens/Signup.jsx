@@ -118,7 +118,7 @@ const Signup = () => {
             >
               <Text style={styles.submitText}>Create Account</Text>
             </TouchableOpacity>
-
+            
             <View style={styles.loginContainer}>
               <Text style={styles.loginText}>Already have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>

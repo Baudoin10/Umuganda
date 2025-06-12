@@ -1,5 +1,4 @@
 
-
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -7,11 +6,9 @@ import { LinearGradient } from "expo-linear-gradient";
 
 function Introduction() {
   const navigation = useNavigation();
-
   const handleNext = () => {
     navigation.navigate("Login");
   };
-
   return (
     <>
       <StatusBar barStyle="light-content" />

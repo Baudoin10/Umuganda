@@ -8,9 +8,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
 const TaskCard = ({ task, onStatusUpdate }) => {
-  
-
-
   const getStatusColor = (status) => {
     switch (status) {
       case 'Completed': return 'green';
@@ -210,16 +207,26 @@ const ViewTask = () => {
 
   return (
     <View style={styles.container}>
-      
-
-<TouchableOpacity
-      onPress={() =>  navigation.navigate("user")}
-      style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
-    >
-      <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
-      <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
-    </TouchableOpacity>
-      <Text style={styles.header}>{userRole === 'admin' ? 'All Tasks' : 'Your Tasks'}</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("user")}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginTop: "10%",
+          paddingVertical: 10,
+        }}
+      >
+        <Ionicons
+          name="arrow-back"
+          size={24}
+          color="black"
+          style={{ marginRight: 5 }}
+        />
+        <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
+      </TouchableOpacity>
+      <Text style={styles.header}>
+        {userRole === "admin" ? "All Tasks" : "Your Tasks"}
+      </Text>
       {tasks.length === 0 ? (
         <Text style={styles.noTasksText}>No tasks available</Text>
       ) : (
@@ -227,10 +234,7 @@ const ViewTask = () => {
           data={tasks}
           keyExtractor={(item) => item._id.toString()}
           renderItem={({ item }) => (
-            <TaskCard 
-              task={item} 
-              onStatusUpdate={updateTaskStatus} 
-            />
+            <TaskCard task={item} onStatusUpdate={updateTaskStatus} />
           )}
         />
       )}

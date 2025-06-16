@@ -9,7 +9,6 @@ import { Ionicons } from '@expo/vector-icons';
 const Viewnotifications = () => {
 
   const navigation = useNavigation();
-
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 

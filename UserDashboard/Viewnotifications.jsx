@@ -49,20 +49,30 @@ const Viewnotifications = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <TouchableOpacity
-             onPress={() =>  navigation.navigate("user")}
-             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
-           >
-             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
-             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
-           </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("user")}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: "10%",
+            paddingVertical: 10,
+          }}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            style={{ marginRight: 5 }}
+          />
+          <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Notifications</Text>
       </View>
-      
+
       <FlatList
         data={notifications}
         renderItem={renderItem}
-        keyExtractor={item => item._id}
+        keyExtractor={(item) => item._id}
         ListEmptyComponent={
           <Text style={styles.emptyText}>No notifications yet</Text>
         }

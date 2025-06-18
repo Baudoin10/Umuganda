@@ -17,6 +17,7 @@ import axios from "axios";
 import Toast from 'react-native-toast-message'; 
 
 const Dashboard = ({ navigation }) => {
+  const ip = import.meta.env.VITE_IP;
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
@@ -33,7 +34,7 @@ const Dashboard = ({ navigation }) => {
           return;
         }
   
-        const response = await axios.get(" 192.168.50.129/api/me", {
+        const response = await axios.get(`http://${ip}:3000/api/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -51,7 +52,7 @@ const Dashboard = ({ navigation }) => {
   const fetchUsers = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get("http://192.168.1.39:3000/api/users", {
+      const response = await axios.get(`http://${ip}:3000/api/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -70,7 +71,7 @@ const Dashboard = ({ navigation }) => {
   const fetchTasks = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get("http://192.168.1.39:3000/api/tasks", {
+      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -89,7 +90,7 @@ const Dashboard = ({ navigation }) => {
   const fetchEvents = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get("http://192.168.1.39:3000/api/events", {
+      const response = await axios.get(`http://${ip}:3000/api/events`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -172,7 +173,7 @@ const Dashboard = ({ navigation }) => {
 
     try {
       await axios.post(
-        "http://192.168.1.39:3000/api/auth/logout", 
+        `http://${ip}:3000/api/auth/logout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -269,7 +270,6 @@ const Dashboard = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </Modal>
-      {/* Toast component */}
       <Toast ref={(ref) => Toast.setRef(ref)} />
     </SafeAreaView>
   );

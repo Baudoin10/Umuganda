@@ -1,5 +1,5 @@
-
-import React, { useState, useEffect } from 'react';
+  
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,26 +8,26 @@ import {
   ActivityIndicator,
   Image,
   StyleSheet,
-} from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const ListTask = () => {
   const navigation = useNavigation();
-
+  const ip = import.meta.env.VITE_IP;
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState("all");
 
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const token = await AsyncStorage.getItem('token');
-      const response = await axios.get(" 192.168.50.129/api/tasks", {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -35,8 +35,8 @@ const ListTask = () => {
       setTasks(response.data);
       setLoading(false);
     } catch (err) {
-      console.error('Error fetching tasks:', err);
-      setError('Failed to load tasks');
+      console.error("Error fetching tasks:", err);
+      setError("Failed to load tasks");
       setLoading(false);
     }
   };
@@ -46,19 +46,19 @@ const ListTask = () => {
   }, []);
 
   const filteredTasks =
-    filter === 'all'
+    filter === "all"
       ? tasks
       : tasks.filter((task) => {
-          if (filter === 'pending') return task.status === 'Pending';
-          if (filter === 'inProgress') return task.status === 'In Progress';
-          if (filter === 'completed') return task.status === 'Completed';
+          if (filter === "pending") return task.status === "Pending";
+          if (filter === "inProgress") return task.status === "In Progress";
+          if (filter === "completed") return task.status === "Completed";
           return true;
         });
 
   const getStatusStyle = (status) => {
-    if (status === 'Pending') return styles.statusPending;
-    if (status === 'In Progress') return styles.statusInProgress;
-    if (status === 'Completed') return styles.statusCompleted;
+    if (status === "Pending") return styles.statusPending;
+    if (status === "In Progress") return styles.statusInProgress;
+    if (status === "Completed") return styles.statusCompleted;
     return styles.statusDefault;
   };
 
@@ -74,35 +74,44 @@ const ListTask = () => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={{ color: 'red' }}>{error}</Text>
+        <Text style={{ color: "red" }}>{error}</Text>
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.container}>
-        <TouchableOpacity
-                   onPress={() =>  navigation.navigate("Dashboard")}
-                   style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
-                 >
-                   <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
-                   <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
-                 </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Dashboard")}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginTop: "10%",
+          paddingVertical: 10,
+        }}
+      >
+        <Ionicons
+          name="arrow-back"
+          size={24}
+          color="black"
+          style={{ marginRight: 5 }}
+        />
+        <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Task Management</Text>
 
       {/* Filters */}
       <View style={styles.filterRow}>
-        {['all', 'pending', 'inProgress', 'completed'].map((f) => (
+        {["all", "pending", "inProgress", "completed"].map((f) => (
           <TouchableOpacity
             key={f}
-            style={[
-              styles.filterBtn,
-              filter === f && styles.activeFilter,
-            ]}
+            style={[styles.filterBtn, filter === f && styles.activeFilter]}
             onPress={() => setFilter(f)}
           >
             <Text style={filter === f ? styles.activeText : styles.defaultText}>
-              {f === 'inProgress' ? 'In Progress' : f.charAt(0).toUpperCase() + f.slice(1)}
+              {f === "inProgress"
+                ? "In Progress"
+                : f.charAt(0).toUpperCase() + f.slice(1)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -111,9 +120,18 @@ const ListTask = () => {
       {/* Summary */}
       <View style={styles.summaryRow}>
         <SummaryBox title="Total Tasks" count={tasks.length} />
-        <SummaryBox title="Pending" count={tasks.filter(t => t.status === 'Pending').length} />
-        <SummaryBox title="In Progress" count={tasks.filter(t => t.status === 'In Progress').length} />
-        <SummaryBox title="Completed" count={tasks.filter(t => t.status === 'Completed').length} />
+        <SummaryBox
+          title="Pending"
+          count={tasks.filter((t) => t.status === "Pending").length}
+        />
+        <SummaryBox
+          title="In Progress"
+          count={tasks.filter((t) => t.status === "In Progress").length}
+        />
+        <SummaryBox
+          title="Completed"
+          count={tasks.filter((t) => t.status === "Completed").length}
+        />
       </View>
 
       {/* Task List */}
@@ -128,19 +146,26 @@ const ListTask = () => {
               {task.status}
             </Text>
             <Text style={styles.taskInfo}>
-              Assigned To: {task.assignedTo?.name || `User ID: ${task.assignedTo || 'Unassigned'}`}
+              Assigned To:{" "}
+              {task.assignedTo?.name ||
+                `User ID: ${task.assignedTo || "Unassigned"}`}
             </Text>
             <Text style={styles.taskInfo}>
-              Last Updated: {task.lastUpdated ? new Date(task.lastUpdated).toLocaleString() : 'Not updated'}
+              Last Updated:{" "}
+              {task.lastUpdated
+                ? new Date(task.lastUpdated).toLocaleString()
+                : "Not updated"}
             </Text>
           </View>
         ))
       ) : (
-        <Text style={styles.noTasksText}>No tasks found matching the selected filter</Text>
+        <Text style={styles.noTasksText}>
+          No tasks found matching the selected filter
+        </Text>
       )}
 
       {/* Completed Task Details */}
-      {filter === 'completed' && filteredTasks.length > 0 && (
+      {filter === "completed" && filteredTasks.length > 0 && (
         <View style={{ marginTop: 20 }}>
           <Text style={styles.sectionTitle}>Completed Task Details</Text>
           {filteredTasks.map((task) => (
@@ -148,9 +173,15 @@ const ListTask = () => {
               <Text style={styles.taskTitle}>{task.title}</Text>
               <Text style={styles.taskDesc}>{task.description}</Text>
               <Text style={styles.taskInfo}>Location: {task.location}</Text>
-              <Text style={styles.taskInfo}>Completed by: {task.assignedTo?.name || `User ID: ${task.assignedTo}`}</Text>
               <Text style={styles.taskInfo}>
-                Completed on: {task.lastUpdated ? new Date(task.lastUpdated).toLocaleString() : 'Unknown'}
+                Completed by:{" "}
+                {task.assignedTo?.name || `User ID: ${task.assignedTo}`}
+              </Text>
+              <Text style={styles.taskInfo}>
+                Completed on:{" "}
+                {task.lastUpdated
+                  ? new Date(task.lastUpdated).toLocaleString()
+                  : "Unknown"}
               </Text>
 
               {task.photo && (
@@ -174,105 +205,105 @@ const SummaryBox = ({ title, count }) => (
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#f9fafb',
+    backgroundColor: "#f9fafb",
   },
   centered: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 16,
     // marginTop: '20%'
   },
   filterRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: 16,
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
   filterBtn: {
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: "#e5e7eb",
     margin: 4,
   },
   activeFilter: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: "#3b82f6",
   },
   activeText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   defaultText: {
-    color: '#111',
+    color: "#111",
   },
   summaryRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     marginBottom: 16,
   },
   summaryBox: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 12,
     borderRadius: 8,
-    width: '48%',
+    width: "48%",
     marginBottom: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 2,
   },
   summaryTitle: {
-    color: '#6b7280',
+    color: "#6b7280",
     fontSize: 12,
   },
   summaryCount: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   taskCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 12,
     marginBottom: 12,
     borderRadius: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 1,
   },
   taskTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   taskDesc: {
-    color: '#6b7280',
+    color: "#6b7280",
   },
   taskInfo: {
     fontSize: 12,
-    color: '#4b5563',
+    color: "#4b5563",
     marginTop: 2,
   },
   noTasksText: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 16,
-    color: '#6b7280',
+    color: "#6b7280",
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   completedCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 12,
     marginBottom: 12,
     borderRadius: 8,
-    borderColor: '#e5e7eb',
+    borderColor: "#e5e7eb",
     borderWidth: 1,
   },
   statusBadge: {
@@ -280,24 +311,24 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 999,
     fontSize: 10,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginTop: 4,
   },
   statusPending: {
-    backgroundColor: '#fee2e2',
-    color: '#b91c1c',
+    backgroundColor: "#fee2e2",
+    color: "#b91c1c",
   },
   statusInProgress: {
-    backgroundColor: '#fef3c7',
-    color: '#92400e',
+    backgroundColor: "#fef3c7",
+    color: "#92400e",
   },
   statusCompleted: {
-    backgroundColor: '#d1fae5',
-    color: '#065f46',
+    backgroundColor: "#d1fae5",
+    color: "#065f46",
   },
   statusDefault: {
-    backgroundColor: '#e5e7eb',
-    color: '#374151',
+    backgroundColor: "#e5e7eb",
+    color: "#374151",
   },
   image: {
     width: 100,

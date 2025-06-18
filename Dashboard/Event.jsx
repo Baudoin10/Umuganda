@@ -8,6 +8,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 const Event = () => {
 
 const navigation = useNavigation();
+const ip = import.meta.env.VITE_IP;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -39,7 +40,7 @@ const navigation = useNavigation();
     const eventData = { ...formData, day, month };
 
     try {
-      const response = await fetch(" 192.168.50.129/api/events", {
+      const response = await fetch(`http://${ip}:3000/api/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(eventData),

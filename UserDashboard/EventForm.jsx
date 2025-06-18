@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView,
+   Platform, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 const EventJoinForm = () => {
@@ -8,6 +9,7 @@ const EventJoinForm = () => {
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const ip = import.meta.env.VITE_IP;
   
   const userId = "your-user-id-here"; 
   
@@ -18,7 +20,7 @@ const EventJoinForm = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await fetch(" 192.168.50.129/api/events");
+      const response = await fetch(`http://${ip}:3000/api/events`);
       const data = await response.json();
       
       if (response.ok) {

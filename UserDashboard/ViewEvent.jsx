@@ -8,13 +8,14 @@ import { Ionicons } from '@expo/vector-icons';
 const ViewEvent = () => {
 
   const navigation = useNavigation();
+  const ip = import.meta.env.VITE_IP;
 
   const [events, setEvents] = useState([]); 
   const [loading, setLoading] = useState(true); 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(" 192.168.50.129/api/events"); 
+        const response = await fetch(`http://${ip}:3000/api/events`); 
         const data = await response.json();
 
         if (response.ok) {

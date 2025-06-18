@@ -22,6 +22,7 @@ const UserDashboard = ({ navigation }) => {
   const [user, setUser] = useState(null);
     const [events, setEvents] = useState([]);
     const [tasks, setTasks] = useState([]);
+    const ip = import.meta.env.VITE_IP;
 
     useEffect(() => {
       const fetchUser = async () => {
@@ -32,7 +33,7 @@ const UserDashboard = ({ navigation }) => {
             return;
           }
     
-          const response = await axios.get(" 192.168.50.129/api/me", {
+          const response = await axios.get(`http://${ip}:3000/api/me`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -51,7 +52,7 @@ const UserDashboard = ({ navigation }) => {
     const fetchTasks = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
-        const response = await axios.get("http://192.168.1.39:3000/api/tasks", {
+        const response = await axios.get(`http://${ip}:3000/api/tasks`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -69,7 +70,7 @@ const UserDashboard = ({ navigation }) => {
     const fetchEvents = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
-        const response = await axios.get("http://192.168.1.39:3000/api/events", {
+        const response = await axios.get(`http://${ip}:3000/api/events`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -154,7 +155,7 @@ const UserDashboard = ({ navigation }) => {
       }
 
       await axios.post(
-        "http://192.168.1.39:3000/api/auth/logout", 
+        `http://${ip}:3000/api/auth/logout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -192,7 +193,6 @@ const UserDashboard = ({ navigation }) => {
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Icon name="menu" size={28} color="#333" />
         </TouchableOpacity>
-        {/* <Text style={styles.topBarTitle}>User</Text> */}
         <Text style={styles.topBarTitle}>{user ? user.email : "Loading..."}</Text>
       </View>
 
@@ -251,8 +251,6 @@ const UserDashboard = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </Modal>
-
-      {/* Toast Message */}
       <Toast />
     </SafeAreaView>
   );

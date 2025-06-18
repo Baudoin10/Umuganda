@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { Ionicons } from '@expo/vector-icons';
 
 const EventCard = ({ event, navigation }) => (
+
   <View style={styles.card}>
     <Text style={styles.eventTitle}>{event.title}</Text>
     <Text style={styles.eventDescription}>{event.description}</Text>
@@ -33,10 +34,12 @@ const JoinEvent = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const ip = import.meta.env.VITE_IP;
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(" 192.168.50.129/api/events");
+        const response = await fetch(`http://${ip}:3000/api/events`);
         const data = await response.json();
 
         if (response.ok) {

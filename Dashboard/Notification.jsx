@@ -13,6 +13,8 @@ import Toast from 'react-native-toast-message';
 import { useNavigation } from "@react-navigation/native";
 
 const Notification = () => {
+
+  const ip = import.meta.env.VITE_IP;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +35,7 @@ const Notification = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(" 192.168.50.129/api/notifications", {
+      const response = await fetch(`http://${ip}:3000/api/notifications`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -22,6 +22,8 @@ import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 
 const Task = () => {
+
+  const ip = import.meta.env.VITE_IP;
    const navigation = useNavigation();
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -100,7 +102,7 @@ const Task = () => {
         photo: photo,
       };
 
-      const response = await fetch(" 192.168.50.129/api/tasks", {
+      const response = await fetch(`http://${ip}:3000/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

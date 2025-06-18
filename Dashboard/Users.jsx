@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -11,22 +10,23 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import Toast from 'react-native-toast-message';  
+import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
 const Users = () => {
+  const navigation = useNavigation();
 
-   const navigation = useNavigation();
+  const ip = import.meta.env.VITE_IP;
 
   const [users, setUsers] = useState([]);
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = Dimensions.get("window").width;
   const isSmallScreen = screenWidth < 380;
 
   const fetchUsers = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(" 192.168.50.129/api/users", {
+      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,26 +55,23 @@ const Users = () => {
           onPress: async () => {
             try {
               const token = await AsyncStorage.getItem("token");
-              await axios.delete(
-                `http://192.168.1.39:3000/api/users/${id}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              );
+              await axios.delete(`http://${ip}:3000/api/users/${id}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
               fetchUsers();
               Toast.show({
-                type: 'success',
-                position: 'bottom',
-                text1: 'User deleted successfully',
+                type: "success",
+                position: "bottom",
+                text1: "User deleted successfully",
               });
             } catch (error) {
               console.log(error);
               Toast.show({
-                type: 'error',
-                position: 'bottom',
-                text1: 'Error deleting user',
+                type: "error",
+                position: "bottom",
+                text1: "Error deleting user",
               });
             }
           },
@@ -87,18 +84,35 @@ const Users = () => {
 
   const renderHeader = () => (
     <View style={[styles.row, styles.header]}>
-      <Text style={[styles.headerCell, { flex: 3 }]} numberOfLines={1}>{isSmallScreen ? "First" : "Firstname"}</Text>
-      <Text style={[styles.headerCell, { flex: 3 }]} numberOfLines={1}>{isSmallScreen ? "Last" : "Lastname"}</Text>
-      <Text style={[styles.headerCell, { flex: 4 }]} numberOfLines={1}>Email</Text>
-      <Text style={[styles.headerCell, { width: 50, textAlign: 'center' }]} numberOfLines={1}>Action</Text>
+      <Text style={[styles.headerCell, { flex: 3 }]} numberOfLines={1}>
+        {isSmallScreen ? "First" : "Firstname"}
+      </Text>
+      <Text style={[styles.headerCell, { flex: 3 }]} numberOfLines={1}>
+        {isSmallScreen ? "Last" : "Lastname"}
+      </Text>
+      <Text style={[styles.headerCell, { flex: 4 }]} numberOfLines={1}>
+        Email
+      </Text>
+      <Text
+        style={[styles.headerCell, { width: 50, textAlign: "center" }]}
+        numberOfLines={1}
+      >
+        Action
+      </Text>
     </View>
   );
 
   const renderItem = ({ item }) => (
     <View style={styles.row}>
-      <Text style={[styles.cell, { flex: 3 }]} numberOfLines={1}>{item.firstname}</Text>
-      <Text style={[styles.cell, { flex: 3 }]} numberOfLines={1}>{item.lastname}</Text>
-      <Text style={[styles.cell, { flex: 4 }]} numberOfLines={1}>{item.email}</Text>
+      <Text style={[styles.cell, { flex: 3 }]} numberOfLines={1}>
+        {item.firstname}
+      </Text>
+      <Text style={[styles.cell, { flex: 3 }]} numberOfLines={1}>
+        {item.lastname}
+      </Text>
+      <Text style={[styles.cell, { flex: 4 }]} numberOfLines={1}>
+        {item.email}
+      </Text>
       <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => handleDeleteUser(item._id)}
@@ -110,13 +124,23 @@ const Users = () => {
 
   return (
     <View style={styles.container}>
-       <TouchableOpacity
-             onPress={() =>  navigation.navigate("Dashboard")}
-             style={{ flexDirection: 'row', alignItems: 'center', marginTop: '10%', paddingVertical: 10 }}
-           >
-             <Ionicons name="arrow-back" size={24} color="black" style={{ marginRight: 5 }} />
-             <Text style={{ fontSize: 16, color: 'black' }}>Back</Text>
-           </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Dashboard")}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginTop: "10%",
+          paddingVertical: 10,
+        }}
+      >
+        <Ionicons
+          name="arrow-back"
+          size={24}
+          color="black"
+          style={{ marginRight: 5 }}
+        />
+        <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Users</Text>
       <FlatList
         data={users}
@@ -126,11 +150,10 @@ const Users = () => {
         stickyHeaderIndices={[0]}
         initialNumToRender={10}
       />
-      <Toast /> 
+      <Toast />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

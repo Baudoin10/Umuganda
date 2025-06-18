@@ -16,14 +16,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { Ionicons } from '@expo/vector-icons';
 
+
 const Login = () => {
+  const ip = import.meta.env.VITE_IP;
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(" 192.168.50.129/api/auth/login", {
+      const response = await axios.post(`http://${ip}:3000/api/auth/login`, {
         email,
         password,
       });

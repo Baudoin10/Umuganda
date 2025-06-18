@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 
 const Signup = () => {
+  const ip = import.meta.env.VITE_IP;
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      await axios.post(" 192.168.50.129/api/auth/register", {
+      await axios.post(`http://${ip}:3000/api/auth/register`, {
         firstname,
         lastname,
         email,

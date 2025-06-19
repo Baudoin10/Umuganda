@@ -15,10 +15,11 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { Ionicons } from '@expo/vector-icons';
+import { IP } from "@env";
 
 
 const Login = () => {
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

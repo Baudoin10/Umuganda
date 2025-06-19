@@ -1,5 +1,362 @@
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   FlatList,
+//   TouchableOpacity,
+//   Modal,
+//   SafeAreaView,
+//   StatusBar,
+// } from "react-native";
+// import Icon from "react-native-vector-icons/MaterialIcons";
+// import Chart from "./Chart";
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import axios from "axios";
+// import Toast from 'react-native-toast-message';
+// import { useEffect } from "react";
+// import { IP } from "@env";
+
+// const UserDashboard = ({ navigation }) => {
+//   const [isMenuVisible, setMenuVisible] = useState(false);
+//   const [user, setUser] = useState(null);
+//     const [events, setEvents] = useState([]);
+//     const [tasks, setTasks] = useState([]);
+//     const ip = IP;
+
+//     useEffect(() => {
+//       const fetchUser = async () => {
+//         try {
+//           const token = await AsyncStorage.getItem("token");  
+//           if (!token) {
+//             console.error("No token found");
+//             return;
+//           }
+    
+//           const response = await axios.get(`http://${ip}:3000/api/me`, {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//           });
+    
+//           setUser(response.data);  
+//         } catch (error) {
+//           console.error("Error fetching user:", error);
+//         }
+//       };
+    
+//       fetchUser();
+//     }, []);
+
+
+//     const fetchTasks = async () => {
+//       try {
+//         const token = await AsyncStorage.getItem("token");
+//         const response = await axios.get(`http://${ip}:3000/api/tasks`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         });
+//         setTasks(response.data);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     };
+  
+//     useEffect(() => {
+//       fetchTasks();
+//     }, []);
+
+//     const fetchEvents = async () => {
+//       try {
+//         const token = await AsyncStorage.getItem("token");
+//         const response = await axios.get(`http://${ip}:3000/api/events`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         });
+//         setEvents(response.data);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     };
+  
+//     useEffect(() => {
+//       fetchEvents();
+//     }, []);
+
+//   const menuItems = [
+//     {
+//       id: "1",
+//       title: "View Events",
+//       screen: "ViewEvent",
+//       icon: "event",
+//     },
+//     {
+//       id: "2",
+//       title: "View Tasks",
+//       screen: "ViewTask",
+//       icon: "assignment",
+//     },
+//     {
+//       id: "3",
+//       title: "Join Events",
+//       screen: "joinEvent",
+//       icon: "event",
+//     },
+//     {
+//       id: "4",
+//       title: "Notifications",
+//       screen: "view",
+//       icon: "notifications",
+//     },
+//     {
+//       id: "5",
+//       title: "Profile/Settings",
+//       screen: "Profile",
+//       icon: "settings",
+//     },
+//     { id: "6", title: "Logout", screen: "Login", icon: "logout" },
+//   ];
+
+//   const dashboardCards = [
+//     { id: "1", title: "Tasks", count: tasks.length, icon: "people", color: "#1976D2" },
+//     { id: "2", title: "Events", count: events.length, icon: "event", color: "#00897B" },
+//     {
+//       id: "3",
+//       title: "Events joined",
+//       count: events.length,
+//       icon: "task",
+//       color: "#D81B60",
+//     },
+//   ];
+
+//   const toggleMenu = () => {
+//     setMenuVisible(!isMenuVisible);
+//   };
+
+//   const renderCard = ({ item }) => (
+//     <View style={[styles.card, { backgroundColor: item.color }]}>
+//       <Icon name={item.icon} size={32} color="#FFF" />
+//       <Text style={styles.cardCount}>{item.count}</Text>
+//       <Text style={styles.cardTitle}>{item.title}</Text>
+//     </View>
+//   );
+
+//   // Logout Functionality
+//   const handleLogout = async () => {
+//     try {
+//       const token = await AsyncStorage.getItem("token");
+
+//       if (!token) {
+//         console.warn("No token found, user already logged out.");
+//         navigation.navigate("Login");
+//         return;
+//       }
+
+//       await axios.post(
+//         `http://${ip}:3000/api/auth/logout`,
+//         {},
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+
+//       // Clear the stored data
+//       await AsyncStorage.removeItem("token");
+//       await AsyncStorage.removeItem("role");
+//       await AsyncStorage.removeItem("user");
+
+//       Toast.show({
+//         type: "success",
+//         position: "top",
+//         text1: "Logout successful!",
+//       });
+
+     
+//       setTimeout(() => {
+//         navigation.navigate("Login");
+//       }, 3000);
+//     } catch (error) {
+//       console.error("Logout failed", error);
+//       Toast.show({
+//         type: "error",
+//         position: "top",
+//         text1: "Logout failed. Please try again.",
+//       });
+//     }
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
+
+//       <View style={styles.topBar}>
+//         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
+//           <Icon name="menu" size={28} color="#333" />
+//         </TouchableOpacity>
+//         <Text style={styles.topBarTitle}>{user ? user.email : "Loading..."}</Text>
+//       </View>
+
+//       <View style={styles.mainContent}>
+//         <FlatList
+//           data={dashboardCards}
+//           renderItem={renderCard}
+//           keyExtractor={(item) => item.id}
+//           numColumns={2}
+//           columnWrapperStyle={styles.cardRow}
+//           showsVerticalScrollIndicator={false}
+//         />
+//       </View>
+
+//       <Chart />
+
+//       <Modal
+//         animationType="fade"
+//         transparent={true}
+//         visible={isMenuVisible}
+//         onRequestClose={toggleMenu}
+//       >
+//         <TouchableOpacity
+//           style={styles.menuOverlay}
+//           activeOpacity={1}
+//           onPress={toggleMenu}
+//         >
+//           <View style={styles.menuContent}>
+//             <View style={styles.menuHeader}>
+//               <Text style={styles.menuTitle}>UserDashboard</Text>
+//               <TouchableOpacity onPress={toggleMenu}>
+//                 <Icon name="close" size={24} color="#333" />
+//               </TouchableOpacity>
+//             </View>
+
+//             <FlatList
+//               data={menuItems}
+//               keyExtractor={(item) => item.id}
+//               renderItem={({ item }) => (
+//                 <TouchableOpacity
+//                   style={styles.menuItem}
+//                   onPress={() => {
+//                     setMenuVisible(false);
+//                     if (item.title === "Logout") {
+//                       handleLogout();
+//                     } else {
+//                       navigation.navigate(item.screen);
+//                     }
+//                   }}
+//                 >
+//                   <Icon name={item.icon} size={24} color="#666" />
+//                   <Text style={styles.menuItemText}>{item.title}</Text>
+//                 </TouchableOpacity>
+//               )}
+//             />
+//           </View>
+//         </TouchableOpacity>
+//       </Modal>
+//       <Toast />
+//     </SafeAreaView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#F5F7FA",
+//   },
+//   topBar: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     justifyContent: "space-between",
+//     paddingHorizontal: 16,
+//     paddingVertical: 12,
+//     backgroundColor: "#FFF",
+//     elevation: 2,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//   },
+//   menuButton: {
+//     padding: 8,
+//   },
+//   profileButton: {
+//     padding: 8,
+//   },
+//   topBarTitle: {
+//     fontSize: 20,
+//     fontWeight: "600",
+//     color: "#333",
+//   },
+//   mainContent: {
+//     flex: 1,
+//     padding: 16,
+//   },
+//   cardRow: {
+//     justifyContent: "space-between",
+//     marginBottom: 16,
+//   },
+//   card: {
+//     width: "48%",
+//     borderRadius: 12,
+//     padding: 16,
+//     alignItems: "center",
+//     elevation: 3,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//   },
+//   cardCount: {
+//     fontSize: 24,
+//     fontWeight: "bold",
+//     color: "#FFF",
+//     marginTop: 8,
+//   },
+//   cardTitle: {
+//     fontSize: 14,
+//     color: "#FFF",
+//     marginTop: 4,
+//   },
+//   menuOverlay: {
+//     flex: 1,
+//     backgroundColor: "rgba(0, 0, 0, 0.5)",
+//   },
+//   menuContent: {
+//     width: "80%",
+//     height: "100%",
+//     backgroundColor: "#FFF",
+//     paddingTop: StatusBar.currentHeight,
+//   },
+//   menuHeader: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     justifyContent: "space-between",
+//     padding: 16,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#EEE",
+//     marginTop: 60,
+//   },
+//   menuTitle: {
+//     fontSize: 20,
+//     fontWeight: "600",
+//     color: "#333",
+//   },
+//   menuItem: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     padding: 16,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#EEE",
+//   },
+//   menuItemText: {
+//     fontSize: 16,
+//     color: "#333",
+//     marginLeft: 16,
+//   },
+// });
+
+// export default UserDashboard;
+
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,82 +366,82 @@ import {
   Modal,
   SafeAreaView,
   StatusBar,
+  ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Chart from "./Chart";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import Toast from 'react-native-toast-message';
-import { useEffect } from "react";
+import Toast from "react-native-toast-message";
 import { IP } from "@env";
 
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState(null);
-    const [events, setEvents] = useState([]);
-    const [tasks, setTasks] = useState([]);
-    const ip = IP;
+  const [events, setEvents] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [activeTab, setActiveTab] = useState("Home");
+  const ip = IP;
 
-    useEffect(() => {
-      const fetchUser = async () => {
-        try {
-          const token = await AsyncStorage.getItem("token");  
-          if (!token) {
-            console.error("No token found");
-            return;
-          }
-    
-          const response = await axios.get(`http://${ip}:3000/api/me`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-    
-          setUser(response.data);  
-        } catch (error) {
-          console.error("Error fetching user:", error);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("No token found");
+          return;
         }
-      };
-    
-      fetchUser();
-    }, []);
 
-
-    const fetchTasks = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const response = await axios.get(`http://${ip}:3000/api/tasks`, {
+        const response = await axios.get(`http://${ip}:3000/api/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setTasks(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
-    useEffect(() => {
-      fetchTasks();
-    }, []);
 
-    const fetchEvents = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const response = await axios.get(`http://${ip}:3000/api/events`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setEvents(response.data);
+        setUser(response.data);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching user:", error);
       }
     };
-  
-    useEffect(() => {
-      fetchEvents();
-    }, []);
+
+    fetchUser();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTasks(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(`http://${ip}:3000/api/events`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setEvents(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const menuItems = [
     {
@@ -121,30 +478,85 @@ const UserDashboard = ({ navigation }) => {
   ];
 
   const dashboardCards = [
-    { id: "1", title: "Tasks", count: tasks.length, icon: "people", color: "#1976D2" },
-    { id: "2", title: "Events", count: events.length, icon: "event", color: "#00897B" },
+    {
+      id: "1",
+      title: "My Tasks",
+      count: tasks.length,
+      icon: "assignment",
+      color: "#4CAF50",
+      subtitle: "Active tasks",
+    },
+    {
+      id: "2",
+      title: "Available Events",
+      count: events.length,
+      icon: "event",
+      color: "#2196F3",
+      subtitle: "This month",
+    },
     {
       id: "3",
-      title: "Events joined",
+      title: "Events Joined",
       count: events.length,
-      icon: "task",
-      color: "#D81B60",
+      icon: "people",
+      color: "#FF9800",
+      subtitle: "Community events",
     },
+    {
+      id: "4",
+      title: "Community Points",
+      count: 245,
+      icon: "star",
+      color: "#9C27B0",
+      subtitle: "Total earned",
+    },
+  ];
+
+  const bottomTabs = [
+    { id: "Home", title: "Home", icon: "home" },
+    { id: "Events", title: "Events", icon: "event" },
+    { id: "Community", title: "Community", icon: "people" },
+    { id: "Discuss", title: "Discuss", icon: "chat" },
+    { id: "Settings", title: "Settings", icon: "settings" },
   ];
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
 
+  const handleTabPress = (tabId) => {
+    setActiveTab(tabId);
+    // Navigate to different screens based on tab
+    switch (tabId) {
+      case "Events":
+        navigation.navigate("ViewEvent");
+        break;
+      case "Community":
+        navigation.navigate("joinEvent");
+        break;
+      case "Discuss":
+        navigation.navigate("view");
+        break;
+      case "Settings":
+        navigation.navigate("Profile");
+        break;
+      default:
+        // Stay on Home
+        break;
+    }
+  };
+
   const renderCard = ({ item }) => (
-    <View style={[styles.card, { backgroundColor: item.color }]}>
-      <Icon name={item.icon} size={32} color="#FFF" />
-      <Text style={styles.cardCount}>{item.count}</Text>
+    <TouchableOpacity style={[styles.card, { backgroundColor: item.color }]}>
+      <View style={styles.cardHeader}>
+        <Icon name={item.icon} size={28} color="#FFF" />
+        <Text style={styles.cardCount}>{item.count}</Text>
+      </View>
       <Text style={styles.cardTitle}>{item.title}</Text>
-    </View>
+      <Text style={styles.cardSubtitle}>{item.subtitle}</Text>
+    </TouchableOpacity>
   );
 
-  // Logout Functionality
   const handleLogout = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
@@ -161,7 +573,6 @@ const UserDashboard = ({ navigation }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Clear the stored data
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("role");
       await AsyncStorage.removeItem("user");
@@ -172,7 +583,6 @@ const UserDashboard = ({ navigation }) => {
         text1: "Logout successful!",
       });
 
-     
       setTimeout(() => {
         navigation.navigate("Login");
       }, 3000);
@@ -190,26 +600,108 @@ const UserDashboard = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
 
-      <View style={styles.topBar}>
+      {/* Header */}
+      <View style={styles.header}>
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Icon name="menu" size={28} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.topBarTitle}>{user ? user.email : "Loading..."}</Text>
+        <View style={styles.headerContent}>
+          <Text style={styles.welcomeText}>Muraho!</Text>
+          <Text style={styles.userEmail}>
+            {user ? user.email : "Loading..."}
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.notificationButton}>
+          <Icon name="notifications" size={24} color="#333" />
+          <View style={styles.notificationBadge}>
+            <Text style={styles.badgeText}>3</Text>
+          </View>
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.mainContent}>
-        <FlatList
-          data={dashboardCards}
-          renderItem={renderCard}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          columnWrapperStyle={styles.cardRow}
-          showsVerticalScrollIndicator={false}
-        />
+      {/* Main Content */}
+      <ScrollView
+        style={styles.mainContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Welcome Section */}
+        <View style={styles.welcomeSection}>
+          <Text style={styles.sectionTitle}>Umuganda Dashboard</Text>
+          <Text style={styles.sectionSubtitle}>
+            Building stronger communities together
+          </Text>
+        </View>
+
+        {/* Dashboard Cards */}
+        <View style={styles.cardsContainer}>
+          <FlatList
+            data={dashboardCards}
+            renderItem={renderCard}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            columnWrapperStyle={styles.cardRow}
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+
+        {/* Chart Section */}
+        <View style={styles.chartSection}>
+          <Text style={styles.chartTitle}>Community Activity</Text>
+          <Chart />
+        </View>
+
+        {/* Quick Actions */}
+        <View style={styles.quickActions}>
+          <Text style={styles.sectionTitle}>Quick Actions</Text>
+          <View style={styles.actionButtonsRow}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => navigation.navigate("joinEvent")}
+            >
+              <Icon name="add-circle" size={24} color="#4CAF50" />
+              <Text style={styles.actionButtonText}>Join Event</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => navigation.navigate("ViewTask")}
+            >
+              <Icon name="checklist" size={24} color="#2196F3" />
+              <Text style={styles.actionButtonText}>View Tasks</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Bottom Tab Navigation */}
+      <View style={styles.bottomTabContainer}>
+        {bottomTabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.tabButton,
+              activeTab === tab.id && styles.activeTabButton,
+            ]}
+            onPress={() => handleTabPress(tab.id)}
+          >
+            <Icon
+              name={tab.icon}
+              size={24}
+              color={activeTab === tab.id ? "#4CAF50" : "#999"}
+            />
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === tab.id && styles.activeTabText,
+              ]}
+            >
+              {tab.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      <Chart />
-
+      {/* Side Menu Modal */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -223,7 +715,10 @@ const UserDashboard = ({ navigation }) => {
         >
           <View style={styles.menuContent}>
             <View style={styles.menuHeader}>
-              <Text style={styles.menuTitle}>UserDashboard</Text>
+              <View>
+                <Text style={styles.menuTitle}>Umuganda App</Text>
+                <Text style={styles.menuSubtitle}>Community Service</Text>
+              </View>
               <TouchableOpacity onPress={toggleMenu}>
                 <Icon name="close" size={24} color="#333" />
               </TouchableOpacity>
@@ -244,8 +739,11 @@ const UserDashboard = ({ navigation }) => {
                     }
                   }}
                 >
-                  <Icon name={item.icon} size={24} color="#666" />
+                  <View style={styles.menuItemIconContainer}>
+                    <Icon name={item.icon} size={24} color="#4CAF50" />
+                  </View>
                   <Text style={styles.menuItemText}>{item.title}</Text>
+                  <Icon name="chevron-right" size={20} color="#999" />
                 </TouchableOpacity>
               )}
             />
@@ -260,14 +758,14 @@ const UserDashboard = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F7FA",
+    backgroundColor: "#F8F9FA",
   },
-  topBar: {
+  header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
     backgroundColor: "#FFF",
     elevation: 2,
     shadowColor: "#000",
@@ -278,17 +776,62 @@ const styles = StyleSheet.create({
   menuButton: {
     padding: 8,
   },
-  profileButton: {
+  headerContent: {
+    flex: 1,
+    marginLeft: 16,
+  },
+  welcomeText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#4CAF50",
+  },
+  userEmail: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 2,
+  },
+  notificationButton: {
+    position: "relative",
     padding: 8,
   },
-  topBarTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#333",
+  notificationBadge: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    backgroundColor: "#FF5722",
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  badgeText: {
+    color: "#FFF",
+    fontSize: 12,
+    fontWeight: "bold",
   },
   mainContent: {
     flex: 1,
-    padding: 16,
+    paddingBottom: 80, // Space for bottom tabs
+  },
+  welcomeSection: {
+    padding: 20,
+    backgroundColor: "#4CAF50",
+    margin: 16,
+    borderRadius: 12,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#FFF",
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: "#E8F5E8",
+    marginTop: 4,
+  },
+  cardsContainer: {
+    paddingHorizontal: 16,
   },
   cardRow: {
     justifyContent: "space-between",
@@ -296,32 +839,126 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "48%",
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 20,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+  },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    elevation: 3,
+    marginBottom: 12,
+  },
+  cardCount: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#FFF",
+  },
+  cardTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#FFF",
+    marginBottom: 4,
+  },
+  cardSubtitle: {
+    fontSize: 12,
+    color: "rgba(255, 255, 255, 0.8)",
+  },
+  chartSection: {
+    margin: 16,
+    backgroundColor: "#FFF",
+    borderRadius: 16,
+    padding: 20,
+    elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  cardCount: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#FFF",
+  chartTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 16,
+  },
+  quickActions: {
+    margin: 16,
+    backgroundColor: "#FFF",
+    borderRadius: 16,
+    padding: 20,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  actionButtonsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 16,
+  },
+  actionButton: {
+    flex: 0.48,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#E9ECEF",
+  },
+  actionButtonText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#333",
     marginTop: 8,
   },
-  cardTitle: {
-    fontSize: 14,
-    color: "#FFF",
+  bottomTabContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderTopWidth: 1,
+    borderTopColor: "#E9ECEF",
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
+  activeTabButton: {
+    backgroundColor: "rgba(76, 175, 80, 0.1)",
+    borderRadius: 8,
+  },
+  tabText: {
+    fontSize: 11,
+    color: "#999",
     marginTop: 4,
+    fontWeight: "500",
+  },
+  activeTabText: {
+    color: "#4CAF50",
+    fontWeight: "600",
   },
   menuOverlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   menuContent: {
-    width: "80%",
+    width: "85%",
     height: "100%",
     backgroundColor: "#FFF",
     paddingTop: StatusBar.currentHeight,
@@ -330,27 +967,43 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 16,
+    padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEE",
-    marginTop: 60,
+    borderBottomColor: "#F0F0F0",
+    marginTop: 40,
+    backgroundColor: "#F8F9FA",
   },
   menuTitle: {
     fontSize: 20,
-    fontWeight: "600",
-    color: "#333",
+    fontWeight: "700",
+    color: "#4CAF50",
+  },
+  menuSubtitle: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 2,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEE",
+    borderBottomColor: "#F0F0F0",
+  },
+  menuItemIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(76, 175, 80, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
   },
   menuItemText: {
     fontSize: 16,
     color: "#333",
-    marginLeft: 16,
+    flex: 1,
+    fontWeight: "500",
   },
 });
 

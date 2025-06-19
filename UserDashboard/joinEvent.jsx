@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'; 
 import { Ionicons } from '@expo/vector-icons';
+import { IP } from "@env";
 
 const EventCard = ({ event, navigation }) => (
 
@@ -34,7 +35,7 @@ const JoinEvent = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
 
   useEffect(() => {
     const fetchEvents = async () => {

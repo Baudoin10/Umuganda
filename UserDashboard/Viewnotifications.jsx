@@ -5,9 +5,10 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { IP } from "@env";
 
 const Viewnotifications = () => {
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
   const navigation = useNavigation();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);

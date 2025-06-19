@@ -16,13 +16,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Toast from 'react-native-toast-message';
 import { useEffect } from "react";
+import { IP } from "@env";
 
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState(null);
     const [events, setEvents] = useState([]);
     const [tasks, setTasks] = useState([]);
-    const ip = import.meta.env.VITE_IP;
+    const ip = IP;
 
     useEffect(() => {
       const fetchUser = async () => {

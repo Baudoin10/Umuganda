@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView,
    Platform, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { IP } from "@env";
 
 const EventJoinForm = () => {
   const [events, setEvents] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
   
   const userId = "your-user-id-here"; 
   

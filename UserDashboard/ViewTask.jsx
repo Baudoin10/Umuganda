@@ -6,6 +6,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import { IP } from "@env";
 
 const TaskCard = ({ task, onStatusUpdate }) => {
   const getStatusColor = (status) => {
@@ -76,6 +77,7 @@ const TaskCard = ({ task, onStatusUpdate }) => {
 
 // Main component for the View Task page
 const ViewTask = () => {
+  const ip = IP
   const navigation = useNavigation();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -86,7 +88,7 @@ const ViewTask = () => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(" 192.168.50.129/api/tasks", {
+      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -127,7 +129,7 @@ const ViewTask = () => {
               onPress: async () => {
                 // Update task status
                 await axios.put(
-                  ` 192.168.50.129/api/tasks/${taskId}`,
+                  `http://${ip}:3000/api/tasks/${taskId}`,
                   {
                     status: newStatus,
                     lastUpdated: new Date().toISOString(),
@@ -157,7 +159,7 @@ const ViewTask = () => {
       } else {
         // For other status updates that don't need confirmation
         await axios.put(
-          ` 192.168.50.129/api/tasks/${taskId}`,
+          `http://${ip}:3000/api/tasks/${taskId}`,
           {
             status: newStatus,
             lastUpdated: new Date().toISOString(),

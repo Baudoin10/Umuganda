@@ -4,11 +4,12 @@ import { View, Text, FlatList, ActivityIndicator,TouchableOpacity } from 'react-
 import { CalendarDays, MapPin } from 'lucide-react-native';
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from '@expo/vector-icons';
+import { IP } from "@env";
 
 const ViewEvent = () => {
 
   const navigation = useNavigation();
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
 
   const [events, setEvents] = useState([]); 
   const [loading, setLoading] = useState(true); 

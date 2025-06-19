@@ -13,11 +13,12 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { IP } from "@env";
 
 const Users = () => {
   const navigation = useNavigation();
 
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
 
   const [users, setUsers] = useState([]);
   const screenWidth = Dimensions.get("window").width;

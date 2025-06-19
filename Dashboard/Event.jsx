@@ -4,11 +4,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-nativ
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { IP } from "@env";
 
 const Event = () => {
 
 const navigation = useNavigation();
-const ip = import.meta.env.VITE_IP;
+const ip = IP;
 
   const [formData, setFormData] = useState({
     title: "",

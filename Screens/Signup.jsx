@@ -13,9 +13,10 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import { IP } from "@env";
 
 const Signup = () => {
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");

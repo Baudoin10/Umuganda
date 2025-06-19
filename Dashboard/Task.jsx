@@ -20,10 +20,11 @@ import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import { IP } from "@env";
 
 const Task = () => {
 
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
    const navigation = useNavigation();
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);

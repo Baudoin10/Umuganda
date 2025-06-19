@@ -15,9 +15,10 @@ import Chart from "./Chart";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Toast from 'react-native-toast-message'; 
+import { IP } from "@env";
 
 const Dashboard = ({ navigation }) => {
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);

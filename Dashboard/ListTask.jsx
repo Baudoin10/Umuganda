@@ -13,10 +13,11 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { IP } from "@env";
 
 const ListTask = () => {
   const navigation = useNavigation();
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);

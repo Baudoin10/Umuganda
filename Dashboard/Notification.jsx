@@ -11,10 +11,11 @@ import {
 } from "react-native";
 import Toast from 'react-native-toast-message'; 
 import { useNavigation } from "@react-navigation/native";
+import { IP } from "@env";
 
 const Notification = () => {
 
-  const ip = import.meta.env.VITE_IP;
+  const ip = IP;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);

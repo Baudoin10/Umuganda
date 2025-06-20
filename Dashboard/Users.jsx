@@ -151,24 +151,6 @@ const Users = () => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Dashboard")}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: "10%",
-            paddingVertical: 10,
-          }}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="black"
-            style={{ marginRight: 5 }}
-          />
-          <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
-        </TouchableOpacity>
-
         <Text style={styles.title}>Users</Text>
         <FlatList
           data={users}

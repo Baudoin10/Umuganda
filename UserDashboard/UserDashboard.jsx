@@ -113,9 +113,9 @@ const UserDashboard = ({ navigation }) => {
     },
     {
       id: "5",
-      title: "Profile",
+      title: "Profile/Settings",
       screen: "Profile",
-      icon: "settings",
+      icon: "person",
     },
     { id: "6", title: "Logout", screen: "Login", icon: "logout" },
   ];
@@ -159,7 +159,7 @@ const UserDashboard = ({ navigation }) => {
     { id: "Home", title: "Home", icon: "home" },
     { id: "Events", title: "Events", icon: "event" },
     { id: "Community", title: "Community", icon: "people" },
-    { id: "Discuss", title: "Discuss", icon: "chat" },
+    { id: "Discuss", title: "Notification", icon: "notifications" },
     { id: "Settings", title: "Settings", icon: "settings" },
   ];
 

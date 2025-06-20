@@ -148,7 +148,7 @@ const Dashboard = ({ navigation }) => {
     { id: "Events", title: "Events", icon: "event" },
     { id: "Tasks", title: "Tasks", icon: "assignment" },
     { id: "Users", title: "Users", icon: "group" },
-    { id: "Discuss", title: "Notification", icon: "notifications" },
+    { id: "Discuss", title: "Send alert", icon: "notifications" },
   ];
 
   // Dashboard cards with enhanced data

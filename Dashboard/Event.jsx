@@ -100,7 +100,7 @@ const Event = () => {
     { id: "Events", title: "Events", icon: "event" },
     { id: "Tasks", title: "Tasks", icon: "assignment" },
     { id: "Users", title: "Users", icon: "group" },
-    { id: "Discuss", title: "Notification", icon: "notifications" },
+    { id: "Discuss", title: "Send alert", icon: "notifications" },
   ];
 
   return (
@@ -178,7 +178,8 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     marginBottom: 10,
-    marginTop: "20%",
+    marginTop: "30%",
+    marginBottom: "10%",
   },
   input: {
     borderWidth: 1,

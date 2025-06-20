@@ -29,7 +29,7 @@ const Users = () => {
   const fetchUsers = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
+      const response = await axios.get(`http://${ip}:3000/api/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -108,7 +108,7 @@ const Users = () => {
     { id: "Events", title: "Events", icon: "event" },
     { id: "Tasks", title: "Tasks", icon: "assignment" },
     { id: "Users", title: "Users", icon: "group" },
-    { id: "Discuss", title: "Notification", icon: "notifications" },
+    { id: "Discuss", title: "Send alert", icon: "notifications" },
   ];
 
   const renderHeader = () => (
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
     flex: 1,
     backgroundColor: "#F9F9F9",
+    marginTop: "30%"
   },
   title: {
     fontSize: 20,

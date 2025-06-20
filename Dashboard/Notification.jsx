@@ -121,13 +121,13 @@ const Notification = () => {
     { id: "Events", title: "Events", icon: "event" },
     { id: "Tasks", title: "Tasks", icon: "assignment" },
     { id: "Users", title: "Users", icon: "group" },
-    { id: "Discuss", title: "Notification", icon: "notifications" },
+    { id: "Discuss", title: "Send alert", icon: "notifications" },
   ];
 
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Create a New Notification</Text>
+        <Text style={styles.title}>Send an Alert</Text>
 
         <View style={styles.formGroup}>
           <Text style={styles.label}>Notification Title</Text>

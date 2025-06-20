@@ -73,24 +73,6 @@ const Login = () => {
         style={styles.keyboardView}
       >
         <View style={styles.content}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Introduction")}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: "-20%",
-              marginBottom: "10%",
-              paddingVertical: 10,
-            }}
-          >
-            <Ionicons
-              name="arrow-back"
-              size={24}
-              color="black"
-              style={{ marginRight: 5 }}
-            />
-            <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
-          </TouchableOpacity>
           <View style={styles.header}>
             <Text style={styles.headerText}>Welcome Back</Text>
             <Text style={styles.subHeaderText}>Sign in to continue</Text>

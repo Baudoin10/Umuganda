@@ -1,44 +1,56 @@
 
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import Icon from "react-native-vector-icons/Feather";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { IP } from "@env";
 
 const TaskCard = ({ task, onStatusUpdate }) => {
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Completed': return 'green';
-      case 'In Progress': return 'orange';
-      case 'Pending': return 'red';
-      default: return 'gray';
+      case "Completed":
+        return "green";
+      case "In Progress":
+        return "orange";
+      case "Pending":
+        return "red";
+      default:
+        return "gray";
     }
   };
-  
+
   const renderActionButtons = () => {
     switch (task.status) {
-      case 'Pending':
+      case "Pending":
         return (
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: '#f39c12' }]}
-            onPress={() => onStatusUpdate(task._id, 'In Progress')}
+          <TouchableOpacity
+            style={[styles.actionButton, { backgroundColor: "#f39c12" }]}
+            onPress={() => onStatusUpdate(task._id, "In Progress")}
           >
             <Text style={styles.actionButtonText}>Start Task</Text>
           </TouchableOpacity>
         );
-      case 'In Progress':
+      case "In Progress":
         return (
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: '#2ecc71' }]}
-            onPress={() => onStatusUpdate(task._id, 'Completed')}
+          <TouchableOpacity
+            style={[styles.actionButton, { backgroundColor: "#2ecc71" }]}
+            onPress={() => onStatusUpdate(task._id, "Completed")}
           >
             <Text style={styles.actionButtonText}>Mark Complete</Text>
           </TouchableOpacity>
         );
-      case 'Completed':
+      case "Completed":
         return (
           <View style={styles.completedWrapper}>
             <Icon name="check-circle" size={16} color="green" />
@@ -59,30 +71,24 @@ const TaskCard = ({ task, onStatusUpdate }) => {
       <Text style={[styles.taskStatus, { color: getStatusColor(task.status) }]}>
         Status: {task.status}
       </Text>
-      
-      {/* Last status update info for admin tracking */}
       {task.lastUpdated && (
         <Text style={styles.lastUpdated}>
           Last updated: {new Date(task.lastUpdated).toLocaleString()}
         </Text>
       )}
-      
-      {/* Action buttons section */}
-      <View style={styles.actionContainer}>
-        {renderActionButtons()}
-      </View>
+      <View style={styles.actionContainer}>{renderActionButtons()}</View>
     </View>
   );
 };
 
-// Main component for the View Task page
 const ViewTask = () => {
-  const ip = IP
+  const ip = IP;
   const navigation = useNavigation();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userRole, setUserRole] = useState('user'); // 'user' or 'admin'
+  const [userRole, setUserRole] = useState("user");
+  const [activeTab, setActiveTab] = useState("Events");
 
   const fetchTasks = async () => {
     try {
@@ -94,13 +100,11 @@ const ViewTask = () => {
         },
       });
       setTasks(response.data);
-      
       const userInfo = await AsyncStorage.getItem("userInfo");
       if (userInfo) {
         const { role } = JSON.parse(userInfo);
-        setUserRole(role || 'user');
+        setUserRole(role || "user");
       }
-      
       setLoading(false);
     } catch (error) {
       console.log("Error fetching tasks:", error);
@@ -109,25 +113,18 @@ const ViewTask = () => {
     }
   };
 
-  // Function to update task status
   const updateTaskStatus = async (taskId, newStatus) => {
     try {
       const token = await AsyncStorage.getItem("token");
-      
-      // Add confirmation for completing tasks
-      if (newStatus === 'Completed') {
+      if (newStatus === "Completed") {
         Alert.alert(
           "Complete Task",
           "Are you sure you want to mark this task as completed?",
           [
+            { text: "Cancel", style: "cancel" },
             {
-              text: "Cancel",
-              style: "cancel"
-            },
-            { 
-              text: "Yes", 
+              text: "Yes",
               onPress: async () => {
-                // Update task status
                 await axios.put(
                   `http://${ip}:3000/api/tasks/${taskId}`,
                   {
@@ -135,29 +132,26 @@ const ViewTask = () => {
                     lastUpdated: new Date().toISOString(),
                   },
                   {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
+                    headers: { Authorization: `Bearer ${token}` },
                   }
                 );
-                
-                // Update local state
-                setTasks(prev => 
-                  prev.map(task => 
-                    task._id === taskId 
-                      ? { ...task, status: newStatus, lastUpdated: new Date().toISOString() } 
+                setTasks((prev) =>
+                  prev.map((task) =>
+                    task._id === taskId
+                      ? {
+                          ...task,
+                          status: newStatus,
+                          lastUpdated: new Date().toISOString(),
+                        }
                       : task
                   )
                 );
-
-                // Show success message
                 Alert.alert("Success", "Task marked as completed!");
-              } 
-            }
+              },
+            },
           ]
         );
       } else {
-        // For other status updates that don't need confirmation
         await axios.put(
           `http://${ip}:3000/api/tasks/${taskId}`,
           {
@@ -165,17 +159,17 @@ const ViewTask = () => {
             lastUpdated: new Date().toISOString(),
           },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-        
-        // Update local state
-        setTasks(prev => 
-          prev.map(task => 
-            task._id === taskId 
-              ? { ...task, status: newStatus, lastUpdated: new Date().toISOString() } 
+        setTasks((prev) =>
+          prev.map((task) =>
+            task._id === taskId
+              ? {
+                  ...task,
+                  status: newStatus,
+                  lastUpdated: new Date().toISOString(),
+                }
               : task
           )
         );
@@ -189,6 +183,37 @@ const ViewTask = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  const handleTabPress = (tabId) => {
+    setActiveTab(tabId);
+    switch (tabId) {
+      case "Home":
+        navigation.navigate("user");
+        break;
+      case "Events":
+        navigation.navigate("ViewEvent");
+        break;
+      case "Community":
+        navigation.navigate("joinEvent");
+        break;
+      case "Discuss":
+        navigation.navigate("view");
+        break;
+      case "Settings":
+        navigation.navigate("Profile");
+        break;
+      default:
+        break;
+    }
+  };
+
+  const bottomTabs = [
+    { id: "Home", title: "Home", icon: "home" },
+    { id: "Events", title: "Events", icon: "calendar" },
+    { id: "Community", title: "Community", icon: "users" },
+    { id: "Discuss", title: "Notification", icon: "bell" },
+    { id: "Settings", title: "Settings", icon: "settings" },
+  ];
 
   if (loading) {
     return (
@@ -226,9 +251,11 @@ const ViewTask = () => {
         />
         <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
       </TouchableOpacity>
+
       <Text style={styles.header}>
         {userRole === "admin" ? "All Tasks" : "Your Tasks"}
       </Text>
+
       {tasks.length === 0 ? (
         <Text style={styles.noTasksText}>No tasks available</Text>
       ) : (
@@ -238,8 +265,37 @@ const ViewTask = () => {
           renderItem={({ item }) => (
             <TaskCard task={item} onStatusUpdate={updateTaskStatus} />
           )}
+          contentContainerStyle={{ paddingBottom: 90 }} // space for bottom tab
         />
       )}
+
+      {/* Bottom Tabs */}
+      <View style={styles.bottomTabContainer}>
+        {bottomTabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.tabButton,
+              activeTab === tab.id && styles.activeTabButton,
+            ]}
+            onPress={() => handleTabPress(tab.id)}
+          >
+            <Icon
+              name={tab.icon}
+              size={24}
+              color={activeTab === tab.id ? "#4CAF50" : "#999"}
+            />
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === tab.id && styles.activeTabText,
+              ]}
+            >
+              {tab.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
@@ -247,21 +303,21 @@ const ViewTask = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     padding: 15,
   },
   header: {
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 15,
-    marginTop: '3%'
+    marginTop: "3%",
   },
   taskCard: {
     margin: 10,
     padding: 15,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -269,33 +325,33 @@ const styles = StyleSheet.create({
   },
   taskTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   taskDescription: {
     fontSize: 14,
-    color: '#6e6e6e',
+    color: "#6e6e6e",
     marginTop: 5,
   },
   taskDetail: {
     fontSize: 12,
     marginTop: 4,
-    color: '#6e6e6e',
+    color: "#6e6e6e",
   },
   taskStatus: {
     fontSize: 12,
     marginTop: 4,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   lastUpdated: {
     fontSize: 11,
-    fontStyle: 'italic',
-    color: '#888',
+    fontStyle: "italic",
+    color: "#888",
     marginTop: 4,
   },
   actionContainer: {
     marginTop: 12,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   actionButton: {
     paddingVertical: 6,
@@ -303,38 +359,75 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   actionButtonText: {
-    color: 'white',
-    fontWeight: '500',
+    color: "white",
+    fontWeight: "500",
     fontSize: 12,
   },
   completedWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   completedText: {
     marginLeft: 5,
-    color: 'green',
+    color: "green",
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   centered: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
     marginTop: 10,
     fontSize: 16,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 16,
   },
   noTasksText: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 50,
     fontSize: 16,
-    color: '#6e6e6e',
+    color: "#6e6e6e",
+  },
+  bottomTabContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderTopWidth: 1,
+    borderTopColor: "#E9ECEF",
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
+  activeTabButton: {
+    backgroundColor: "rgba(76, 175, 80, 0.1)",
+    borderRadius: 8,
+  },
+  tabText: {
+    fontSize: 11,
+    color: "#999",
+    marginTop: 4,
+    fontWeight: "500",
+  },
+  activeTabText: {
+    color: "#4CAF50",
+    fontWeight: "600",
   },
 });
 

@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     borderRadius: 10,
+    marginTop: "15%"
   },
   header: {
     borderRadius: 12,

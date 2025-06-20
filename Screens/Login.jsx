@@ -23,7 +23,6 @@ const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const handleLogin = async () => {
     try {
       const response = await axios.post(`http://${ip}:3000/api/auth/login`, {
@@ -31,10 +30,20 @@ const Login = () => {
         password,
       });
 
+      console.log("Login response:", response.data);
+
       const { token, role } = response.data;
+
+      // Decode the JWT token to extract userId
+      const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+      console.log("Token payload:", tokenPayload);
+
+      const userId = tokenPayload.userId;
+      console.log("Extracted userId:", userId);
 
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("role", role);
+      await AsyncStorage.setItem("userId", userId);
 
       Toast.show({
         type: "success",

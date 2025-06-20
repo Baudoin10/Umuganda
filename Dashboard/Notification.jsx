@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { IP } from "@env";
 
 const Notification = () => {
+  const navigation = useNavigation();
 
   const ip = IP;
   const [title, setTitle] = useState("");

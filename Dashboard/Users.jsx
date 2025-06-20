@@ -1,3 +1,5 @@
+
+import Icon from "react-native-vector-icons/MaterialIcons";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -17,10 +19,10 @@ import { IP } from "@env";
 
 const Users = () => {
   const navigation = useNavigation();
-
   const ip = IP;
 
   const [users, setUsers] = useState([]);
+  const [activeTab, setActiveTab] = useState("Users");
   const screenWidth = Dimensions.get("window").width;
   const isSmallScreen = screenWidth < 380;
 
@@ -47,10 +49,7 @@ const Users = () => {
       "Delete User",
       "Are you sure you want to delete this user?",
       [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
+        { text: "Cancel", style: "cancel" },
         {
           text: "Delete",
           onPress: async () => {
@@ -83,6 +82,35 @@ const Users = () => {
     );
   };
 
+  const handleTabPress = (tabId) => {
+    setActiveTab(tabId);
+    switch (tabId) {
+      case "Dashboard":
+        navigation.navigate("Dashboard");
+        break;
+      case "Events":
+        navigation.navigate("Event");
+        break;
+      case "Tasks":
+        navigation.navigate("Task");
+        break;
+      case "Users":
+        navigation.navigate("Users");
+        break;
+      case "Discuss":
+        navigation.navigate("Notification");
+        break;
+    }
+  };
+
+  const bottomTabs = [
+    { id: "Dashboard", title: "Dashboard", icon: "dashboard" },
+    { id: "Events", title: "Events", icon: "event" },
+    { id: "Tasks", title: "Tasks", icon: "assignment" },
+    { id: "Users", title: "Users", icon: "group" },
+    { id: "Discuss", title: "Notification", icon: "notifications" },
+  ];
+
   const renderHeader = () => (
     <View style={[styles.row, styles.header]}>
       <Text style={[styles.headerCell, { flex: 3 }]} numberOfLines={1}>
@@ -94,10 +122,7 @@ const Users = () => {
       <Text style={[styles.headerCell, { flex: 4 }]} numberOfLines={1}>
         Email
       </Text>
-      <Text
-        style={[styles.headerCell, { width: 50, textAlign: "center" }]}
-        numberOfLines={1}
-      >
+      <Text style={[styles.headerCell, { width: 50, textAlign: "center" }]}>
         Action
       </Text>
     </View>
@@ -124,40 +149,72 @@ const Users = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Dashboard")}
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: "10%",
-          paddingVertical: 10,
-        }}
-      >
-        <Ionicons
-          name="arrow-back"
-          size={24}
-          color="black"
-          style={{ marginRight: 5 }}
+    <View style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Dashboard")}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: "10%",
+            paddingVertical: 10,
+          }}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            style={{ marginRight: 5 }}
+          />
+          <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.title}>Users</Text>
+        <FlatList
+          data={users}
+          keyExtractor={(item) => item._id}
+          ListHeaderComponent={renderHeader}
+          renderItem={renderItem}
+          stickyHeaderIndices={[0]}
+          initialNumToRender={10}
         />
-        <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>Users</Text>
-      <FlatList
-        data={users}
-        keyExtractor={(item) => item._id}
-        ListHeaderComponent={renderHeader}
-        renderItem={renderItem}
-        stickyHeaderIndices={[0]}
-        initialNumToRender={10}
-      />
-      <Toast />
+        <Toast />
+      </View>
+
+      {/* Bottom Tab Navigation */}
+      <View style={styles.bottomTabContainer}>
+        {bottomTabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.tabButton,
+              activeTab === tab.id && styles.activeTabButton,
+            ]}
+            onPress={() => handleTabPress(tab.id)}
+          >
+            <Icon
+              name={tab.icon}
+              size={24}
+              color={activeTab === tab.id ? "#4CAF50" : "#999"}
+            />
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === tab.id && styles.activeTabText,
+              ]}
+            >
+              {tab.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    paddingBottom: 100,
     flex: 1,
     backgroundColor: "#F9F9F9",
   },
@@ -203,6 +260,38 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  bottomTabContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderTopWidth: 1,
+    borderTopColor: "#E9ECEF",
+    elevation: 8,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  activeTabButton: {
+    backgroundColor: "rgba(76, 175, 80, 0.1)",
+    borderRadius: 8,
+  },
+  tabText: {
+    fontSize: 11,
+    color: "#999",
+    marginTop: 4,
+    fontWeight: "500",
+  },
+  activeTabText: {
+    color: "#4CAF50",
+    fontWeight: "600",
   },
 });
 

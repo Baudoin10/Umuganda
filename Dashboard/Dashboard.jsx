@@ -148,7 +148,7 @@ const Dashboard = ({ navigation }) => {
     { id: "Events", title: "Events", icon: "event" },
     { id: "Tasks", title: "Tasks", icon: "assignment" },
     { id: "Users", title: "Users", icon: "group" },
-    { id: "Notifications", title: "Notifications", icon: "notification" },
+    { id: "Discuss", title: "Notification", icon: "notifications" },
   ];
 
   // Dashboard cards with enhanced data
@@ -232,6 +232,9 @@ const Dashboard = ({ navigation }) => {
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
     switch (tabId) {
+      case "Dashboard":
+        navigation.navigate("Dashboard");
+        break;
       case "Events":
         navigation.navigate("Event");
         break;
@@ -241,10 +244,8 @@ const Dashboard = ({ navigation }) => {
       case "Users":
         navigation.navigate("Users");
         break;
-      case "Settings":
+      case "Discuss":
         navigation.navigate("Notification");
-        break;
-      default:
         break;
     }
   };

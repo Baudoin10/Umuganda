@@ -1,34 +1,36 @@
 
 import React, { useState } from "react";
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
   ActivityIndicator,
-  Switch
+  Switch,
 } from "react-native";
-import Toast from 'react-native-toast-message'; 
+import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { IP } from "@env";
 
 const Notification = () => {
   const navigation = useNavigation();
-
   const ip = IP;
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isBroadcast, setIsBroadcast] = useState(true);
+  const [activeTab, setActiveTab] = useState("Discuss");
 
   const handleCreateNotification = async () => {
     if (!title || !description) {
       Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Incomplete Form',
-        text2: 'Please fill out both title and description.',
+        type: "error",
+        position: "top",
+        text1: "Incomplete Form",
+        text2: "Please fill out both title and description.",
         visibilityTime: 3000,
         autoHide: true,
       });
@@ -50,13 +52,15 @@ const Notification = () => {
       });
 
       const data = await response.json();
-      
+
       if (response.ok) {
         Toast.show({
-          type: 'success',
-          position: 'top',
-          text1: 'Notification Created',
-          text2: `Successfully sent to ${isBroadcast ? 'all users' : 'selected users'}`,
+          type: "success",
+          position: "top",
+          text1: "Notification Created",
+          text2: `Successfully sent to ${
+            isBroadcast ? "all users" : "selected users"
+          }`,
           visibilityTime: 3000,
           autoHide: true,
         });
@@ -65,25 +69,24 @@ const Notification = () => {
           navigation.navigate("Dashboard");
         }, 3000);
 
-        // Reset the form
         setTitle("");
         setDescription("");
       } else {
         Toast.show({
-          type: 'error',
-          position: 'top',
-          text1: 'Error',
-          text2: data.message || 'Failed to create notification.',
+          type: "error",
+          position: "top",
+          text1: "Error",
+          text2: data.message || "Failed to create notification.",
           visibilityTime: 3000,
           autoHide: true,
         });
       }
     } catch (error) {
       Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Error',
-        text2: 'Network error. Please check your connection.',
+        type: "error",
+        position: "top",
+        text1: "Error",
+        text2: "Network error. Please check your connection.",
         visibilityTime: 3000,
         autoHide: true,
       });
@@ -92,57 +95,119 @@ const Notification = () => {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create a New Notification</Text>
+  const handleTabPress = (tabId) => {
+    setActiveTab(tabId);
+    switch (tabId) {
+      case "Dashboard":
+        navigation.navigate("Dashboard");
+        break;
+      case "Events":
+        navigation.navigate("Event");
+        break;
+      case "Tasks":
+        navigation.navigate("Task");
+        break;
+      case "Users":
+        navigation.navigate("Users");
+        break;
+      case "Discuss":
+        navigation.navigate("Notification");
+        break;
+    }
+  };
 
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Notification Title</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter title here"
-          value={title}
-          onChangeText={setTitle}
-        />
-      </View>
-      
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Notification Description</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Enter description here"
-          value={description}
-          onChangeText={setDescription}
-          multiline
-          numberOfLines={4}
-        />
-      </View>
-      
-      <View style={styles.formGroup}>
-        <View style={styles.broadcastRow}>
-          <Text style={styles.label}>Send to all users</Text>
-          <Switch
-            value={isBroadcast}
-            onValueChange={setIsBroadcast}
-            trackColor={{ false: "#cccccc", true: "#a0d8a3" }}
-            thumbColor={isBroadcast ? "#4CAF50" : "#f4f3f4"}
+  const bottomTabs = [
+    { id: "Dashboard", title: "Dashboard", icon: "dashboard" },
+    { id: "Events", title: "Events", icon: "event" },
+    { id: "Tasks", title: "Tasks", icon: "assignment" },
+    { id: "Users", title: "Users", icon: "group" },
+    { id: "Discuss", title: "Notification", icon: "notifications" },
+  ];
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Create a New Notification</Text>
+
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Notification Title</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter title here"
+            value={title}
+            onChangeText={setTitle}
           />
         </View>
-      </View>
-      
-      <TouchableOpacity 
-        style={[styles.createButton, (isLoading || !title || !description) && styles.disabledButton]} 
-        onPress={handleCreateNotification}
-        disabled={isLoading || !title || !description}
-      >
-        {isLoading ? (
-          <ActivityIndicator color="#FFF" size="small" />
-        ) : (
-          <Text style={styles.createButtonText}>Create Notification</Text>
-        )}
-      </TouchableOpacity>
 
-      <Toast /> 
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Notification Description</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Enter description here"
+            value={description}
+            onChangeText={setDescription}
+            multiline
+            numberOfLines={4}
+          />
+        </View>
+
+        <View style={styles.formGroup}>
+          <View style={styles.broadcastRow}>
+            <Text style={styles.label}>Send to all users</Text>
+            <Switch
+              value={isBroadcast}
+              onValueChange={setIsBroadcast}
+              trackColor={{ false: "#cccccc", true: "#a0d8a3" }}
+              thumbColor={isBroadcast ? "#4CAF50" : "#f4f3f4"}
+            />
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={[
+            styles.createButton,
+            (isLoading || !title || !description) && styles.disabledButton,
+          ]}
+          onPress={handleCreateNotification}
+          disabled={isLoading || !title || !description}
+        >
+          {isLoading ? (
+            <ActivityIndicator color="#FFF" size="small" />
+          ) : (
+            <Text style={styles.createButtonText}>Create Notification</Text>
+          )}
+        </TouchableOpacity>
+
+        <Toast />
+      </View>
+
+      {/* Bottom Tab Navigation */}
+      <View style={styles.bottomTabContainer}>
+        {bottomTabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.tabButton,
+              activeTab === tab.id && styles.activeTabButton,
+            ]}
+            onPress={() => handleTabPress(tab.id)}
+          >
+            <Icon
+              name={tab.icon}
+              size={24}
+              color={activeTab === tab.id ? "#4CAF50" : "#999"}
+            />
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === tab.id && styles.activeTabText,
+              ]}
+            >
+              {tab.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
@@ -152,14 +217,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#F9F9F9",
     flex: 1,
+    paddingBottom: 100,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: '10%',
+    marginBottom: "10%",
     textAlign: "left",
     color: "#333",
-    marginTop: '22%',
+    marginTop: "22%",
   },
   formGroup: {
     marginBottom: 16,
@@ -180,21 +246,21 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 100,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
   },
   broadcastRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 8,
   },
   createButton: {
     backgroundColor: "#4CAF50",
-    paddingVertical: 14,        
-    paddingHorizontal: 20,      
-    borderRadius: 8,           
-    alignItems: "center",       
-    marginTop: 20,              
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
     elevation: 2,
   },
   disabledButton: {
@@ -202,9 +268,41 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   createButtonText: {
-    color: "#FFF",              
-    fontSize: 17,              
-    fontWeight: "bold",       
+    color: "#FFF",
+    fontSize: 17,
+    fontWeight: "bold",
+  },
+  bottomTabContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderTopWidth: 1,
+    borderTopColor: "#E9ECEF",
+    elevation: 8,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  activeTabButton: {
+    backgroundColor: "rgba(76, 175, 80, 0.1)",
+    borderRadius: 8,
+  },
+  tabText: {
+    fontSize: 11,
+    color: "#999",
+    marginTop: 4,
+    fontWeight: "500",
+  },
+  activeTabText: {
+    color: "#4CAF50",
+    fontWeight: "600",
   },
 });
 

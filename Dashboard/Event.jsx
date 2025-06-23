@@ -138,7 +138,7 @@ const Event = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Bottom Tab Navigation (copied from Dashboard) */}
+      {/* Bottom Tab Navigation */}
       <View style={styles.bottomTabContainer}>
         {bottomTabs.map((tab) => (
           <TouchableOpacity

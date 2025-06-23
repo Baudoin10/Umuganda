@@ -151,7 +151,7 @@ const Dashboard = ({ navigation }) => {
     { id: "Discuss", title: "Send alert", icon: "notifications" },
   ];
 
-  // Dashboard cards with enhanced data
+  //cards with enhanced data
   const dashboardCards = [
     {
       id: "1",

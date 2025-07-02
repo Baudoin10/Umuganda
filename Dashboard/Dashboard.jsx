@@ -107,7 +107,6 @@ const Dashboard = ({ navigation }) => {
     fetchEvents();
   }, []);
 
-
   const menuItems = [
     {
       id: "1",

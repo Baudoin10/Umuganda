@@ -43,7 +43,6 @@ const Event = () => {
     const dateObj = new Date(date);
     const day = dateObj.getDate().toString();
     const month = (dateObj.getMonth() + 1).toString();
-
     const eventData = { ...formData, day, month };
 
     try {

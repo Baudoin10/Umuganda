@@ -136,8 +136,7 @@ const Event = () => {
           <Text style={styles.submitText}>Create Event</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Bottom Tab Navigation */}
+      
       <View style={styles.bottomTabContainer}>
         {bottomTabs.map((tab) => (
           <TouchableOpacity

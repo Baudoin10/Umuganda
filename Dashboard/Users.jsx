@@ -14,7 +14,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
 import { IP } from "@env";
 
 const Users = () => {

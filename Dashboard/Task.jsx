@@ -205,7 +205,6 @@ const Task = () => {
                 numberOfLines={3}
               />
             </View>
-
             <View style={styles.formGroup}>
               <Text style={styles.label}>Date (YYYY-MM-DD)</Text>
               <TextInput

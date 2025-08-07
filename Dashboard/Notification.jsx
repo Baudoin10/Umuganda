@@ -181,6 +181,8 @@ const Notification = () => {
         <Toast />
       </View>
 
+      
+
       <View style={styles.bottomTabContainer}>
         {bottomTabs.map((tab) => (
           <TouchableOpacity

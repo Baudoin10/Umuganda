@@ -42,7 +42,7 @@ Make sure you have the following installed:
 git clone https://github.com/your-username/umuganda-app.git
 
 # Navigate into the folder
-cd umuganda-app
+cd umuganda
 
 # Install dependencies
 npm install

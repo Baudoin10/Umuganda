@@ -26,7 +26,7 @@ const Chart = () => {
     >
       <LineChart
         data={data}
-        width={chartWidth} // Using reduced width
+        width={chartWidth} 
         height={270}
         yAxisSuffix=""
         chartConfig={{

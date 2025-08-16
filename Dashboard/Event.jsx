@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   View,
@@ -11,48 +10,43 @@ import {
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { IP } from "@env";
+import { createEvent } from "../Services/eventAPI";
+
 
 const Event = () => {
   const navigation = useNavigation();
-  const ip = IP;
   const [activeTab, setActiveTab] = useState("Events");
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     address: "",
-    date: "",
+    date: "", 
   });
 
+  const [submitting, setSubmitting] = useState(false);
+
   const handleChange = (key, value) => {
-    setFormData({ ...formData, [key]: value });
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
     const { title, description, address, date } = formData;
 
     if (!title || !description || !address || !date) {
-      Toast.show({
-        type: "error",
-        text1: "All fields are required!",
-      });
+      Toast.show({ type: "error", text1: "All fields are required!" });
       return;
     }
 
-    const dateObj = new Date(date);
-    const day = dateObj.getDate().toString();
-    const month = (dateObj.getMonth() + 1).toString();
-    const eventData = { ...formData, day, month };
+    const d = new Date(date);
+    if (isNaN(d.getTime())) {
+      Toast.show({ type: "error", text1: "Use date as YYYY-MM-DD" });
+      return;
+    }
 
     try {
-      const response = await fetch(`http://${ip}:3000/api/events`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(eventData),
-      });
-
-      if (!response.ok) throw new Error("Failed to create event");
+      setSubmitting(true);
+      await createEvent({ title, description, address, date });
 
       Toast.show({
         type: "success",
@@ -60,16 +54,22 @@ const Event = () => {
         text1: "Event created successfully!",
       });
 
+      setFormData({ title: "", description: "", address: "", date: "" });
+
       setTimeout(() => {
         navigation.navigate("Dashboard");
-      }, 3000);
-
-      setFormData({ title: "", description: "", address: "", date: "" });
+      }, 1500);
     } catch (error) {
+      console.error(
+        "Create event failed:",
+        error?.response?.data || error.message
+      );
       Toast.show({
         type: "error",
         text1: "Something went wrong. Please try again.",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -107,6 +107,7 @@ const Event = () => {
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
       <View style={styles.container}>
         <Text style={styles.heading}>Create Event</Text>
+
         <TextInput
           style={styles.input}
           placeholder="Event Title"
@@ -131,13 +132,19 @@ const Event = () => {
           value={formData.date}
           onChangeText={(text) => handleChange("date", text)}
         />
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+
+        <TouchableOpacity
+          style={[styles.submitButton, submitting && { opacity: 0.7 }]}
+          onPress={handleSubmit}
+          disabled={submitting}
+        >
           <Icon name="add" size={24} color="#FFF" />
-          <Text style={styles.submitText}>Create Event</Text>
+          <Text style={styles.submitText}>
+            {submitting ? "Creating..." : "Create Event"}
+          </Text>
         </TouchableOpacity>
       </View>
 
-      
       <View style={styles.bottomTabContainer}>
         {bottomTabs.map((tab) => (
           <TouchableOpacity
@@ -164,6 +171,7 @@ const Event = () => {
           </TouchableOpacity>
         ))}
       </View>
+
       <Toast />
     </View>
   );
@@ -176,7 +184,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 20,
-    marginBottom: 10,
     marginTop: "30%",
     marginBottom: "10%",
   },
@@ -201,7 +208,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 8,
   },
-
   bottomTabContainer: {
     position: "absolute",
     bottom: 0,

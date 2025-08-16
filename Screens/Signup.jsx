@@ -13,43 +13,35 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-import { IP } from "@env";
+import { signup as signupApi } from "../api/authAPI";
 
 const Signup = () => {
-  const ip = IP;
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  const handleSignup = async () => {
-    try {
-      await axios.post(`http://${ip}:3000/api/auth/register`, {
-        firstname,
-        lastname,
-        email,
-        password,
-      });
+   const handleSignup = async () => {
+     try {
+       await signupApi({ firstname, lastname, email, password });
 
-      Toast.show({
-        type: "success",
-        position: "top",
-        text2: "Account created successfully!",
-      });
+       Toast.show({
+         type: "success",
+         position: "top",
+         text2: "Account created successfully!",
+       });
 
-      setTimeout(() => {
-        navigation.navigate("Login");
-      }, 2000);
-    } catch (error) {
-      console.error(error);
-      Toast.show({
-        type: "error",
-        position: "top",
-        text2: "There was an issue creating the account.",
-      });
-    }
-  };
+       setTimeout(() => navigation.navigate("Login"), 1500);
+     } catch (error) {
+       console.error("Signup failed:", error?.response?.data || error.message);
+       Toast.show({
+         type: "error",
+         position: "top",
+         text2: "There was an issue creating the account.",
+       });
+     }
+   };
 
   return (
     <SafeAreaView style={styles.container}>

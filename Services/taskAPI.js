@@ -1,11 +1,11 @@
-// Services/listTaskAPI.js
+// Services/taskAPI.js
 import axios from "axios";
 import { authHeader } from "./authAPI";
 
 const BASE_URL = "https://umuganda-backend.onrender.com";
 
-export async function getTasks() {
+export async function createTask(task) {
   const headers = await authHeader();
-  const { data } = await axios.get(`${BASE_URL}/api/tasks`, { headers });
+  const { data } = await axios.post(`${BASE_URL}/api/tasks`, task, { headers });
   return data;
 }

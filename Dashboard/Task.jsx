@@ -20,11 +20,9 @@ import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
-import { IP } from "@env";
+import { createTask } from "../Services/taskAPI"; 
 
 const Task = () => {
-
-  const ip = IP;
    const navigation = useNavigation();
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -83,66 +81,61 @@ const Task = () => {
     }
   };
 
-  const handleSubmitTask = async () => {
-    if (!photo || !taskDetails.title || !taskDetails.description || !taskDetails.date) {
-      Toast.show({
-        type: "error",
-        text1: "Please fill all fields and take a picture",
-      });
-      return;
-    }
+   const handleSubmitTask = async () => {
+     if (
+       !photo ||
+       !taskDetails.title ||
+       !taskDetails.description ||
+       !taskDetails.date
+     ) {
+       Toast.show({
+         type: "error",
+         text1: "Please fill all fields and take a picture",
+       });
+       return;
+     }
 
-    setLoading(true);
-    try {
-      const formData = {
-        title: taskDetails.title,
-        description: taskDetails.description,
-        date: taskDetails.date,
-        location: taskDetails.location,
-        status: taskDetails.status,
-        photo: photo,
-      };
+     setLoading(true);
+     try {
+       const formData = {
+         title: taskDetails.title,
+         description: taskDetails.description,
+         date: taskDetails.date, // YYYY-MM-DD
+         location: taskDetails.location, // JSON string with lat/lng
+         status: taskDetails.status, // "Pending"
+         photo: photo, // image URI
+       };
 
-      const response = await fetch(`http://${ip}:3000/api/tasks`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+       await createTask(formData);
 
-      const result = await response.json();
+       Toast.show({ type: "success", text1: "Task created successfully!" });
 
-      if (response.ok) {
-        Toast.show({ type: "success", text1: "Task created successfully!" });
-        setPhoto(null);
-        setTaskDetails({
-          title: "",
-          description: "",
-          date: "",
-          location: "",
-          status: "Pending",
-        });
+       setPhoto(null);
+       setTaskDetails({
+         title: "",
+         description: "",
+         date: "",
+         location: "",
+         status: "Pending",
+       });
 
-        setTimeout(() => {
-          navigation.navigate("Dashboard");
-        }, 3000);
-
-      } else {
-        Toast.show({
-          type: "error",
-          text1: "Failed to create task",
-          text2: result.message || "Please try again",
-        });
-      }
-    } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "Network error",
-        text2: "Please check your connection",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+       setTimeout(() => {
+         navigation.navigate("Dashboard");
+       }, 1500);
+     } catch (error) {
+       console.error(
+         "Task creation failed:",
+         error?.response?.data || error.message
+       );
+       Toast.show({
+         type: "error",
+         text1: "Failed to create task",
+         text2: "Please try again",
+       });
+     } finally {
+       setLoading(false);
+     }
+   };
 
   const mapLocation = taskDetails.location ? JSON.parse(taskDetails.location) : null;
 

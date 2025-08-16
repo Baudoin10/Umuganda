@@ -9,40 +9,32 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { IP } from "@env";
+import { getTasks } from "../Services/listTaskAPI";
 
 const ListTask = () => {
   const navigation = useNavigation();
-  const ip = IP;
-
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("Tasks");
 
-  const fetchTasks = async () => {
-    try {
-      setLoading(true);
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTasks(response.data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching tasks:", err);
-      setError("Failed to load tasks");
-      setLoading(false);
-    }
-  };
+ const fetchTasks = async () => {
+   try {
+     setLoading(true);
+     const data = await getTasks(); 
+     setTasks(data);
+     setError(null);
+   } catch (err) {
+     console.error("Error fetching tasks:", err?.response?.data || err.message);
+     setError("Failed to load tasks");
+   } finally {
+     setLoading(false);
+   }
+ };
 
   useEffect(() => {
     fetchTasks();

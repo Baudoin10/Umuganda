@@ -12,13 +12,15 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Chart from "./Chart";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import Toast from "react-native-toast-message";
-import { IP } from "@env";
+import { getMe } from "../Services/meAPI";
+import { getUsers } from "../Services/usersAPI";
+import { getTasks } from "../Services/listTaskAPI";
+import { getEvents } from "../Services/eventAPI";
+import { logout } from "../Services/authAPI";
+
 
 const Dashboard = ({ navigation }) => {
-  const ip = IP;
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
@@ -29,39 +31,22 @@ const Dashboard = ({ navigation }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          console.error("No token found");
-          return;
-        }
-
-        const response = await axios.get(`http://${ip}:3000/api/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
+        const me = await getMe();
+        setUser(me);
+      } catch (e) {
+        console.error("Error fetching user:", e?.response?.data || e.message);
       }
     };
-
     fetchUser();
   }, []);
 
   // Fetch users data
   const fetchUsers = async () => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUsers(response.data);
-    } catch (error) {
-      console.log(error);
+      const data = await getUsers();
+      setUsers(data);
+    } catch (e) {
+      console.log("Users load error:", e?.response?.data || e.message);
     }
   };
 
@@ -70,42 +55,32 @@ const Dashboard = ({ navigation }) => {
   }, []);
 
   // Fetch tasks data
-  const fetchTasks = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTasks(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const fetchTasks = async () => {
+      try {
+        const data = await getTasks();
+        setTasks(data);
+      } catch (e) {
+        console.log("Tasks load error:", e?.response?.data || e.message);
+      }
+    };
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+    useEffect(() => {
+      fetchTasks();
+    }, []);
 
   // Fetch events data
-  const fetchEvents = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/events`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setEvents(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+   const fetchEvents = async () => {
+     try {
+       const data = await getEvents();
+       setEvents(data);
+     } catch (e) {
+       console.log("Events load error:", e?.response?.data || e.message);
+     }
+   };
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+   useEffect(() => {
+     fetchEvents();
+   }, []);
 
   const menuItems = [
     {
@@ -296,46 +271,23 @@ const Dashboard = ({ navigation }) => {
   };
 
   // Handle logout
-  const handleLogout = async () => {
-    const token = await AsyncStorage.getItem("token");
-    if (!token) {
-      console.warn("No token found, user already logged out.");
-      navigation.navigate("Login");
-      return;
-    }
-
-    try {
-      await axios.post(
-        `http://${ip}:3000/api/auth/logout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("role");
-      await AsyncStorage.removeItem("user");
-
-      Toast.show({
-        type: "success",
-        position: "top",
-        text1: "Logout successful!",
-        visibilityTime: 3000,
-      });
-
-      setTimeout(() => {
+    const handleLogout = async () => {
+      try {
+        await logout(); 
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Logout successful!",
+        });
         navigation.navigate("Login");
-      }, 3000);
-    } catch (error) {
-      console.error("Logout failed", error);
-
-      Toast.show({
-        type: "error",
-        position: "bottom",
-        text1: "Logout failed. Please try again.",
-        visibilityTime: 3000,
-      });
-    }
-  };
+      } catch (e) {
+        Toast.show({
+          type: "error",
+          position: "bottom",
+          text1: "Logout failed. Please try again.",
+        });
+      }
+    };
 
   return (
     <SafeAreaView style={styles.container}>

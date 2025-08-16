@@ -14,57 +14,33 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
-import { Ionicons } from '@expo/vector-icons';
-import { IP } from "@env";
+import { login as loginApi } from "../Services/authAPI"; 
 
 
 const Login = () => {
-  const ip = IP;
-  const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post(`http://${ip}:3000/api/auth/login`, {
-        email,
-        password,
-      });
+    const navigation = useNavigation();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-      console.log("Login response:", response.data);
+   const handleLogin = async () => {
+     try {
+       const { role } = await loginApi(email, password);
 
-      const { token, role } = response.data;
+       Toast.show({ type: "success", text1: "Login successful!" });
 
-      // Decode the JWT token to extract userId
-      const tokenPayload = JSON.parse(atob(token.split(".")[1]));
-      console.log("Token payload:", tokenPayload);
+       setTimeout(() => {
+         if (role === "admin") navigation.navigate("Dashboard");
+         else navigation.navigate("user");
+       }, 1200);
+     } catch (err) {
+       console.error("Login failed:", err?.response?.data || err.message);
+       Toast.show({
+         type: "error",
+         text1: "Invalid credentials. Please try again.",
+       });
+     }
+   };
 
-      const userId = tokenPayload.userId;
-      console.log("Extracted userId:", userId);
-
-      await AsyncStorage.setItem("token", token);
-      await AsyncStorage.setItem("role", role);
-      await AsyncStorage.setItem("userId", userId);
-
-      Toast.show({
-        type: "success",
-        text1: "Login successful!",
-      });
-
-      setTimeout(() => {
-        if (role === "admin") {
-          navigation.navigate("Dashboard");
-        } else {
-          navigation.navigate("user");
-        }
-      }, 1500);
-    } catch (err) {
-      Toast.show({
-        type: "error",
-        text1: "Invalid credentials. Please try again.",
-      });
-      console.error("Login failed:", err);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>

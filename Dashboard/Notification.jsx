@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   View,
@@ -12,11 +11,10 @@ import {
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { IP } from "@env";
+import { createNotification } from "../Services/notificationAPI"; 
 
 const Notification = () => {
   const navigation = useNavigation();
-  const ip = IP;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -31,65 +29,44 @@ const Notification = () => {
         position: "top",
         text1: "Incomplete Form",
         text2: "Please fill out both title and description.",
-        visibilityTime: 3000,
-        autoHide: true,
       });
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await fetch(`http://${ip}:3000/api/notifications`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          message: description,
-          targetUserIds: isBroadcast ? "all" : [],
-        }),
+      await createNotification({
+        title,
+        message: description,
+        isBroadcast,
       });
 
-      const data = await response.json();
+      Toast.show({
+        type: "success",
+        position: "top",
+        text1: "Notification Created",
+        text2: `Successfully sent to ${
+          isBroadcast ? "all users" : "selected users"
+        }`,
+      });
 
-      if (response.ok) {
-        Toast.show({
-          type: "success",
-          position: "top",
-          text1: "Notification Created",
-          text2: `Successfully sent to ${
-            isBroadcast ? "all users" : "selected users"
-          }`,
-          visibilityTime: 3000,
-          autoHide: true,
-        });
+      setTitle("");
+      setDescription("");
 
-        setTimeout(() => {
-          navigation.navigate("Dashboard");
-        }, 3000);
-
-        setTitle("");
-        setDescription("");
-      } else {
-        Toast.show({
-          type: "error",
-          position: "top",
-          text1: "Error",
-          text2: data.message || "Failed to create notification.",
-          visibilityTime: 3000,
-          autoHide: true,
-        });
-      }
+      setTimeout(() => {
+        navigation.navigate("Dashboard");
+      }, 1500);
     } catch (error) {
       Toast.show({
         type: "error",
         position: "top",
         text1: "Error",
-        text2: "Network error. Please check your connection.",
-        visibilityTime: 3000,
-        autoHide: true,
+        text2: "Failed to create notification.",
       });
+      console.error(
+        "Create notification failed:",
+        error?.response?.data || error.message
+      );
     } finally {
       setIsLoading(false);
     }
@@ -180,8 +157,6 @@ const Notification = () => {
 
         <Toast />
       </View>
-
-      
 
       <View style={styles.bottomTabContainer}>
         {bottomTabs.map((tab) => (

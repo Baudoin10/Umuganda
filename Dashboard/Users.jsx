@@ -14,28 +14,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
-import { IP } from "@env";
+import { getUsers, deleteUser } from "../Services/usersAPI"; 
 
 const Users = () => {
-  const navigation = useNavigation();
-  const ip = IP;
-
-  const [users, setUsers] = useState([]);
-  const [activeTab, setActiveTab] = useState("Users");
-  const screenWidth = Dimensions.get("window").width;
-  const isSmallScreen = screenWidth < 380;
+ const navigation = useNavigation();
+ const [users, setUsers] = useState([]);
+ const [activeTab, setActiveTab] = useState("Users");
+ const screenWidth = Dimensions.get("window").width;
+ const isSmallScreen = screenWidth < 380;
 
   const fetchUsers = async () => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUsers(response.data);
+      const data = await getUsers();
+      setUsers(data);
     } catch (error) {
-      console.log(error);
+      console.error(
+        "Error fetching users:",
+        error?.response?.data || error.message
+      );
+      Toast.show({ type: "error", text1: "Failed to load users" });
     }
   };
 
@@ -43,7 +40,7 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  const handleDeleteUser = async (id) => {
+  const handleDeleteUser = (id) => {
     Alert.alert(
       "Delete User",
       "Are you sure you want to delete this user?",
@@ -53,25 +50,18 @@ const Users = () => {
           text: "Delete",
           onPress: async () => {
             try {
-              const token = await AsyncStorage.getItem("token");
-              await axios.delete(`http://${ip}:3000/api/users/${id}`, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              });
+              await deleteUser(id);
               fetchUsers();
               Toast.show({
                 type: "success",
-                position: "bottom",
                 text1: "User deleted successfully",
               });
             } catch (error) {
-              console.log(error);
-              Toast.show({
-                type: "error",
-                position: "bottom",
-                text1: "Error deleting user",
-              });
+              console.error(
+                "Error deleting user:",
+                error?.response?.data || error.message
+              );
+              Toast.show({ type: "error", text1: "Error deleting user" });
             }
           },
           style: "destructive",

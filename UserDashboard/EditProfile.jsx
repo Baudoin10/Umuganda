@@ -1,4 +1,5 @@
 
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -9,10 +10,9 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
-import { IP } from "@env";
+import { fetchUserProfile, updateUserProfile } from "../Services/profileAPI";
 
 const EditProfile = () => {
   const navigation = useNavigation();
@@ -20,35 +20,33 @@ const EditProfile = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
-  const ip = IP;
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const load = async () => {
       try {
         const userId = await AsyncStorage.getItem("userId");
-        const token = await AsyncStorage.getItem("token");
-
-        if (!userId || !token) {
+        if (!userId) {
           Alert.alert("Error", "Missing user info. Please login again.");
           return;
         }
 
-        const res = await axios.get(`http://${ip}:3000/api/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setFirstName(res.data.firstname || "");
-        setLastName(res.data.lastname || "");
-        setEmail(res.data.email || "");
+        const data = await fetchUserProfile(userId);
+        setFirstName(data.firstname || "");
+        setLastName(data.lastname || "");
+        setEmail(data.email || "");
       } catch (err) {
-        Alert.alert("Error", "Failed to load user data.");
+        const msg =
+          err?.response?.data?.message ||
+          err?.response?.data?.error ||
+          "Failed to load user data.";
+        Alert.alert("Error", msg);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUser();
-  }, [ip]);
+    load();
+  }, []);
 
   const handleSave = async () => {
     try {
@@ -58,30 +56,24 @@ const EditProfile = () => {
       }
 
       const userId = await AsyncStorage.getItem("userId");
-      const token = await AsyncStorage.getItem("token");
+      if (!userId) {
+        Alert.alert("Error", "Missing user info. Please login again.");
+        return;
+      }
 
-      const response = await axios.put(
-        `http://${ip}:3000/api/users/${userId}`,
-        {
-          firstname: firstName.trim(),
-          lastname: lastName.trim(),
-          email: email.trim(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await updateUserProfile(userId, {
+        firstname: firstName.trim(),
+        lastname: lastName.trim(),
+        email: email.trim(),
+      });
 
       Alert.alert("Success", "Profile updated successfully!", [
         { text: "OK", onPress: () => navigation.goBack() },
       ]);
     } catch (error) {
       const msg =
-        error.response?.data?.message ||
-        error.response?.data?.error ||
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
         "Update failed. Try again.";
       Alert.alert("Error", msg);
     }
@@ -99,12 +91,7 @@ const EditProfile = () => {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => navigation.navigate("Profile")}
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginBottom: "10%",
-          paddingVertical: 10,
-        }}
+        style={styles.backRow}
       >
         <Ionicons
           name="arrow-back"
@@ -114,6 +101,7 @@ const EditProfile = () => {
         />
         <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
       </TouchableOpacity>
+
       <View style={styles.formCard}>
         <Text style={styles.title}>Edit Your Profile</Text>
         <Text style={styles.share}>
@@ -174,10 +162,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  centered: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  centered: { justifyContent: "center", alignItems: "center" },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -214,10 +199,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
   },
-  loadingText: {
-    fontSize: 16,
-    color: "#4f8cff",
-    fontWeight: "500",
+  loadingText: { fontSize: 16, color: "#4f8cff", fontWeight: "500" },
+  backRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: "10%",
+    paddingVertical: 10,
   },
 });
 

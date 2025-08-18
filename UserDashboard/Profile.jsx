@@ -10,39 +10,43 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IP } from "@env";
 import Icon from "react-native-vector-icons/Feather";
+import { fetchUserProfile } from "../Services/profileAPI";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("Settings");
   const navigation = useNavigation();
-  const ip = IP;
+ 
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const id = await AsyncStorage.getItem("userId");
-        const token = await AsyncStorage.getItem("token");
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-        if (!id || !token) return;
+      const load = async () => {
+        try {
+          const id = await AsyncStorage.getItem("userId");
+          if (!id) return;
+          const data = await fetchUserProfile(id); // middleware adds baseURL + token
+          if (isActive) setUser(data);
+        } catch (err) {
+          console.error(
+            "Failed to fetch user:",
+            err?.response?.data || err?.message || err
+          );
+        }
+      };
 
-        const res = await axios.get(`http://${ip}:3000/api/users/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      load();
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
-        setUser(res.data);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);

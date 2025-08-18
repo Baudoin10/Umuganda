@@ -142,11 +142,13 @@ const styles = StyleSheet.create({
   },
   features: {
     marginVertical: 20,
+ 
   },
   featureItem: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+   marginLeft: 16
   },
   featureIcon: {
     width: 40,

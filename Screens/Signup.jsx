@@ -10,7 +10,6 @@ import {
   Platform,
   SafeAreaView,
 } from "react-native";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { signup as signupApi } from "../Services/authAPI";

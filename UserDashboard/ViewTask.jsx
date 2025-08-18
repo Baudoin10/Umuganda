@@ -10,11 +10,13 @@ import {
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { IP } from "@env";
+import {
+  fetchTasks as apiFetchTasks,
+  updateTaskStatus as apiUpdateTaskStatus,
+} from "../Services/viewTaskAPI";
 
 const TaskCard = ({ task, onStatusUpdate }) => {
   const getStatusColor = (status) => {
@@ -82,7 +84,6 @@ const TaskCard = ({ task, onStatusUpdate }) => {
 };
 
 const ViewTask = () => {
-  const ip = IP;
   const navigation = useNavigation();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -90,95 +91,75 @@ const ViewTask = () => {
   const [userRole, setUserRole] = useState("user");
   const [activeTab, setActiveTab] = useState("Events");
 
-  const fetchTasks = async () => {
-    try {
-      setLoading(true);
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTasks(response.data);
-      const userInfo = await AsyncStorage.getItem("userInfo");
-      if (userInfo) {
-        const { role } = JSON.parse(userInfo);
-        setUserRole(role || "user");
-      }
-      setLoading(false);
-    } catch (error) {
-      console.log("Error fetching tasks:", error);
-      setError("Failed to load tasks. Please try again.");
-      setLoading(false);
-    }
-  };
+   const fetchTasks = async () => {
+     try {
+       setLoading(true);
 
-  const updateTaskStatus = async (taskId, newStatus) => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      if (newStatus === "Completed") {
-        Alert.alert(
-          "Complete Task",
-          "Are you sure you want to mark this task as completed?",
-          [
-            { text: "Cancel", style: "cancel" },
-            {
-              text: "Yes",
-              onPress: async () => {
-                await axios.put(
-                  `http://${ip}:3000/api/tasks/${taskId}`,
-                  {
-                    status: newStatus,
-                    lastUpdated: new Date().toISOString(),
-                  },
-                  {
-                    headers: { Authorization: `Bearer ${token}` },
-                  }
-                );
-                setTasks((prev) =>
-                  prev.map((task) =>
-                    task._id === taskId
-                      ? {
-                          ...task,
-                          status: newStatus,
-                          lastUpdated: new Date().toISOString(),
-                        }
-                      : task
-                  )
-                );
-                Alert.alert("Success", "Task marked as completed!");
-              },
-            },
-          ]
-        );
-      } else {
-        await axios.put(
-          `http://${ip}:3000/api/tasks/${taskId}`,
-          {
-            status: newStatus,
-            lastUpdated: new Date().toISOString(),
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setTasks((prev) =>
-          prev.map((task) =>
-            task._id === taskId
-              ? {
-                  ...task,
-                  status: newStatus,
-                  lastUpdated: new Date().toISOString(),
-                }
-              : task
-          )
-        );
-      }
-    } catch (error) {
-      console.log("Error updating task:", error);
-      Alert.alert("Error", "Failed to update task status.");
-    }
-  };
+       // API call (handled by Axios middleware)
+       const data = await apiFetchTasks();
+       setTasks(Array.isArray(data) ? data : []);
+
+       // Role still comes from AsyncStorage (as before)
+       const userInfo = await AsyncStorage.getItem("userInfo");
+       if (userInfo) {
+         const { role } = JSON.parse(userInfo);
+         setUserRole(role || "user");
+       }
+     } catch (error) {
+       console.log(
+         "Error fetching tasks:",
+         error?.response?.data || error.message
+       );
+       setError("Failed to load tasks. Please try again.");
+     } finally {
+       setLoading(false);
+     }
+   };
+
+
+   const updateTaskStatus = async (taskId, newStatus) => {
+     try {
+       const performUpdate = async () => {
+         await apiUpdateTaskStatus(taskId, newStatus);
+         setTasks((prev) =>
+           prev.map((task) =>
+             task._id === taskId
+               ? {
+                   ...task,
+                   status: newStatus,
+                   lastUpdated: new Date().toISOString(),
+                 }
+               : task
+           )
+         );
+       };
+
+       if (newStatus === "Completed") {
+         Alert.alert(
+           "Complete Task",
+           "Are you sure you want to mark this task as completed?",
+           [
+             { text: "Cancel", style: "cancel" },
+             {
+               text: "Yes",
+               onPress: async () => {
+                 await performUpdate();
+                 Alert.alert("Success", "Task marked as completed!");
+               },
+             },
+           ]
+         );
+       } else {
+         await performUpdate();
+       }
+     } catch (error) {
+       console.log(
+         "Error updating task:",
+         error?.response?.data || error.message
+       );
+       Alert.alert("Error", "Failed to update task status.");
+     }
+   };
 
   useEffect(() => {
     fetchTasks();

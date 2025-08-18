@@ -21,3 +21,13 @@ export async function createEvent(body) {
   return data;
 }
 
+// join a specific event
+
+export async function joinEvent(eventId, userId) {
+  const headers = await authHeader(); 
+  const payload = { eventId, userId };
+  const { data } = await axios.post(`${BASE_URL}/api/events/join`, payload, {
+    headers,
+  });
+  return data; 
+}

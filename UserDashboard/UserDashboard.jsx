@@ -14,9 +14,11 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Chart from "./Chart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import Toast from "react-native-toast-message";
-import { IP } from "@env";
+import { getMe } from "../Services/meAPI";
+import { fetchTasks as apiFetchTasks } from "../Services/tasksAPI";
+import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
+import { logout as apiLogout } from "../Services/authAPI";
 
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -24,63 +26,59 @@ const UserDashboard = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState("Home");
-  const ip = IP;
+
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const loadUser = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
         if (!token) {
-          console.error("No token found");
+          console.warn("No token found");
           return;
         }
-
-        const response = await axios.get(`http://${ip}:3000/api/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(response.data);
+        const me = await getMe(); // meAPI should use your BASE_URL + interceptor/authHeader
+        setUser(me);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error(
+          "Error fetching user:",
+          error?.response?.data || error.message
+        );
       }
     };
 
-    fetchUser();
+    loadUser();
   }, []);
 
-  const fetchTasks = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/tasks`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTasks(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+   const fetchTasks = async () => {
+     try {
+       const data = await apiFetchTasks();
+       setTasks(Array.isArray(data) ? data : []);
+     } catch (error) {
+       console.log(
+         "Error loading tasks:",
+         error?.response?.data || error.message
+       );
+     }
+   };
 
   useEffect(() => {
     fetchTasks();
   }, []);
+  
 
   const fetchEvents = async () => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/events`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setEvents(response.data);
+      const data = await apiFetchEvents();
+      setEvents(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.log(error);
+      console.log(
+        "Error loading events:",
+        error?.response?.data || error.message
+      );
     }
   };
+
 
   useEffect(() => {
     fetchEvents();
@@ -200,44 +198,24 @@ const UserDashboard = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  const handleLogout = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-
-      if (!token) {
-        console.warn("No token found, user already logged out.");
-        navigation.navigate("Login");
-        return;
-      }
-
-      await axios.post(
-        `http://${ip}:3000/api/auth/logout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("role");
-      await AsyncStorage.removeItem("user");
-
-      Toast.show({
-        type: "success",
-        position: "top",
-        text1: "Logout successful!",
-      });
-
-      setTimeout(() => {
-        navigation.navigate("Login");
-      }, 3000);
-    } catch (error) {
-      console.error("Logout failed", error);
-      Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Logout failed. Please try again.",
-      });
-    }
-  };
+    // Handle logout
+      const handleLogout = async () => {
+        try {
+          await logout(); 
+          Toast.show({
+            type: "success",
+            position: "top",
+            text1: "Logout successful!",
+          });
+          navigation.navigate("Login");
+        } catch (e) {
+          Toast.show({
+            type: "error",
+            position: "bottom",
+            text1: "Logout failed. Please try again.",
+          });
+        }
+      };
 
   return (
     <SafeAreaView style={styles.container}>

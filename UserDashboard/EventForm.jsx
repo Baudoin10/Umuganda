@@ -11,8 +11,11 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-import { IP } from "@env";
 import { useNavigation } from "@react-navigation/native";
+import {
+  fetchEvents as apiFetchEvents,
+  joinEvent as apiJoinEvent,
+} from "../Services/eventAPI";
 
 const EventJoinForm = () => {
   const [events, setEvents] = useState([]);
@@ -20,88 +23,73 @@ const EventJoinForm = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Community");
   const navigation = useNavigation();
-  const ip = IP;
-
-  const userId = "your-user-id-here";
+   const [userId, setUserId] = useState(null);
+   const [joining, setJoining] = useState(false);
 
   useEffect(() => {
     fetchEvents();
   }, []);
 
-  const fetchEvents = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://${ip}:3000/api/events`);
-      const data = await response.json();
+   useEffect(() => {
+     const load = async () => {
+       try {
+         setLoading(true);
 
-      if (response.ok) {
-        setEvents(data);
-      } else {
-        Toast.show({
-          type: "error",
-          text1: "Failed to fetch events",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      Toast.show({
-        type: "error",
-        text1: "Error connecting to server",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+         // Load events
+         const data = await apiFetchEvents();
+         setEvents(Array.isArray(data) ? data : []);
 
-  const handleJoinEvent = async () => {
-    if (!selectedEventId) {
-      Toast.show({
-        type: "error",
-        text1: "Please select an event to join",
-      });
-      return;
-    }
+         // Load userId from AsyncStorage (set elsewhere at login)
+         const uid = await AsyncStorage.getItem("userId");
+         if (uid) setUserId(uid);
+       } catch (error) {
+         console.error(error);
+         Toast.show({ type: "error", text1: "Failed to fetch events" });
+       } finally {
+         setLoading(false);
+       }
+     };
 
-    try {
-      const response = await fetch(`http://${ip}:3000/api/events/join`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          eventId: selectedEventId,
-          userId: userId,
-        }),
-      });
+     load();
+   }, []);
 
-      const data = await response.json();
 
-      if (response.ok) {
-        Toast.show({
-          type: "success",
-          text1: "Joined the event successfully!",
-        });
+   const handleJoinEvent = async () => {
+     if (!selectedEventId) {
+       Toast.show({ type: "error", text1: "Please select an event to join" });
+       return;
+     }
+     if (!userId) {
+       Toast.show({
+         type: "error",
+         text1: "Missing user info. Please login again.",
+       });
+       return;
+     }
 
-        setTimeout(() => {
-          navigation.navigate("user");
-        }, 1500);
+     try {
+       setJoining(true);
+       await apiJoinEvent(selectedEventId, userId);
 
-        fetchEvents();
-        setSelectedEventId(null);
-      } else {
-        Toast.show({
-          type: "error",
-          text1: data.message || "Something went wrong",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      Toast.show({
-        type: "error",
-        text1: "Error connecting to server",
-      });
-    }
-  };
+       Toast.show({ type: "success", text1: "Joined the event successfully!" });
+       const data = await apiFetchEvents();
+       setEvents(Array.isArray(data) ? data : []);
+       setSelectedEventId(null);
+
+       setTimeout(() => {
+         navigation.navigate("user");
+       }, 1200);
+     } catch (error) {
+       const msg =
+         error?.response?.data?.message ||
+         error?.response?.data?.error ||
+         "Something went wrong";
+       Toast.show({ type: "error", text1: msg });
+     } finally {
+       setJoining(false);
+     }
+   };
+
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
@@ -189,10 +177,14 @@ const EventJoinForm = () => {
               !selectedEventId && styles.disabledButton,
             ]}
             onPress={handleJoinEvent}
-            disabled={!selectedEventId}
+            disabled={!selectedEventId || joining}
             activeOpacity={0.8}
           >
-            <Text style={styles.joinButtonText}>JOIN EVENT</Text>
+            {joining ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.joinButtonText}>JOIN EVENT</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

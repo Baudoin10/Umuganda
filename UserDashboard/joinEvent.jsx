@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
+import { fetchEvents as apiFetchEvents } from "../Services/joinEventAPI";
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>

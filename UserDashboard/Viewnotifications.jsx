@@ -9,14 +9,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { IP } from "@env";
+import { fetchNotifications as apiFetchNotifications } from "../Services/viewNotificationAPI";
 
 const Viewnotifications = () => {
-  const ip = IP;
+
   const navigation = useNavigation();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,17 +22,16 @@ const Viewnotifications = () => {
 
   const fetchNotifications = async () => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`http://${ip}:3000/api/notifications`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setNotifications(response.data);
+      const data = await apiFetchNotifications();
+      setNotifications(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.log(error);
+      console.log(
+        "Error loading notifications:",
+        error?.response?.data || error.message
+      );
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {

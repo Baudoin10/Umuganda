@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,41 +6,37 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   StyleSheet,
+  RefreshControl,
 } from "react-native";
 import { CalendarDays, MapPin } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { IP } from "@env";
-
+import { fetchEvents } from "../Services/viewEventAPI"; 
 const ViewEvent = () => {
   const navigation = useNavigation();
-  const ip = IP;
-
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState("Events");
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch(`http://${ip}:3000/api/events`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setEvents(data);
-        } else {
-          console.error("Failed to fetch events");
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
+  const loadEvents = useCallback(async () => {
+    try {
+      const data = await fetchEvents();
+      setEvents(data || []);
+    } catch (error) {
+      console.error(
+        "Error fetching events:",
+        error?.response?.data || error.message
+      );
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadEvents();
+  }, [loadEvents]);
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
@@ -103,12 +98,19 @@ const ViewEvent = () => {
         paddingBottom: 80,
       }}
     >
-   
       <Text style={styles.headerText}>Upcoming Events</Text>
       <FlatList
         data={events}
         keyExtractor={(item) => item._id.toString()}
         renderItem={({ item }) => <EventCard event={item} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadEvents} />
+        }
+        ListEmptyComponent={
+          <Text style={{ textAlign: "center", marginTop: 20, color: "#666" }}>
+            No events available
+          </Text>
+        }
       />
 
       {/* Bottom Tabs */}
@@ -143,17 +145,7 @@ const ViewEvent = () => {
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  backButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: "10%",
-    paddingVertical: 10,
-  },
+  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   headerText: {
     fontSize: 22,
     fontWeight: "600",
@@ -172,23 +164,10 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
-  eventTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  eventDescription: {
-    fontSize: 14,
-    color: "#6e6e6e",
-  },
-  eventDetailRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  eventDetailText: {
-    fontSize: 12,
-    marginLeft: 5,
-  },
+  eventTitle: { fontSize: 18, fontWeight: "bold" },
+  eventDescription: { fontSize: 14, color: "#6e6e6e" },
+  eventDetailRow: { flexDirection: "row", alignItems: "center", marginTop: 10 },
+  eventDetailText: { fontSize: 12, marginLeft: 5 },
   bottomTabContainer: {
     position: "absolute",
     bottom: 0,
@@ -216,16 +195,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(76, 175, 80, 0.1)",
     borderRadius: 8,
   },
-  tabText: {
-    fontSize: 11,
-    color: "#999",
-    marginTop: 4,
-    fontWeight: "500",
-  },
-  activeTabText: {
-    color: "#4CAF50",
-    fontWeight: "600",
-  },
+  tabText: { fontSize: 11, color: "#999", marginTop: 4, fontWeight: "500" },
+  activeTabText: { color: "#4CAF50", fontWeight: "600" },
 });
 
 export default ViewEvent;

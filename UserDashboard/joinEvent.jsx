@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-import { Ionicons } from "@expo/vector-icons";
-import { IP } from "@env";
+import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
@@ -41,28 +40,24 @@ const JoinEvent = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Community");
 
-  const ip = IP;
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const load = async () => {
       try {
-        const response = await fetch(`http://${ip}:3000/api/events`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setEvents(data);
-        } else {
-          console.error("Failed to fetch events");
-        }
+        const data = await apiFetchEvents();
+        setEvents(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error(
+          "Error fetching events:",
+          error?.response?.data || error.message
+        );
       } finally {
         setLoading(false);
       }
     };
-
-    fetchEvents();
+    load();
   }, []);
+
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);

@@ -9,7 +9,9 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-import { fetchEvents as apiFetchEvents } from "../Services/joinEventAPI";
+import { fetchEvents } from "../Services/eventAPI";
+
+
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
@@ -27,7 +29,7 @@ const EventCard = ({ event, navigation }) => (
     {event.status === "Open" && (
       <TouchableOpacity
         style={styles.joinButton}
-        onPress={() => navigation.navigate("EventForm", { eventId: event.id })}
+        onPress={() => navigation.navigate("EventForm", { eventId: event._id })}
       >
         <Text style={styles.joinButtonText}>Join Event</Text>
       </TouchableOpacity>
@@ -44,7 +46,7 @@ const JoinEvent = ({ navigation }) => {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await apiFetchEvents();
+        const data = await fetchEvents();
         setEvents(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error(
@@ -101,7 +103,7 @@ const JoinEvent = ({ navigation }) => {
 
       <FlatList
         data={events}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <EventCard event={item} navigation={navigation} />
         )}

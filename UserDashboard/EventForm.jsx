@@ -12,10 +12,10 @@ import {
 import Toast from "react-native-toast-message";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
-import {
-  fetchEvents as apiFetchEvents,
-  joinEvent as apiJoinEvent,
-} from "../Services/eventAPI";
+import { fetchEvents, joinEvent } from "../Services/eventAPI";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const EventJoinForm = () => {
   const [events, setEvents] = useState([]);
@@ -26,9 +26,7 @@ const EventJoinForm = () => {
    const [userId, setUserId] = useState(null);
    const [joining, setJoining] = useState(false);
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+
 
    useEffect(() => {
      const load = async () => {
@@ -36,7 +34,7 @@ const EventJoinForm = () => {
          setLoading(true);
 
          // Load events
-         const data = await apiFetchEvents();
+        const data = await fetchEvents();
          setEvents(Array.isArray(data) ? data : []);
 
          // Load userId from AsyncStorage (set elsewhere at login)
@@ -69,10 +67,10 @@ const EventJoinForm = () => {
 
      try {
        setJoining(true);
-       await apiJoinEvent(selectedEventId, userId);
+       await joinEvent(selectedEventId, userId);
 
        Toast.show({ type: "success", text1: "Joined the event successfully!" });
-       const data = await apiFetchEvents();
+       const data = await fetchEvents();
        setEvents(Array.isArray(data) ? data : []);
        setSelectedEventId(null);
 

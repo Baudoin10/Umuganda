@@ -8,15 +8,18 @@ const TOKEN_KEY = "token";
 const ROLE_KEY = "role";
 const USER_ID_KEY = "userId";
 
+  
+
 export async function login(email, password) {
   const { data } = await axios.post(`${BASE_URL}/api/auth/login`, {
     email,
     password,
   });
 
-  const token = data?.token || data?.accessToken || "";
-  const role = data?.role || "user";
-  const userId = data?.userId ? String(data.userId) : "";
+  // ✅ matches backend response exactly
+  const token = data.token;
+  const role = data.role;
+  const userId = String(data.userId);
 
   await AsyncStorage.setItem(TOKEN_KEY, token);
   await AsyncStorage.setItem(ROLE_KEY, role);
@@ -24,6 +27,7 @@ export async function login(email, password) {
 
   return { token, role, userId };
 }
+
 
 export async function signup({ firstname, lastname, email, password, phone, sector, address }) {
   await axios.post(`${BASE_URL}/api/auth/register`, {

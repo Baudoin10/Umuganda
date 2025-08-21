@@ -21,13 +21,44 @@ export async function createEvent(body) {
   return data;
 }
 
-// join a specific event
-
+// --- User: join event
 export async function joinEvent(eventId, userId) {
-  const headers = await authHeader(); 
+  const headers = await authHeader();
   const payload = { eventId, userId };
   const { data } = await axios.post(`${BASE_URL}/api/events/join`, payload, {
     headers,
   });
-  return data; 
+  return data;
+}
+
+// --- Admin: list participants (filters + pagination)
+export async function getParticipants(
+  eventId,
+  { q, status, sector, page = 1, limit = 10 } = {}
+) {
+  const headers = await authHeader();
+  const params = {};
+  if (q) params.q = q;
+  if (status) params.status = status; // "joined" | "present" | "absent"
+  if (sector) params.sector = sector; // e.g., "Gasabo"
+  params.page = page;
+  params.limit = limit;
+
+  const { data } = await axios.get(
+    `${BASE_URL}/api/events/${eventId}/participants`,
+    { headers, params }
+  );
+  // data shape: { total, page, limit, data: [...] }
+  return data;
+}
+
+// --- Admin: update participant status
+export async function updateParticipantStatus(eventId, userId, status) {
+  const headers = await authHeader();
+  const { data } = await axios.put(
+    `${BASE_URL}/api/events/${eventId}/participants/${userId}`,
+    { status }, // "present" | "absent"
+    { headers }
+  );
+  return data;
 }

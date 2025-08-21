@@ -1,6 +1,4 @@
-
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,28 +7,24 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
 import { fetchUserProfile } from "../Services/profileAPI";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("Settings");
   const navigation = useNavigation();
- 
 
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-
       const load = async () => {
         try {
           const id = await AsyncStorage.getItem("userId");
           if (!id) return;
-          const data = await fetchUserProfile(id); // middleware adds baseURL + token
+          const data = await fetchUserProfile(id);
           if (isActive) setUser(data);
         } catch (err) {
           console.error(
@@ -39,14 +33,12 @@ const Profile = () => {
           );
         }
       };
-
       load();
       return () => {
         isActive = false;
       };
     }, [])
   );
-
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
@@ -89,7 +81,7 @@ const Profile = () => {
   }
 
   const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    user.firstname + " " + user.lastname
+    (user.firstname || "") + " " + (user.lastname || "")
   )}&background=4f8cff&color=fff&size=128&rounded=true`;
 
   return (
@@ -125,6 +117,20 @@ const Profile = () => {
           <View style={styles.infoRow}>
             <Text style={styles.label}>Email</Text>
             <Text style={styles.value}>{user.email}</Text>
+          </View>
+
+          {/* New fields */}
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>Phone</Text>
+            <Text style={styles.value}>{user.phone || "—"}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>Sector</Text>
+            <Text style={styles.value}>{user.sector || "—"}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>Address</Text>
+            <Text style={styles.value}>{user.address || "—"}</Text>
           </View>
         </View>
 
@@ -203,11 +209,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
+  avatar: { width: 100, height: 100, borderRadius: 50 },
   name: {
     fontSize: 26,
     fontWeight: "bold",
@@ -263,10 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
   },
-  actions: {
-    marginTop: 14,
-    alignItems: "center",
-  },
+  actions: { marginTop: 14, alignItems: "center" },
   button: {
     paddingVertical: 15,
     paddingHorizontal: 40,
@@ -312,16 +311,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(76, 175, 80, 0.1)",
     borderRadius: 8,
   },
-  tabText: {
-    fontSize: 11,
-    color: "#999",
-    marginTop: 4,
-    fontWeight: "500",
-  },
-  activeTabText: {
-    color: "#4CAF50",
-    fontWeight: "600",
-  },
+  tabText: { fontSize: 11, color: "#999", marginTop: 4, fontWeight: "500" },
+  activeTabText: { color: "#4CAF50", fontWeight: "600" },
 });
 
 export default Profile;

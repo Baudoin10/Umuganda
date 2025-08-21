@@ -31,6 +31,9 @@ export async function signup({ firstname, lastname, email, password }) {
     lastname,
     email,
     password,
+    phone, 
+    sector, 
+    address, 
   });
 }
 

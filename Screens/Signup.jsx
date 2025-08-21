@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   View,
@@ -18,29 +17,49 @@ const Signup = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState(""); // ✅ new
+  const [sector, setSector] = useState(""); // ✅ new
+  const [address, setAddress] = useState(""); // ✅ new
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-   const handleSignup = async () => {
-     try {
-       await signupApi({ firstname, lastname, email, password });
+  const handleSignup = async () => {
+    try {
+      if (!firstname || !lastname || !email || !phone || !sector || !password) {
+        Toast.show({
+          type: "error",
+          position: "top",
+          text2: "Please fill all required fields.",
+        });
+        return;
+      }
 
-       Toast.show({
-         type: "success",
-         position: "top",
-         text2: "Account created successfully!",
-       });
+      await signupApi({
+        firstname,
+        lastname,
+        email,
+        password,
+        phone, // ✅ send
+        sector, // ✅ send
+        address, // ✅ send
+      });
 
-       setTimeout(() => navigation.navigate("Login"), 1500);
-     } catch (error) {
-       console.error("Signup failed:", error?.response?.data || error.message);
-       Toast.show({
-         type: "error",
-         position: "top",
-         text2: "There was an issue creating the account.",
-       });
-     }
-   };
+      Toast.show({
+        type: "success",
+        position: "top",
+        text2: "Account created successfully!",
+      });
+
+      setTimeout(() => navigation.navigate("Login"), 1500);
+    } catch (error) {
+      console.error("Signup failed:", error?.response?.data || error.message);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: "There was an issue creating the account.",
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,55 +74,63 @@ const Signup = () => {
           </View>
 
           <View style={styles.form}>
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Firstname</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your Firstname"
-                placeholderTextColor="#999"
-                value={firstname}
-                onChangeText={setFirstname}
-                autoCapitalize="none"
-              />
-            </View>
+            <Field
+              label="Firstname"
+              value={firstname}
+              onChangeText={setFirstname}
+              placeholder="Enter your Firstname"
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Lastname</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your Lastname"
-                placeholderTextColor="#999"
-                value={lastname}
-                onChangeText={setLastname}
-                autoCapitalize="none"
-              />
-            </View>
+            <Field
+              label="Lastname"
+              value={lastname}
+              onChangeText={setLastname}
+              placeholder="Enter your Lastname"
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your Email"
-                placeholderTextColor="#999"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
+            <Field
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#999"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                autoCapitalize="none"
-              />
-            </View>
+            {/* ✅ Phone */}
+            <Field
+              label="Phone"
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="07XXXXXXXX"
+              keyboardType="phone-pad"
+            />
+
+            {/* ✅ Sector */}
+            <Field
+              label="Sector"
+              value={sector}
+              onChangeText={setSector}
+              placeholder="Gasabo / Nyarugenge / Kicukiro"
+              autoCapitalize="words"
+            />
+
+            {/* ✅ Address (optional) */}
+            <Field
+              label="Address"
+              value={address}
+              onChangeText={setAddress}
+              placeholder="Street / Landmark (optional)"
+            />
+
+            <Field
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Password"
+              secureTextEntry
+              autoCapitalize="none"
+            />
 
             <TouchableOpacity
               style={styles.submitButton}
@@ -111,8 +138,8 @@ const Signup = () => {
             >
               <Text style={styles.submitText}>Create Account</Text>
             </TouchableOpacity>
-            
-            <View style={styles.loginContainer}>
+
+            <View className="loginContainer" style={styles.loginContainer}>
               <Text style={styles.loginText}>Already have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                 <Text style={styles.loginLink}>Sign In</Text>
@@ -126,45 +153,45 @@ const Signup = () => {
   );
 };
 
+const Field = ({
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  secureTextEntry,
+  keyboardType,
+  autoCapitalize = "none",
+}) => (
+  <View style={styles.inputGroup}>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={styles.input}
+      placeholder={placeholder}
+      placeholderTextColor="#999"
+      value={value}
+      onChangeText={onChangeText}
+      secureTextEntry={secureTextEntry}
+      keyboardType={keyboardType}
+      autoCapitalize={autoCapitalize}
+    />
+  </View>
+);
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
-  keyboardView: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    padding: 24,
-    justifyContent: "center",
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 40,
-  },
+  container: { flex: 1, backgroundColor: "#ffffff" },
+  keyboardView: { flex: 1 },
+  content: { flex: 1, padding: 24, justifyContent: "center" },
+  header: { alignItems: "center", marginBottom: 40 },
   headerText: {
     fontSize: 32,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 8,
   },
-  subHeaderText: {
-    fontSize: 16,
-    color: "#666",
-  },
-  form: {
-    width: "100%",
-  },
-  inputGroup: {
-    marginBottom: 24,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 8,
-  },
+  subHeaderText: { fontSize: 16, color: "#666" },
+  form: { width: "100%" },
+  inputGroup: { marginBottom: 24 },
+  label: { fontSize: 14, fontWeight: "600", color: "#333", marginBottom: 8 },
   input: {
     borderWidth: 1,
     borderColor: "#E0E0E0",
@@ -181,34 +208,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 24,
     shadowColor: "#4CAF50",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
   },
-  submitText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
-  },
+  submitText: { color: "white", fontSize: 16, fontWeight: "600" },
   loginContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-  loginText: {
-    color: "#666",
-    fontSize: 14,
-  },
-  loginLink: {
-    color: "#4CAF50",
-    fontSize: 14,
-    fontWeight: "600",
-  },
+  loginText: { color: "#666", fontSize: 14 },
+  loginLink: { color: "#4CAF50", fontSize: 14, fontWeight: "600" },
 });
 
 export default Signup;
-

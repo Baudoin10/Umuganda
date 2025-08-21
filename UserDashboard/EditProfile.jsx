@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -18,6 +17,9 @@ const EditProfile = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [sector, setSector] = useState("");
+  const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,6 +35,9 @@ const EditProfile = () => {
         setFirstName(data.firstname || "");
         setLastName(data.lastname || "");
         setEmail(data.email || "");
+        setPhone(data.phone || "");
+        setSector(data.sector || "");
+        setAddress(data.address || "");
       } catch (err) {
         const msg =
           err?.response?.data?.message ||
@@ -49,7 +54,14 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     try {
-      if (!firstName.trim() || !lastName.trim() || !email.trim()) {
+      if (
+        !firstName.trim() ||
+        !lastName.trim() ||
+        !email.trim() ||
+        !phone.trim() ||
+        !sector.trim() ||
+        !address.trim()
+      ) {
         Alert.alert("Error", "Please fill in all fields.");
         return;
       }
@@ -64,6 +76,9 @@ const EditProfile = () => {
         firstname: firstName.trim(),
         lastname: lastName.trim(),
         email: email.trim(),
+        phone: phone.trim(),
+        sector: sector.trim(),
+        address: address.trim(),
       });
 
       Alert.alert("Success", "Profile updated successfully!", [
@@ -133,6 +148,33 @@ const EditProfile = () => {
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
+          placeholderTextColor="#b1b5c9"
+        />
+
+        <TextInput
+          style={styles.input}
+          value={phone}
+          onChangeText={setPhone}
+          placeholder="Phone Number"
+          keyboardType="phone-pad"
+          placeholderTextColor="#b1b5c9"
+        />
+
+        <TextInput
+          style={styles.input}
+          value={sector}
+          onChangeText={setSector}
+          placeholder="Sector"
+          autoCapitalize="words"
+          placeholderTextColor="#b1b5c9"
+        />
+
+        <TextInput
+          style={styles.input}
+          value={address}
+          onChangeText={setAddress}
+          placeholder="Address"
+          autoCapitalize="words"
           placeholderTextColor="#b1b5c9"
         />
 

@@ -25,7 +25,7 @@ export async function login(email, password) {
   return { token, role, userId };
 }
 
-export async function signup({ firstname, lastname, email, password }) {
+export async function signup({ firstname, lastname, email, password, phone, sector, address }) {
   await axios.post(`${BASE_URL}/api/auth/register`, {
     firstname,
     lastname,

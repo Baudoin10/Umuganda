@@ -11,8 +11,6 @@ import Icon from "react-native-vector-icons/Feather";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { fetchEvents } from "../Services/eventAPI";
 
-
-
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
     <Text style={styles.eventTitle}>{event.title}</Text>

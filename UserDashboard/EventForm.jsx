@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -8,14 +9,17 @@ import {
   Platform,
   ScrollView,
   ActivityIndicator,
+  SafeAreaView,
+  Dimensions,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { fetchEvents, joinEvent } from "../Services/eventAPI";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const { width, height } = Dimensions.get("window");
+const BOTTOM_TAB_HEIGHT = 80;
 
 const EventJoinForm = () => {
   const [events, setEvents] = useState([]);
@@ -23,71 +27,67 @@ const EventJoinForm = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Community");
   const navigation = useNavigation();
-   const [userId, setUserId] = useState(null);
-   const [joining, setJoining] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [joining, setJoining] = useState(false);
 
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
 
-
-   useEffect(() => {
-     const load = async () => {
-       try {
-         setLoading(true);
-
-         // Load events
+        // Load events
         const data = await fetchEvents();
-         setEvents(Array.isArray(data) ? data : []);
+        setEvents(Array.isArray(data) ? data : []);
 
-         // Load userId from AsyncStorage (set elsewhere at login)
-         const uid = await AsyncStorage.getItem("userId");
-         if (uid) setUserId(uid);
-       } catch (error) {
-         console.error(error);
-         Toast.show({ type: "error", text1: "Failed to fetch events" });
-       } finally {
-         setLoading(false);
-       }
-     };
+        // Load userId from AsyncStorage (set elsewhere at login)
+        const uid = await AsyncStorage.getItem("userId");
+        if (uid) setUserId(uid);
+      } catch (error) {
+        console.error(error);
+        Toast.show({ type: "error", text1: "Failed to fetch events" });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-     load();
-   }, []);
+    load();
+  }, []);
 
+  const handleJoinEvent = async () => {
+    if (!selectedEventId) {
+      Toast.show({ type: "error", text1: "Please select an event to join" });
+      return;
+    }
+    if (!userId) {
+      Toast.show({
+        type: "error",
+        text1: "Missing user info. Please login again.",
+      });
+      return;
+    }
 
-   const handleJoinEvent = async () => {
-     if (!selectedEventId) {
-       Toast.show({ type: "error", text1: "Please select an event to join" });
-       return;
-     }
-     if (!userId) {
-       Toast.show({
-         type: "error",
-         text1: "Missing user info. Please login again.",
-       });
-       return;
-     }
+    try {
+      setJoining(true);
+      await joinEvent(selectedEventId, userId);
 
-     try {
-       setJoining(true);
-       await joinEvent(selectedEventId, userId);
+      Toast.show({ type: "success", text1: "Joined the event successfully!" });
+      const data = await fetchEvents();
+      setEvents(Array.isArray(data) ? data : []);
+      setSelectedEventId(null);
 
-       Toast.show({ type: "success", text1: "Joined the event successfully!" });
-       const data = await fetchEvents();
-       setEvents(Array.isArray(data) ? data : []);
-       setSelectedEventId(null);
-
-       setTimeout(() => {
-         navigation.navigate("user");
-       }, 1200);
-     } catch (error) {
-       const msg =
-         error?.response?.data?.message ||
-         error?.response?.data?.error ||
-         "Something went wrong";
-       Toast.show({ type: "error", text1: msg });
-     } finally {
-       setJoining(false);
-     }
-   };
-
+      setTimeout(() => {
+        navigation.navigate("user");
+      }, 1200);
+    } catch (error) {
+      const msg =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        "Something went wrong";
+      Toast.show({ type: "error", text1: msg });
+    } finally {
+      setJoining(false);
+    }
+  };
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
@@ -127,13 +127,15 @@ const EventJoinForm = () => {
         key={event._id}
         style={[styles.eventItem, isSelected && styles.selectedEvent]}
         onPress={() => setSelectedEventId(event._id)}
+        activeOpacity={0.7}
       >
         <Text style={styles.eventTitle}>{event.title}</Text>
         <Text style={styles.eventDate}>{event.date}</Text>
-        <Text style={styles.eventAddress} numberOfLines={1}>
+        <Text style={styles.eventAddress} numberOfLines={2}>
           {event.address}
         </Text>
         <View style={styles.participantsCount}>
+          <MaterialIcon name="people" size={16} color="#555" />
           <Text style={styles.participantsText}>
             {event.participants?.length || 0} participants
           </Text>
@@ -143,156 +145,198 @@ const EventJoinForm = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={[styles.container, { paddingBottom: 80 }]}
-    >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.formContainer}>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <View style={styles.content}>
+          {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Join Event</Text>
             <Text style={styles.subtitle}>Select an event to participate</Text>
           </View>
 
-          {loading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#4CAF50" />
-              <Text style={styles.loadingText}>Loading events...</Text>
-            </View>
-          ) : events.length === 0 ? (
-            <View style={styles.noEventsContainer}>
-              <Text style={styles.noEventsText}>No events available</Text>
-            </View>
-          ) : (
-            <View style={styles.eventsContainer}>
-              {events.map(renderEventItem)}
+          {/* Scrollable Content */}
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#4CAF50" />
+                <Text style={styles.loadingText}>Loading events...</Text>
+              </View>
+            ) : events.length === 0 ? (
+              <View style={styles.noEventsContainer}>
+                <MaterialIcon name="event-busy" size={48} color="#ccc" />
+                <Text style={styles.noEventsText}>No events available</Text>
+                <Text style={styles.noEventsSubtext}>
+                  Check back later for new events
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.eventsContainer}>
+                <Text style={styles.sectionTitle}>Available Events</Text>
+                {events.map(renderEventItem)}
+              </View>
+            )}
+          </ScrollView>
+
+          {/* Join Button - Fixed at bottom of content area */}
+          {!loading && events.length > 0 && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.joinButton,
+                  !selectedEventId && styles.disabledButton,
+                ]}
+                onPress={handleJoinEvent}
+                disabled={!selectedEventId || joining}
+                activeOpacity={0.8}
+              >
+                {joining ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.joinButtonText}>JOIN EVENT</Text>
+                )}
+              </TouchableOpacity>
             </View>
           )}
-
-          <TouchableOpacity
-            style={[
-              styles.joinButton,
-              !selectedEventId && styles.disabledButton,
-            ]}
-            onPress={handleJoinEvent}
-            disabled={!selectedEventId || joining}
-            activeOpacity={0.8}
-          >
-            {joining ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.joinButtonText}>JOIN EVENT</Text>
-            )}
-          </TouchableOpacity>
         </View>
-      </ScrollView>
 
-      {/* Bottom Tabs */}
-      <View style={styles.bottomTabContainer}>
-        {bottomTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={[
-              styles.tabButton,
-              activeTab === tab.id && styles.activeTabButton,
-            ]}
-            onPress={() => handleTabPress(tab.id)}
-          >
-            <MaterialIcon
-              name={tab.icon}
-              size={24}
-              color={activeTab === tab.id ? "#4CAF50" : "#999"}
-            />
-            <Text
+        {/* Bottom Tabs */}
+        <View style={styles.bottomTabContainer}>
+          {bottomTabs.map((tab) => (
+            <TouchableOpacity
+              key={tab.id}
               style={[
-                styles.tabText,
-                activeTab === tab.id && styles.activeTabText,
+                styles.tabButton,
+                activeTab === tab.id && styles.activeTabButton,
               ]}
+              onPress={() => handleTabPress(tab.id)}
             >
-              {tab.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </KeyboardAvoidingView>
+              <MaterialIcon
+                name={tab.icon}
+                size={24}
+                color={activeTab === tab.id ? "#4CAF50" : "#999"}
+              />
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === tab.id && styles.activeTabText,
+                ]}
+              >
+                {tab.title}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f9fafc",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f9fafc",
   },
-  formContainer: {
+  content: {
     flex: 1,
-    padding: 20,
-    borderRadius: 10,
-    marginTop: "15%"
+    marginBottom: BOTTOM_TAB_HEIGHT,
   },
   header: {
-    borderRadius: 12,
-    padding: 24,
-    marginBottom: 25,
     backgroundColor: "#4CAF50",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
   },
   title: {
-    fontSize: 28,
+    fontSize: width > 375 ? 28 : 24,
     fontWeight: "700",
     color: "#fff",
-    marginBottom: 8,
+    marginBottom: 4,
   },
   subtitle: {
-    fontSize: 16,
-    color: "rgba(255, 255, 255, 0.8)",
+    fontSize: width > 375 ? 16 : 14,
+    color: "rgba(255, 255, 255, 0.9)",
     fontWeight: "400",
   },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 15,
+  },
   loadingContainer: {
-    padding: 30,
+    paddingVertical: 60,
     alignItems: "center",
   },
   loadingText: {
-    marginTop: 10,
+    marginTop: 15,
     fontSize: 16,
     color: "#666",
   },
   noEventsContainer: {
-    padding: 30,
+    paddingVertical: 60,
     alignItems: "center",
   },
   noEventsText: {
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "600",
     color: "#666",
+    marginTop: 15,
+    marginBottom: 5,
+  },
+  noEventsSubtext: {
+    fontSize: 14,
+    color: "#999",
   },
   eventsContainer: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   eventItem: {
     backgroundColor: "#fff",
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: "#e1e1e8",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 1,
+    shadowRadius: 8,
+    elevation: 2,
   },
   selectedEvent: {
     borderColor: "#4CAF50",
     borderWidth: 2,
     backgroundColor: "rgba(76, 175, 80, 0.05)",
+    transform: [{ scale: 1.02 }],
   },
   eventTitle: {
     fontSize: 18,
     fontWeight: "600",
-    marginBottom: 4,
+    marginBottom: 6,
     color: "#333",
   },
   eventDate: {
@@ -303,34 +347,46 @@ const styles = StyleSheet.create({
   eventAddress: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 8,
+    marginBottom: 10,
+    lineHeight: 20,
   },
   participantsCount: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#f0f0f0",
     alignSelf: "flex-start",
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 12,
   },
   participantsText: {
     fontSize: 12,
     color: "#555",
+    marginLeft: 4,
+    fontWeight: "500",
+  },
+  buttonContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: "#f9fafc",
+    borderTopWidth: 1,
+    borderTopColor: "#e1e1e8",
   },
   joinButton: {
-    marginTop: 10,
-    borderRadius: 10,
+    borderRadius: 12,
     backgroundColor: "#4CAF50",
     paddingVertical: 16,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: "#4CAF50",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 5,
   },
   disabledButton: {
     backgroundColor: "#a5d6a7",
-    opacity: 0.7,
+    opacity: 0.6,
+    shadowOpacity: 0.1,
   },
   joinButtonText: {
     color: "#fff",
@@ -354,22 +410,25 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    height: BOTTOM_TAB_HEIGHT,
   },
   tabButton: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 8,
     paddingHorizontal: 4,
+    borderRadius: 8,
   },
   activeTabButton: {
     backgroundColor: "rgba(76, 175, 80, 0.1)",
-    borderRadius: 8,
   },
   tabText: {
     fontSize: 11,
     color: "#999",
     marginTop: 4,
     fontWeight: "500",
+    textAlign: "center",
   },
   activeTabText: {
     color: "#4CAF50",

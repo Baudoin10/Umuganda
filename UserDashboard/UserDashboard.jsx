@@ -36,7 +36,7 @@ const UserDashboard = ({ navigation }) => {
           console.warn("No token found");
           return;
         }
-        const me = await getMe(); // meAPI should use your BASE_URL + interceptor/authHeader
+        const me = await getMe(); 
         setUser(me);
       } catch (error) {
         console.error(

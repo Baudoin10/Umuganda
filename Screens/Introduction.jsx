@@ -1,8 +1,9 @@
 
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity,  StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function Introduction() {
   const navigation = useNavigation();
@@ -19,8 +20,6 @@ function Introduction() {
         style={styles.background}
       >
         <SafeAreaView style={styles.container}>
-         
-          
           <View style={styles.content}>
             <Text style={styles.title}>Welcome to Umuganda</Text>
             <Text style={styles.subtitle}>Community Service Platform</Text>

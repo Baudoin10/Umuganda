@@ -19,11 +19,7 @@ function Introduction() {
         style={styles.background}
       >
         <SafeAreaView style={styles.container}>
-          <View style={styles.logoContainer}>
-            <View style={styles.logo}>
-              <Text style={styles.logoText}>U</Text>
-            </View>
-          </View>
+         
           
           <View style={styles.content}>
             <Text style={styles.title}>Welcome to Umuganda</Text>
@@ -79,37 +75,9 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-    paddingBottom: 24,
-  },
-  logoContainer: {
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  logo: {
-    width: 80,
-    height: 80,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  logoText: {
-    fontSize: 42,
-    fontWeight: "800",
-    color: "#FFFFFF",
-  },
   content: {
-    flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    marginTop: "15%"
   },
   title: {
     fontSize: 36,
@@ -142,13 +110,12 @@ const styles = StyleSheet.create({
   },
   features: {
     marginVertical: 20,
- 
   },
   featureItem: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
-   marginLeft: 16
+    marginLeft: 16,
   },
   featureIcon: {
     width: 40,
@@ -169,10 +136,12 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 20,
+    alignItems: "center",
   },
   button: {
     backgroundColor: "#FFFFFF",
     paddingVertical: 16,
+    paddingHorizontal: 50, // ✅ controls width — decrease or increase as you want
     borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -180,6 +149,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+
   buttonText: {
     color: "#2563EB",
     fontSize: 18,

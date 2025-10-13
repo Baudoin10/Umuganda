@@ -8,13 +8,13 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { signup as signupApi } from "../Services/authAPI";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { height: screenHeight } = Dimensions.get("window");
 

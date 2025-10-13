@@ -7,7 +7,6 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
-  SafeAreaView,
   StatusBar,
   ScrollView,
 } from "react-native";
@@ -19,6 +18,7 @@ import { getMe } from "../Services/meAPI";
 import { fetchTasks as apiFetchTasks } from "../Services/tasksAPI";
 import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
 import { logout as apiLogout } from "../Services/authAPI";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);

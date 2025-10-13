@@ -9,7 +9,6 @@ import {
   Platform,
   ScrollView,
   ActivityIndicator,
-  SafeAreaView,
   Dimensions,
 } from "react-native";
 import Toast from "react-native-toast-message";
@@ -17,6 +16,7 @@ import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { fetchEvents, joinEvent } from "../Services/eventAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 const BOTTOM_TAB_HEIGHT = 80;

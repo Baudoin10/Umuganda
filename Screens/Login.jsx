@@ -8,11 +8,11 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { login as loginApi } from "../Services/authAPI"; 
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const Login = () => {

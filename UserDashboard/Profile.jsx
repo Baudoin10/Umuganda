@@ -4,9 +4,12 @@ import {
   View,
   Text,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  ScrollView,
+  Alert,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
@@ -17,7 +20,6 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("Settings");
   const navigation = useNavigation();
 
-  // Fetch user on focus
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
@@ -60,6 +62,27 @@ const Profile = () => {
     }
   };
 
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: () => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Login" }],
+            });
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   const bottomTabs = [
     { id: "Home", title: "Home", icon: "home" },
     { id: "Events", title: "Events", icon: "calendar" },
@@ -70,9 +93,9 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
-        <Text style={styles.loading}>Loading...</Text>
+        <Text style={styles.loadingText}>Loading your profile...</Text>
       </View>
     );
   }
@@ -82,8 +105,9 @@ const Profile = () => {
   )}&background=4f8cff&color=fff&size=128&rounded=true`;
 
   return (
-    <View style={{ flex: 1, paddingBottom: 80, backgroundColor: "#fff" }}>
-      <View style={styles.container}>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Header */}
         <View style={styles.header}>
           <View style={styles.avatarWrapper}>
             <Image
@@ -97,29 +121,61 @@ const Profile = () => {
           </Text>
         </View>
 
-        <Text style={styles.sectionHeader}>Profile Overview</Text>
-        <Text style={styles.sectionTitle}>
-          This is your Personal Information and it will not be shared.
-        </Text>
+       
 
-        <View style={styles.section}>
-          {["firstname", "lastname", "email", "phone", "sector", "address"].map((field) => (
-            <View key={field} style={styles.infoRow}>
-              <Text style={styles.label}>{field.charAt(0).toUpperCase() + field.slice(1)}</Text>
-              <Text style={styles.value}>{user[field] || "—"}</Text>
-            </View>
-          ))}
-        </View>
+        <View style={styles.formCard}>
+          <TextInput
+            style={styles.input}
+            value={user.firstname}
+            editable={false}
+            placeholder="First Name"
+            placeholderTextColor="#b1b5c9"
+          />
+          <TextInput
+            style={styles.input}
+            value={user.lastname}
+            editable={false}
+            placeholder="Last Name"
+            placeholderTextColor="#b1b5c9"
+          />
+          <TextInput
+            style={styles.input}
+            value={user.email}
+            editable={false}
+            placeholder="Email"
+            placeholderTextColor="#b1b5c9"
+          />
+          <TextInput
+            style={styles.input}
+            value={user.phone}
+            editable={false}
+            placeholder="Phone Number"
+            placeholderTextColor="#b1b5c9"
+          />
+          <TextInput
+            style={styles.input}
+            value={user.sector}
+            editable={false}
+            placeholder="Sector"
+            placeholderTextColor="#b1b5c9"
+          />
+          <TextInput
+            style={styles.input}
+            value={user.address}
+            editable={false}
+            placeholder="Address"
+            placeholderTextColor="#b1b5c9"
+          />
 
-        <View style={styles.actions}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate("EditProfile")}
           >
-            <Text style={styles.buttonText}>Edit Your Profile</Text>
+            <Text style={styles.buttonText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
-      </View>
+
+      </ScrollView>
 
       {/* Bottom Tabs */}
       <View style={styles.bottomTabContainer}>
@@ -153,23 +209,15 @@ const Profile = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  scrollContainer: { padding: 24, paddingBottom: 120 },
+  loadingContainer: {
     flex: 1,
-    padding: 24,
-    backgroundColor: "#FFF",
-  },
-  loading: {
-    fontSize: 18,
-    color: "#4f8cff",
-    alignSelf: "center",
-    marginTop: "50%",
-    fontWeight: "500",
-  },
-  header: {
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: 28,
-    marginTop: "10%",
+    backgroundColor: "#fff",
   },
+  loadingText: { fontSize: 16, color: "#4f8cff", fontWeight: "500" },
+  header: { alignItems: "center", marginBottom: 28, marginTop: 30 },
   avatarWrapper: {
     width: 110,
     height: 110,
@@ -188,78 +236,36 @@ const styles = StyleSheet.create({
   },
   avatar: { width: 100, height: 100, borderRadius: 50 },
   name: {
-    fontSize: 26,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#222e4c",
     letterSpacing: 0.5,
-    marginTop: 2,
   },
-  section: {
-    backgroundColor: "#fff",
-    borderRadius: 18,
-    padding: 24,
-    marginTop: 22,
-    marginBottom: 20,
-    shadowColor: "#2d3142",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.09,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#4CAF50",
-    marginBottom: 6,
-    letterSpacing: 0.2,
-  },
-  sectionTitle: {
-    marginTop: 2,
-    marginBottom: 22,
-    fontSize: 15,
-    color: "#6b7280",
-    fontWeight: "500",
-    textAlign: "left",
-    lineHeight: 21,
-  },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f2f4f8",
-    paddingBottom: 8,
-  },
-  label: {
-    fontWeight: "600",
+
+
+  input: {
+    backgroundColor: "#ffff",
+    borderWidth: 1,
+    borderColor: "#e3e7ed",
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 18,
     fontSize: 16,
     color: "#222e4c",
-    letterSpacing: 0.2,
   },
-  value: {
-    color: "#3f4c6b",
-    fontSize: 16,
-    fontWeight: "400",
-  },
-  actions: { marginTop: 14, alignItems: "center" },
   button: {
-    paddingVertical: 15,
-    paddingHorizontal: 40,
     backgroundColor: "#4CAF50",
+    paddingVertical: 16,
     borderRadius: 30,
-    shadowColor: "#4f8cff",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.18,
-    shadowRadius: 8,
+    marginTop: 10,
     elevation: 3,
   },
+
   buttonText: {
-    color: "#FFF",
+    color: "#fff",
     textAlign: "center",
     fontSize: 17,
     fontWeight: "bold",
-    letterSpacing: 0.4,
   },
   bottomTabContainer: {
     position: "absolute",
@@ -291,4 +297,5 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 11, color: "#999", marginTop: 4, fontWeight: "500" },
   activeTabText: { color: "#4CAF50", fontWeight: "600" },
 });
+
 export default Profile;

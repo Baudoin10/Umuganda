@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -16,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { getMe } from "../Services/meAPI";
 import { updateUserProfile } from "../Services/profileAPI";
+
 
 const EditProfile = () => {
   const navigation = useNavigation();
@@ -134,18 +133,16 @@ const EditProfile = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backRow}
-      >
-        <Ionicons
-          name="arrow-back"
-          size={24}
-          color="black"
-          style={{ marginRight: 5 }}
-        />
-        <Text style={{ fontSize: 16, color: "black" }}>Back</Text>
-      </TouchableOpacity>
+      <View style={styles.header}>
+             <TouchableOpacity
+               style={styles.backButton}
+               onPress={() => navigation.goBack()}
+             >
+               <Ionicons name="chevron-back" size={24} color="#000" />
+             </TouchableOpacity>
+             <Text style={styles.headerTitle}>Edit Profile</Text>
+             <View style={{ width: 32 }} />
+           </View>
 
       <View style={styles.avatarContainer}>
         <Image source={{ uri: avatarUrl }} style={styles.avatar} />
@@ -215,13 +212,55 @@ const EditProfile = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFF", padding: 20 },
-  centered: { justifyContent: "center", alignItems: "center" },
-  loadingText: { fontSize: 16, color: "#4f8cff", fontWeight: "500" },
-  backRow: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
-  avatarContainer: { alignItems: "center", marginBottom: 20 },
-  avatar: { width: 110, height: 110, borderRadius: 55, marginBottom: 10 },
-  changeImageText: { color: "#4CAF50", fontWeight: "600", fontSize: 16 },
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFF",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: "15%",
+  },
+  backButton: {
+    padding: 4,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000",
+  },
+  centered: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#4f8cff",
+    fontWeight: "500",
+  },
+  backRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  avatarContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  avatar: {
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    marginBottom: 10,
+  },
+  changeImageText: {
+    color: "#4CAF50",
+    fontWeight: "600",
+    fontSize: 16,
+  },
   formCard: {
     backgroundColor: "#fff",
     borderRadius: 18,
@@ -233,7 +272,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   input: {
-    backgroundColor: "#f4f6fa",
+    backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#e3e7ed",
     borderRadius: 10,

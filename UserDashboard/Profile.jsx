@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
+
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,22 +10,20 @@ import {
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
-import { fetchUserProfile } from "../Services/profileAPI";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getMe } from "../Services/meAPI";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("Settings");
   const navigation = useNavigation();
 
+  // Fetch user on focus
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-      const load = async () => {
+      const loadUser = async () => {
         try {
-          const id = await AsyncStorage.getItem("userId");
-          if (!id) return;
-          const data = await fetchUserProfile(id);
+          const data = await getMe();
           if (isActive) setUser(data);
         } catch (err) {
           console.error(
@@ -33,7 +32,7 @@ const Profile = () => {
           );
         }
       };
-      load();
+      loadUser();
       return () => {
         isActive = false;
       };
@@ -57,8 +56,6 @@ const Profile = () => {
         break;
       case "Settings":
         navigation.navigate("Profile");
-        break;
-      default:
         break;
     }
   };
@@ -106,32 +103,12 @@ const Profile = () => {
         </Text>
 
         <View style={styles.section}>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Firstname</Text>
-            <Text style={styles.value}>{user.firstname}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Lastname</Text>
-            <Text style={styles.value}>{user.lastname}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Email</Text>
-            <Text style={styles.value}>{user.email}</Text>
-          </View>
-
-          {/* New fields */}
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Phone</Text>
-            <Text style={styles.value}>{user.phone || "—"}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Sector</Text>
-            <Text style={styles.value}>{user.sector || "—"}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Address</Text>
-            <Text style={styles.value}>{user.address || "—"}</Text>
-          </View>
+          {["firstname", "lastname", "email", "phone", "sector", "address"].map((field) => (
+            <View key={field} style={styles.infoRow}>
+              <Text style={styles.label}>{field.charAt(0).toUpperCase() + field.slice(1)}</Text>
+              <Text style={styles.value}>{user[field] || "—"}</Text>
+            </View>
+          ))}
         </View>
 
         <View style={styles.actions}>
@@ -314,5 +291,4 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 11, color: "#999", marginTop: 4, fontWeight: "500" },
   activeTabText: { color: "#4CAF50", fontWeight: "600" },
 });
-
 export default Profile;

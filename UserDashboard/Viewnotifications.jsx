@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -12,9 +11,9 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { fetchNotifications as apiFetchNotifications } from "../Services/viewNotificationAPI";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Viewnotifications = () => {
-
   const navigation = useNavigation();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,7 +84,8 @@ const Viewnotifications = () => {
   }
 
   return (
-    <View style={[styles.container, { paddingBottom: 80 }]}>
+    <SafeAreaView style={styles.safeArea}>
+      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -97,6 +97,7 @@ const Viewnotifications = () => {
         <View style={{ width: 32 }} />
       </View>
 
+      {/* Notifications List */}
       <FlatList
         data={notifications}
         renderItem={renderItem}
@@ -104,6 +105,8 @@ const Viewnotifications = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>No notifications yet</Text>
         }
+        showsVerticalScrollIndicator={false} // ✅ hide scrollbar
+        contentContainerStyle={{ paddingBottom: 100 }} // ✅ prevent overlap
       />
 
       {/* Bottom Tabs */}
@@ -133,23 +136,26 @@ const Viewnotifications = () => {
           </TouchableOpacity>
         ))}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#FFF",
+  },
   container: {
     flex: 1,
     backgroundColor: "#FFF",
   },
-
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginTop: "10%",
+    marginTop: 10,
   },
   backButton: {
     padding: 4,
@@ -159,7 +165,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#000",
   },
-
   loadingContainer: {
     flex: 1,
     justifyContent: "center",

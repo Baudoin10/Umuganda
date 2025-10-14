@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -6,25 +7,31 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { fetchEvents } from "../Services/eventAPI";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
     <Text style={styles.eventTitle}>{event.title}</Text>
     <Text style={styles.eventDescription}>{event.description}</Text>
+
     <View style={styles.eventDetails}>
       <Icon name="calendar" size={16} color="#6e6e6e" />
       <Text style={styles.eventInfo}>{event.date}</Text>
     </View>
+
     <View style={styles.eventDetails}>
       <Icon name="map-pin" size={16} color="#6e6e6e" />
       <Text style={styles.eventInfo}>{event.address}</Text>
     </View>
+
     <Text style={styles.eventStatus(event.status)}>{event.status}</Text>
+
     {event.status === "Open" && (
       <TouchableOpacity
         style={styles.joinButton}
@@ -40,7 +47,6 @@ const JoinEvent = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Community");
-
 
   useEffect(() => {
     const load = async () => {
@@ -58,7 +64,6 @@ const JoinEvent = ({ navigation }) => {
     };
     load();
   }, []);
-
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
@@ -78,8 +83,6 @@ const JoinEvent = ({ navigation }) => {
       case "Settings":
         navigation.navigate("Profile");
         break;
-      default:
-        break;
     }
   };
 
@@ -96,26 +99,28 @@ const JoinEvent = ({ navigation }) => {
   }
 
   return (
-    <View style={[styles.container, { paddingBottom: 80 }]}>
-       <View style={styles.header}>
-              <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => navigation.goBack()}
-              >
-                <Ionicons name="chevron-back" size={24} color="#000" />
-              </TouchableOpacity>
-              <Text style={styles.headerTitle}>Events</Text>
-              <View style={{ width: 32 }} />
-            </View>
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Events</Text>
+        <View style={{ width: 32 }} />
+      </View>
 
-      <Text style={styles.pageTitle}>Choose The Events to join</Text>
-
+      {/* Scrollable List */}
       <FlatList
         data={events}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <EventCard event={item} navigation={navigation} />
         )}
+        contentContainerStyle={{ paddingBottom: 120 }} // ✅ gives space above bottom tabs
+        showsVerticalScrollIndicator={false} // ✅ hides the vertical scroll line
       />
 
       {/* Bottom Tabs */}
@@ -145,21 +150,15 @@ const JoinEvent = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-    padding: 15,
-  },
-  pageTitle: {
-    fontSize: 22,
-    fontWeight: "600",
-    marginTop: "19%",
-    marginBottom: 10,
+    backgroundColor: "#fff",
+    paddingHorizontal: 15,
   },
   header: {
     flexDirection: "row",
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginTop: "10%",
+    marginTop: 10,
   },
   backButton: {
     padding: 4,
@@ -184,9 +183,9 @@ const styles = StyleSheet.create({
     padding: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   eventTitle: {
     fontSize: 18,

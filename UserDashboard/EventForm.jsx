@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { fetchEvents, joinEvent } from "../Services/eventAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 const BOTTOM_TAB_HEIGHT = 80;
@@ -151,13 +152,16 @@ const EventJoinForm = () => {
         style={styles.container}
       >
         <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>Join Event</Text>
-            <Text style={styles.subtitle}>Select an event to participate</Text>
-          </View>
-
-          {/* Scrollable Content */}
+            <View style={styles.header}>
+                      <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => navigation.goBack()}
+                      >
+                        <Ionicons name="chevron-back" size={24} color="#000" />
+                      </TouchableOpacity>
+                      <Text style={styles.headerTitle}>Join An Event</Text>
+                      <View style={{ width: 32 }} />
+                    </View>
           <ScrollView
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
@@ -165,7 +169,7 @@ const EventJoinForm = () => {
           >
             {loading ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#4CAF50" />
+                <ActivityIndicator size="large" color="#26366C" />
                 <Text style={styles.loadingText}>Loading events...</Text>
               </View>
             ) : events.length === 0 ? (
@@ -247,22 +251,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f9fafc",
   },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: "5",
+  },
+  backButton: {
+    padding: 4,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000",
+  },
   content: {
     flex: 1,
     marginBottom: BOTTOM_TAB_HEIGHT,
   },
-  header: {
-    backgroundColor: "#4CAF50",
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
+
   title: {
     fontSize: width > 375 ? 28 : 24,
     fontWeight: "700",
@@ -328,7 +338,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   selectedEvent: {
-    borderColor: "#4CAF50",
+    borderColor: "#26366C",
     borderWidth: 2,
     backgroundColor: "rgba(76, 175, 80, 0.05)",
     transform: [{ scale: 1.02 }],
@@ -374,7 +384,7 @@ const styles = StyleSheet.create({
   },
   joinButton: {
     borderRadius: 12,
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#26366C",
     paddingVertical: 16,
     alignItems: "center",
     shadowColor: "#4CAF50",

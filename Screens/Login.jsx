@@ -11,34 +11,35 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-import { login as loginApi } from "../Services/authAPI"; 
+import { login as loginApi } from "../Services/authAPI";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
-    const navigation = useNavigation();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-   const handleLogin = async () => {
-     try {
-       const { role } = await loginApi(email, password);
+  const handleLogin = async () => {
+    try {
+      const { role, token } = await loginApi(email, password);
 
-       Toast.show({ type: "success", text1: "Login successful!" });
+      await AsyncStorage.setItem("userToken", token); // Save token
 
-       setTimeout(() => {
-         if (role === "admin") navigation.navigate("Dashboard");
-         else navigation.navigate("user");
-       }, 1200);
-     } catch (err) {
-       console.error("Login failed:", err?.response?.data || err.message);
-       Toast.show({
-         type: "error",
-         text1: "Invalid credentials. Please try again.",
-       });
-     }
-   };
+      Toast.show({ type: "success", text1: "Login successful!" });
 
+      setTimeout(() => {
+        if (role === "admin") navigation.replace("Dashboard");
+        else navigation.replace("user"); // replace avoids going back
+      }, 1200);
+    } catch (err) {
+      console.error("Login failed:", err?.response?.data || err.message);
+      Toast.show({
+        type: "error",
+        text1: "Invalid credentials. Please try again.",
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -180,5 +181,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
 export default Login;

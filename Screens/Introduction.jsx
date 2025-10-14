@@ -1,15 +1,27 @@
 
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity,  StatusBar } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Introduction() {
   const navigation = useNavigation();
+
+  // ✅ Skip welcome if logged in
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = await AsyncStorage.getItem("userToken");
+      if (token) navigation.replace("user");
+    };
+    checkLogin();
+  }, []);
+
   const handleNext = () => {
     navigation.navigate("Login");
   };
+
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -23,14 +35,11 @@ function Introduction() {
           <View style={styles.content}>
             <Text style={styles.title}>Welcome to Umuganda</Text>
             <Text style={styles.subtitle}>Community Service Platform</Text>
-            
             <View style={styles.divider} />
-            
             <Text style={styles.description}>
-              Connecting communities and fostering collaboration for a brighter Rwanda. 
+              Connecting communities and fostering collaboration for a brighter Rwanda.
               Join us in making a difference through monthly Umuganda activities!
             </Text>
-            
             <View style={styles.features}>
               <View style={styles.featureItem}>
                 <View style={styles.featureIcon}>
@@ -38,14 +47,12 @@ function Introduction() {
                 </View>
                 <Text style={styles.featureText}>Connect with volunteers</Text>
               </View>
-              
               <View style={styles.featureItem}>
                 <View style={styles.featureIcon}>
                   <Text style={styles.featureIconText}>📍</Text>
                 </View>
                 <Text style={styles.featureText}>Find local projects</Text>
               </View>
-              
               <View style={styles.featureItem}>
                 <View style={styles.featureIcon}>
                   <Text style={styles.featureIconText}>📊</Text>
@@ -54,9 +61,8 @@ function Introduction() {
               </View>
             </View>
           </View>
-          
           <View style={styles.footer}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.button}
               onPress={handleNext}
               activeOpacity={0.8}
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#FFFFFF",
     paddingVertical: 16,
-    paddingHorizontal: 50, // ✅ controls width — decrease or increase as you want
+    paddingHorizontal: 50, 
     borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -156,5 +162,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
 export default Introduction;

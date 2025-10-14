@@ -145,12 +145,12 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   submitButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#26366C",
     padding: 18,
     borderRadius: 12,
     alignItems: "center",
     marginBottom: 24,
-    shadowColor: "#4CAF50",
+    shadowColor: "#26366C",
     shadowOffset: {
       width: 0,
       height: 4,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   signupLink: {
-    color: "#4CAF50",
+    color: "#26366C",
     fontSize: 14,
     fontWeight: "600",
   },

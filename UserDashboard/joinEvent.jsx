@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   }),
   joinButton: {
     marginTop: 15,
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#26366C",
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",

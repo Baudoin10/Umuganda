@@ -146,6 +146,7 @@ const EditProfile = () => {
 
       <View style={styles.avatarContainer}>
         <Image source={{ uri: avatarUrl }} style={styles.avatar} />
+         
         <TouchableOpacity onPress={pickImage}>
           <Text style={styles.changeImageText}>Change Image</Text>
         </TouchableOpacity>
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   changeImageText: {
-    color: "#4CAF50",
+    color: "#26366C",
     fontWeight: "600",
     fontSize: 16,
   },
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
     color: "#222e4c",
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#26366C",
     paddingVertical: 16,
     borderRadius: 30,
     marginTop: 10,

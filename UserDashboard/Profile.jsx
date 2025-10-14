@@ -242,7 +242,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-
   input: {
     backgroundColor: "#ffff",
     borderWidth: 1,
@@ -254,7 +253,7 @@ const styles = StyleSheet.create({
     color: "#222e4c",
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#26366C",
     paddingVertical: 16,
     borderRadius: 30,
     marginTop: 10,

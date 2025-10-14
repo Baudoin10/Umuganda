@@ -270,26 +270,26 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     backgroundColor: "#F8F8F8",
     paddingHorizontal: 16,
-    paddingVertical: screenHeight < 700 ? 12 : 16, // Responsive padding
+    paddingVertical: screenHeight < 700 ? 12 : 16, 
     borderRadius: 12,
     fontSize: 16,
     color: "#333",
-    minHeight: 48, // Ensure minimum touch target
+    minHeight: 48, 
   },
   submitButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#26366C",
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
     alignItems: "center",
     marginBottom: 20,
     marginTop: 8,
-    shadowColor: "#4CAF50",
+    shadowColor: "#26366C",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
-    minHeight: 52, // Ensure minimum touch target
+    minHeight: 52,
   },
   submitText: {
     color: "white",

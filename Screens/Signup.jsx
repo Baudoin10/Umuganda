@@ -215,23 +215,23 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    minHeight: screenHeight * 0.9, // Ensure minimum height for smaller screens
+    minHeight: screenHeight * 0.9, 
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 16,
     justifyContent: "center",
-    maxWidth: 400, // Limit width on larger screens
+    maxWidth: 400, 
     alignSelf: "center",
     width: "100%",
   },
   header: {
     alignItems: "center",
-    marginBottom: screenHeight < 700 ? 20 : 32, // Responsive spacing
+    marginBottom: screenHeight < 700 ? 20 : 32, 
   },
   headerText: {
-    fontSize: screenHeight < 700 ? 28 : 32, // Responsive font size
+    fontSize: screenHeight < 700 ? 28 : 32, 
     fontWeight: "bold",
     color: "#333",
     marginBottom: 8,

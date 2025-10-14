@@ -10,6 +10,7 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { fetchEvents } from "../Services/eventAPI";
+import { Ionicons } from "@expo/vector-icons";
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
@@ -96,6 +97,16 @@ const JoinEvent = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { paddingBottom: 80 }]}>
+       <View style={styles.header}>
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.goBack()}
+              >
+                <Ionicons name="chevron-back" size={24} color="#000" />
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>Events</Text>
+              <View style={{ width: 32 }} />
+            </View>
 
       <Text style={styles.pageTitle}>Choose The Events to join</Text>
 
@@ -148,7 +159,23 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "600",
     marginTop: "19%",
-    marginBottom: 10
+    marginBottom: 10,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: "10%",
+  },
+  backButton: {
+    padding: 4,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000",
   },
   card: {
     backgroundColor: "white",

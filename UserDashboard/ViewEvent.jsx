@@ -12,6 +12,10 @@ import { CalendarDays, MapPin } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { fetchEvents } from "../Services/viewEventAPI"; 
+import { Ionicons } from "@expo/vector-icons";
+
+
+
 const ViewEvent = () => {
   const navigation = useNavigation();
   const [events, setEvents] = useState([]);
@@ -95,10 +99,21 @@ const ViewEvent = () => {
         flex: 1,
         backgroundColor: "#f5f5f5",
         padding: 15,
-        paddingBottom: 80,
+        paddingBottom: 30,
       }}
     >
-      <Text style={styles.headerText}>Upcoming Events</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Upcoming Events</Text>
+        <View style={{ width: 32 }} />
+      </View>
+   
       <FlatList
         data={events}
         keyExtractor={(item) => item._id.toString()}
@@ -145,14 +160,32 @@ const ViewEvent = () => {
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
-  headerText: {
-    fontSize: 22,
-    fontWeight: "600",
-    marginBottom: 15,
-    marginTop: "18%",
-    marginLeft: 10,
+  loadingContainer: {
+     flex: 1, 
+     justifyContent: "center", 
+     alignItems: "center"
+     },
+ 
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingTop: 10,
+  
+    marginTop: 20
   },
+  backButton: {
+    padding: 4,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000",
+  },
+
   card: {
     margin: 10,
     padding: 15,

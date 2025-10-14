@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { fetchNotifications as apiFetchNotifications } from "../Services/viewNotificationAPI";
+import { Ionicons } from "@expo/vector-icons";
 
 const Viewnotifications = () => {
 
@@ -86,7 +87,14 @@ const Viewnotifications = () => {
   return (
     <View style={[styles.container, { paddingBottom: 80 }]}>
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back" size={24} color="#000" />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Notifications</Text>
+        <View style={{ width: 32 }} />
       </View>
 
       <FlatList
@@ -132,25 +140,33 @@ const Viewnotifications = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#FFF",
   },
+
   header: {
-    padding: 16,
-    backgroundColor: "#0000",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: "10%",
+  },
+  backButton: {
+    padding: 4,
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
-    marginTop: "15%"
+    fontWeight: "600",
+    color: "#000",
   },
+
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   notificationItem: {
-    backgroundColor: "white",
+    backgroundColor: "#F5F5F5",
     padding: 16,
     margin: 8,
     borderRadius: 8,

@@ -20,12 +20,15 @@ import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
 import { logout as apiLogout } from "../Services/authAPI";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
+
 const UserDashboard = ({ navigation }) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState("Home");
+  
 
 
   useEffect(() => {
@@ -227,7 +230,7 @@ const UserDashboard = ({ navigation }) => {
           <Icon name="menu" size={28} color="#333" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <Text style={styles.welcomeText}>Muraho!</Text>
+          <Text style={styles.welcomeText}>Welcome Back!</Text>
           <Text style={styles.userEmail}>
             {user ? user.email : "Loading..."}
           </Text>

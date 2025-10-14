@@ -28,8 +28,6 @@ const UserDashboard = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState("Home");
-  
-
 
   useEffect(() => {
     const loadUser = async () => {
@@ -39,7 +37,7 @@ const UserDashboard = ({ navigation }) => {
           console.warn("No token found");
           return;
         }
-        const me = await getMe(); 
+        const me = await getMe();
         setUser(me);
       } catch (error) {
         console.error(
@@ -52,23 +50,21 @@ const UserDashboard = ({ navigation }) => {
     loadUser();
   }, []);
 
-
-   const fetchTasks = async () => {
-     try {
-       const data = await apiFetchTasks();
-       setTasks(Array.isArray(data) ? data : []);
-     } catch (error) {
-       console.log(
-         "Error loading tasks:",
-         error?.response?.data || error.message
-       );
-     }
-   };
+  const fetchTasks = async () => {
+    try {
+      const data = await apiFetchTasks();
+      setTasks(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.log(
+        "Error loading tasks:",
+        error?.response?.data || error.message
+      );
+    }
+  };
 
   useEffect(() => {
     fetchTasks();
   }, []);
-  
 
   const fetchEvents = async () => {
     try {
@@ -81,7 +77,6 @@ const UserDashboard = ({ navigation }) => {
       );
     }
   };
-
 
   useEffect(() => {
     fetchEvents();
@@ -201,24 +196,24 @@ const UserDashboard = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-    // Handle logout
-      const handleLogout = async () => {
-        try {
-          await logout(); 
-          Toast.show({
-            type: "success",
-            position: "top",
-            text1: "Logout successful!",
-          });
-          navigation.navigate("Login");
-        } catch (e) {
-          Toast.show({
-            type: "error",
-            position: "bottom",
-            text1: "Logout failed. Please try again.",
-          });
-        }
-      };
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await apiLogout(); 
+      Toast.show({
+        type: "success",
+        position: "top",
+        text1: "Logout successful!",
+      });
+      navigation.navigate("Login");
+    } catch (e) {
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Logout failed. Please try again.",
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -248,14 +243,7 @@ const UserDashboard = ({ navigation }) => {
         style={styles.mainContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Welcome Section */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.sectionTitle}>Umuganda Dashboard</Text>
-          <Text style={styles.sectionSubtitle}>
-            Building stronger communities together
-          </Text>
-        </View>
-
+       
         {/* Dashboard Cards */}
         <View style={styles.cardsContainer}>
           <FlatList
@@ -438,22 +426,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 80, // Space for bottom tabs
   },
-  welcomeSection: {
-    padding: 20,
-    backgroundColor: "#4CAF50",
-    margin: 16,
-    borderRadius: 12,
-  },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#FFF",
-  },
-  sectionSubtitle: {
-    fontSize: 14,
-    color: "#E8F5E8",
-    marginTop: 4,
-  },
+ 
   cardsContainer: {
     paddingHorizontal: 16,
   },

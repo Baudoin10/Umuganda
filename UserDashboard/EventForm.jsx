@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -36,11 +35,9 @@ const EventJoinForm = () => {
       try {
         setLoading(true);
 
-        // Load events
         const data = await fetchEvents();
         setEvents(Array.isArray(data) ? data : []);
 
-        // Load userId from AsyncStorage (set elsewhere at login)
         const uid = await AsyncStorage.getItem("userId");
         if (uid) setUserId(uid);
       } catch (error) {
@@ -152,16 +149,16 @@ const EventJoinForm = () => {
         style={styles.container}
       >
         <View style={styles.content}>
-            <View style={styles.header}>
-                      <TouchableOpacity
-                        style={styles.backButton}
-                        onPress={() => navigation.goBack()}
-                      >
-                        <Ionicons name="chevron-back" size={24} color="#000" />
-                      </TouchableOpacity>
-                      <Text style={styles.headerTitle}>Join An Event</Text>
-                      <View style={{ width: 32 }} />
-                    </View>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+            >
+              <Ionicons name="chevron-back" size={24} color="#000" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Join An Event</Text>
+            <View style={{ width: 32 }} />
+          </View>
           <ScrollView
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}

@@ -27,7 +27,7 @@ const EditProfile = () => {
   const [phone, setPhone] = useState("");
   const [sector, setSector] = useState("");
   const [address, setAddress] = useState("");
-  const [avatar, setAvatar] = useState(null); // New state for avatar
+  const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -40,7 +40,7 @@ const EditProfile = () => {
         setPhone(data.phone || "");
         setSector(data.sector || "");
         setAddress(data.address || "");
-        setAvatar(data.avatar || null); // Assuming backend has avatar URL
+        setAvatar(data.avatar || null); 
       } catch (err) {
         const msg =
           err?.response?.data?.message ||
@@ -99,7 +99,7 @@ const EditProfile = () => {
       };
 
       if (avatar) {
-        updateData.avatar = avatar; // Include avatar if changed
+        updateData.avatar = avatar; 
       }
 
       await updateUserProfile(user._id, updateData);

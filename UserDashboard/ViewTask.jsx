@@ -95,11 +95,9 @@ const ViewTask = () => {
      try {
        setLoading(true);
 
-       // API call (handled by Axios middleware)
        const data = await apiFetchTasks();
        setTasks(Array.isArray(data) ? data : []);
 
-       // Role still comes from AsyncStorage (as before)
        const userInfo = await AsyncStorage.getItem("userInfo");
        if (userInfo) {
          const { role } = JSON.parse(userInfo);

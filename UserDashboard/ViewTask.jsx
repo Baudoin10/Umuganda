@@ -114,7 +114,6 @@ const ViewTask = () => {
      }
    };
 
-
    const updateTaskStatus = async (taskId, newStatus) => {
      try {
        const performUpdate = async () => {
@@ -244,7 +243,7 @@ const ViewTask = () => {
           renderItem={({ item }) => (
             <TaskCard task={item} onStatusUpdate={updateTaskStatus} />
           )}
-          contentContainerStyle={{ paddingBottom: 90 }} // space for bottom tab
+          contentContainerStyle={{ paddingBottom: 90 }} 
         />
       )}
 

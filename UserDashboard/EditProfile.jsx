@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+
 import {
   View,
   Text,
@@ -9,17 +9,24 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
+  Modal,
+  FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import { getMe } from "../Services/meAPI";
 import { updateUserProfile } from "../Services/profileAPI";
+import { useState } from "react";
+import { useEffect } from "react";
+
+const SECTORS = ["Gasabo", "Kicukiro", "Nyarugenge", "Kigali City"];
 
 const EditProfile = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [sectorModalVisible, setSectorModalVisible] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -226,15 +233,18 @@ const EditProfile = () => {
           </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Sector *</Text>
-            <TextInput
-              style={styles.input}
-              value={sector}
-              onChangeText={setSector}
-              placeholder="Enter your sector"
-              autoCapitalize="words"
-              placeholderTextColor="#b1b5c9"
-            />
+            <Text style={styles.label}>District *</Text>
+            <TouchableOpacity
+              style={styles.sectorInput}
+              onPress={() => setSectorModalVisible(true)}
+            >
+              <Text
+                style={[styles.sectorText, !sector && styles.sectorPlaceholder]}
+              >
+                {sector || "Select a sector"}
+              </Text>
+              <Icon name="chevron-down" size={20} color="#26366C" />
+            </TouchableOpacity>
           </View>
 
           <View style={styles.formGroup}>
@@ -290,6 +300,55 @@ const EditProfile = () => {
 
         <View style={{ height: 20 }} />
       </ScrollView>
+
+      {/* Sector Dropdown Modal */}
+      <Modal
+        visible={sectorModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSectorModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select a Sector</Text>
+              <TouchableOpacity onPress={() => setSectorModalVisible(false)}>
+                <Icon name="x" size={24} color="#222e4c" />
+              </TouchableOpacity>
+            </View>
+
+            <FlatList
+              data={SECTORS}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[
+                    styles.sectorOption,
+                    sector === item && styles.sectorOptionSelected,
+                  ]}
+                  onPress={() => {
+                    setSector(item);
+                    setSectorModalVisible(false);
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.sectorOptionText,
+                      sector === item && styles.sectorOptionTextSelected,
+                    ]}
+                  >
+                    {item}
+                  </Text>
+                  {sector === item && (
+                    <Icon name="check" size={20} color="#26366C" />
+                  )}
+                </TouchableOpacity>
+              )}
+              scrollEnabled={true}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -305,7 +364,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginTop: "5%",
+    marginTop: "12%",
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#E9ECEF",
@@ -457,6 +516,73 @@ const styles = StyleSheet.create({
   deleteButtonText: {
     color: "#fff",
     fontSize: 15,
+    fontWeight: "600",
+  },
+  sectorInput: {
+    backgroundColor: "#F8FAFB",
+    borderWidth: 1.5,
+    borderColor: "#E3E7ED",
+    borderRadius: 10,
+    padding: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  sectorText: {
+    fontSize: 15,
+    color: "#222e4c",
+    fontWeight: "500",
+    flex: 1,
+  },
+  sectorPlaceholder: {
+    color: "#b1b5c9",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: "80%",
+    paddingTop: 16,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E9ECEF",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#222e4c",
+  },
+  sectorOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F5F5F5",
+  },
+  sectorOptionSelected: {
+    backgroundColor: "rgba(38, 54, 108, 0.08)",
+  },
+  sectorOptionText: {
+    fontSize: 15,
+    color: "#222e4c",
+    fontWeight: "500",
+    flex: 1,
+  },
+  sectorOptionTextSelected: {
+    color: "#26366C",
     fontWeight: "600",
   },
 });

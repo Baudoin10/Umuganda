@@ -17,6 +17,7 @@ import { fetchEvents, joinEvent } from "../Services/eventAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import BottomTab from "../Component/BottomTab/BottomTab";
 
 const { width, height } = Dimensions.get("window");
 const BOTTOM_TAB_HEIGHT = 80;

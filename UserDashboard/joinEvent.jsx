@@ -81,7 +81,7 @@ const JoinEvent = ({ navigation }) => {
         navigation.navigate("view");
         break;
       case "Settings":
-        navigation.navigate("Profile");
+        navigation.navigate("Setting");
         break;
     }
   };
@@ -119,8 +119,8 @@ const JoinEvent = ({ navigation }) => {
         renderItem={({ item }) => (
           <EventCard event={item} navigation={navigation} />
         )}
-        contentContainerStyle={{ paddingBottom: 120 }} // ✅ gives space above bottom tabs
-        showsVerticalScrollIndicator={false} // ✅ hides the vertical scroll line
+        contentContainerStyle={{ paddingBottom: 120 }} 
+        showsVerticalScrollIndicator={false} 
       />
 
       {/* Bottom Tabs */}

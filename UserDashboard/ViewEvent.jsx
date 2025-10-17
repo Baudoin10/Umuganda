@@ -55,7 +55,7 @@ const ViewEvent = () => {
         navigation.navigate("view");
         break;
       case "Settings":
-        navigation.navigate("Profile");
+        navigation.navigate("Setting");
         break;
       default:
         navigation.navigate("user");

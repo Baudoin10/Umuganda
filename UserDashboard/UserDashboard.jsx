@@ -6,7 +6,6 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Modal,
   StatusBar,
   ScrollView,
 } from "react-native";
@@ -17,11 +16,10 @@ import { getMe } from "../Services/meAPI";
 import { fetchTasks as apiFetchTasks } from "../Services/tasksAPI";
 import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-
+import BottomTab from "../Component/BottomTab/BottomTab";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const UserDashboard = ({ navigation }) => {
-  const [isMenuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
   const [tasks, setTasks] = useState([]);
@@ -123,8 +121,6 @@ const UserDashboard = ({ navigation }) => {
     { id: "Settings", title: "Settings", icon: "settings" },
   ];
 
-
-
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
     // Navigate to different screens based on tab
@@ -162,7 +158,6 @@ const UserDashboard = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
       <View style={styles.header}>
-   
         <View style={styles.headerContent}>
           <Text style={styles.welcomeText}>Welcome Back!</Text>
           <Text style={styles.userEmail}>
@@ -182,7 +177,6 @@ const UserDashboard = ({ navigation }) => {
         style={styles.mainContent}
         showsVerticalScrollIndicator={false}
       >
-       
         {/* Dashboard Cards */}
         <View style={styles.cardsContainer}>
           <FlatList
@@ -225,32 +219,13 @@ const UserDashboard = ({ navigation }) => {
       </ScrollView>
 
       {/* Bottom Tab Navigation */}
-      <View style={styles.bottomTabContainer}>
-        {bottomTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={[
-              styles.tabButton,
-              activeTab === tab.id && styles.activeTabButton,
-            ]}
-            onPress={() => handleTabPress(tab.id)}
-          >
-            <Icon
-              name={tab.icon}
-              size={24}
-              color={activeTab === tab.id ? "#4CAF50" : "#999"}
-            />
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab.id && styles.activeTabText,
-              ]}
-            >
-              {tab.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <BottomTab
+        tabs={bottomTabs}
+        activeTab={activeTab}
+        onTabPress={handleTabPress}
+        activeColor="#999"
+        iconComponent={MaterialIcons}
+      />
 
       {/* Side Menu Modal */}
     </SafeAreaView>
@@ -402,43 +377,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
     marginTop: 8,
-  },
-  bottomTabContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    backgroundColor: "#FFF",
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderTopWidth: 1,
-    borderTopColor: "#E9ECEF",
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  activeTabButton: {
-    backgroundColor: "rgba(76, 175, 80, 0.1)",
-    borderRadius: 8,
-  },
-  tabText: {
-    fontSize: 11,
-    color: "#999",
-    marginTop: 4,
-    fontWeight: "500",
-  },
-  activeTabText: {
-    color: "#4CAF50",
-    fontWeight: "600",
   },
   menuOverlay: {
     flex: 1,

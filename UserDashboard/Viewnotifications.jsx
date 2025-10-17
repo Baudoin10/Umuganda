@@ -106,8 +106,8 @@ const Viewnotifications = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>No notifications yet</Text>
         }
-        showsVerticalScrollIndicator={false} // ✅ hide scrollbar
-        contentContainerStyle={{ paddingBottom: 100 }} // ✅ prevent overlap
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ paddingBottom: 100 }} 
       />
 
       {/* Bottom Tabs */}

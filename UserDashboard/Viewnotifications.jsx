@@ -106,8 +106,8 @@ const Viewnotifications = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>No notifications yet</Text>
         }
-        showsVerticalScrollIndicator={false} 
-        contentContainerStyle={{ paddingBottom: 100 }} 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
       />
 
       {/* Bottom Tabs */}
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
   },
-
 });
 
 export default Viewnotifications;

@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Switch,
   ScrollView,
-  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -62,13 +61,14 @@ const Setting = () => {
     }
   };
 
-  const bottomTabs = [
-    { id: "Home", title: "Home", icon: "home" },
-    { id: "Events", title: "Events", icon: "calendar" },
-    { id: "Community", title: "Community", icon: "users" },
-    { id: "Discuss", title: "Notification", icon: "bell" },
-    { id: "Settings", title: "Settings", icon: "settings" },
-  ];
+ 
+    const bottomTabs = [
+      { id: "Home", title: "Home", icon: "home" },
+      { id: "Events", title: "Events", icon: "event" },
+      { id: "Community", title: "Community", icon: "people" },
+      { id: "Discuss", title: "Notification", icon: "notifications" },
+      { id: "Settings", title: "Settings", icon: "settings" },
+    ];
 
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFF" }}>

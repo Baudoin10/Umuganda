@@ -10,11 +10,13 @@ import {
 
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { fetchEvents } from "../Services/eventAPI";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import BottomTab from "../Component/BottomTab/BottomTab";
+
+
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>

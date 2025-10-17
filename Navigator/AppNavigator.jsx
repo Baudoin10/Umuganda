@@ -42,7 +42,7 @@ const AppNavigator = () => {
         <Stack.Screen name="joinEvent" component={joinEvent} />
         <Stack.Screen name="EventForm" component={EventForm} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
-        <Stack.Screen name="view" component={Viewnotifications} />
+        <Stack.Screen name="Viewnotifications" component={Viewnotifications} />
       </Stack.Navigator>
     </NavigationContainer>
   );

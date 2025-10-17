@@ -18,8 +18,11 @@ import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BottomTab from "../Component/BottomTab/BottomTab";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { fetchNotifications } from "../Services/viewNotificationAPI";
+
 
 const UserDashboard = ({ navigation }) => {
+const [notifications, setNotifications] = useState([]);
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
   const [tasks, setTasks] = useState([]);
@@ -77,6 +80,32 @@ const UserDashboard = ({ navigation }) => {
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+    const loadNotifications = async () => {
+      try {
+        const data = await fetchNotifications();
+        // Handle both object and array responses
+        if (Array.isArray(data)) {
+          setNotifications(data);
+        } else if (data?.notifications) {
+          setNotifications(data.notifications);
+        } else {
+          setNotifications([]);
+        }
+      } catch (error) {
+        console.error("Error fetching notifications:", error.message);
+        setNotifications([]);
+      }
+    };
+
+    loadNotifications();
+
+    // Optional: refresh every 15 seconds
+    const interval = setInterval(loadNotifications, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
 
   const dashboardCards = [
     {
@@ -164,11 +193,19 @@ const UserDashboard = ({ navigation }) => {
             {user ? user.email : "Loading..."}
           </Text>
         </View>
-        <TouchableOpacity style={styles.notificationButton}>
+  
+        <TouchableOpacity
+          style={styles.notificationButton}
+          onPress={() => navigation.navigate("Viewnotifications")} 
+        >
           <Icon name="notifications" size={24} color="#333" />
-          <View style={styles.notificationBadge}>
-            <Text style={styles.badgeText}>3</Text>
-          </View>
+          {notifications.length > 0 && (
+            <View style={styles.notificationBadge}>
+              <Text style={styles.badgeText}>
+                {notifications.length > 99 ? "99+" : notifications.length}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 

@@ -72,7 +72,7 @@ const Setting = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFF" }}>
       <SafeAreaView style={{ flex: 1 }}>
-        {/* Header */}
+       
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Settings</Text>
         </View>
@@ -87,7 +87,7 @@ const Setting = () => {
 
             <TouchableOpacity
               style={styles.settingItem}
-              onPress={() => navigation.navigate("EditProfile")}
+              onPress={() => navigation.navigate("Profile")}
             >
               <View style={styles.settingItemLeft}>
                 <Icon name="user" size={20} color="#26366C" />

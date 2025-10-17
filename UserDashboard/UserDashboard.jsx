@@ -159,9 +159,7 @@ const UserDashboard = ({ navigation }) => {
     { id: "Settings", title: "Settings", icon: "settings" },
   ];
 
-  const toggleMenu = () => {
-    setMenuVisible(!isMenuVisible);
-  };
+
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
@@ -221,9 +219,7 @@ const UserDashboard = ({ navigation }) => {
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
-          <Icon name="menu" size={28} color="#333" />
-        </TouchableOpacity>
+   
         <View style={styles.headerContent}>
           <Text style={styles.welcomeText}>Welcome Back!</Text>
           <Text style={styles.userEmail}>
@@ -314,55 +310,6 @@ const UserDashboard = ({ navigation }) => {
       </View>
 
       {/* Side Menu Modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isMenuVisible}
-        onRequestClose={toggleMenu}
-      >
-        <TouchableOpacity
-          style={styles.menuOverlay}
-          activeOpacity={1}
-          onPress={toggleMenu}
-        >
-          <View style={styles.menuContent}>
-            <View style={styles.menuHeader}>
-              <View>
-                <Text style={styles.menuTitle}>Umuganda App</Text>
-                <Text style={styles.menuSubtitle}>Community Service</Text>
-              </View>
-              <TouchableOpacity onPress={toggleMenu}>
-                <Icon name="close" size={24} color="#333" />
-              </TouchableOpacity>
-            </View>
-
-            <FlatList
-              data={menuItems}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.menuItem}
-                  onPress={() => {
-                    setMenuVisible(false);
-                    if (item.title === "Logout") {
-                      handleLogout();
-                    } else {
-                      navigation.navigate(item.screen);
-                    }
-                  }}
-                >
-                  <View style={styles.menuItemIconContainer}>
-                    <Icon name={item.icon} size={24} color="#4CAF50" />
-                  </View>
-                  <Text style={styles.menuItemText}>{item.title}</Text>
-                  <Icon name="chevron-right" size={20} color="#999" />
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        </TouchableOpacity>
-      </Modal>
-      <Toast />
     </SafeAreaView>
   );
 };

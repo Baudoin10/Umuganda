@@ -177,7 +177,7 @@ const UserDashboard = ({ navigation }) => {
         navigation.navigate("view");
         break;
       case "Settings":
-        navigation.navigate("Profile");
+        navigation.navigate("Setting");
         break;
       default:
         // Stay on Home

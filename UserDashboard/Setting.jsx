@@ -70,7 +70,7 @@ const Setting = () => {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8FAFB" }}>
+    <View style={{ flex: 1, backgroundColor: "#FFFF" }}>
       <SafeAreaView style={{ flex: 1 }}>
         {/* Header */}
         <View style={styles.header}>
@@ -91,7 +91,7 @@ const Setting = () => {
             >
               <View style={styles.settingItemLeft}>
                 <Icon name="user" size={20} color="#26366C" />
-                <Text style={styles.settingText}>Edit Profile</Text>
+                <Text style={styles.settingText}>Profile</Text>
               </View>
               <Icon name="chevron-right" size={20} color="#ccc" />
             </TouchableOpacity>
@@ -206,8 +206,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E9ECEF",
+    marginTop: "10%",
   },
   headerTitle: {
     fontSize: 24,

@@ -216,8 +216,6 @@ const UserDashboard = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
-
-      {/* Header */}
       <View style={styles.header}>
    
         <View style={styles.headerContent}>

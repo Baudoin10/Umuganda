@@ -12,33 +12,34 @@ import Icon from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import BottomTab from "../Component/BottomTab/BottomTab";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { logout as apiLogout } from "../Services/authAPI";
+import Toast from "react-native-toast-message";
 
 const Setting = () => {
   const navigation = useNavigation();
   const [pushNotifications, setPushNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState("Settings");
-
-  const handleLogout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Logout",
-          style: "destructive",
-          onPress: () => {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Login" }],
-            });
-          },
-        },
-      ],
-      { cancelable: true }
-    );
-  };
+  
+   const handleLogout = async () => {
+     try {
+       await apiLogout();
+       Toast.show({
+         type: "success",
+         position: "top",
+         text1: "Logout successful!",
+       });
+       navigation.navigate("Login");
+     } catch (e) {
+       Toast.show({
+         type: "error",
+         position: "bottom",
+         text1: "Logout failed. Please try again.",
+       });
+     }
+   };
 
   const handleTabPress = (tabId) => {
     setActiveTab(tabId);
@@ -72,7 +73,6 @@ const Setting = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFF" }}>
       <SafeAreaView style={{ flex: 1 }}>
-       
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Settings</Text>
         </View>
@@ -167,32 +167,13 @@ const Setting = () => {
       </SafeAreaView>
 
       {/* Bottom Tabs */}
-      <View style={styles.bottomTabContainer}>
-        {bottomTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={[
-              styles.tabButton,
-              activeTab === tab.id && styles.activeTabButton,
-            ]}
-            onPress={() => handleTabPress(tab.id)}
-          >
-            <Icon
-              name={tab.icon}
-              size={24}
-              color={activeTab === tab.id ? "#26366C" : "#999"}
-            />
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab.id && styles.activeTabText,
-              ]}
-            >
-              {tab.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <BottomTab
+        tabs={bottomTabs}
+        activeTab={activeTab}
+        onTabPress={handleTabPress}
+        activeColor="#999"
+        iconComponent={MaterialIcons}
+      />
     </View>
   );
 };
@@ -257,43 +238,7 @@ const styles = StyleSheet.create({
     color: "#E53935",
     fontWeight: "600",
   },
-  bottomTabContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    backgroundColor: "#FFF",
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderTopWidth: 1,
-    borderTopColor: "#E9ECEF",
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  activeTabButton: {
-    backgroundColor: "rgba(38, 54, 108, 0.1)",
-    borderRadius: 8,
-  },
-  tabText: {
-    fontSize: 11,
-    color: "#999",
-    marginTop: 4,
-    fontWeight: "500",
-  },
-  activeTabText: {
-    color: "#26366C",
-    fontWeight: "600",
-  },
+  
 });
 
 export default Setting;

@@ -13,11 +13,9 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Chart from "./Chart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Toast from "react-native-toast-message";
 import { getMe } from "../Services/meAPI";
 import { fetchTasks as apiFetchTasks } from "../Services/tasksAPI";
 import { fetchEvents as apiFetchEvents } from "../Services/eventAPI";
-import { logout as apiLogout } from "../Services/authAPI";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -81,40 +79,6 @@ const UserDashboard = ({ navigation }) => {
   useEffect(() => {
     fetchEvents();
   }, []);
-
-  const menuItems = [
-    {
-      id: "1",
-      title: "View Events",
-      screen: "ViewEvent",
-      icon: "event",
-    },
-    {
-      id: "2",
-      title: "View Tasks",
-      screen: "ViewTask",
-      icon: "assignment",
-    },
-    {
-      id: "3",
-      title: "Join Events",
-      screen: "joinEvent",
-      icon: "event",
-    },
-    {
-      id: "4",
-      title: "Notifications",
-      screen: "view",
-      icon: "notifications",
-    },
-    {
-      id: "5",
-      title: "Profile/Settings",
-      screen: "Profile",
-      icon: "person",
-    },
-    { id: "6", title: "Logout", screen: "Login", icon: "logout" },
-  ];
 
   const dashboardCards = [
     {
@@ -193,25 +157,6 @@ const UserDashboard = ({ navigation }) => {
       <Text style={styles.cardSubtitle}>{item.subtitle}</Text>
     </TouchableOpacity>
   );
-
-  // Handle logout
-  const handleLogout = async () => {
-    try {
-      await apiLogout(); 
-      Toast.show({
-        type: "success",
-        position: "top",
-        text1: "Logout successful!",
-      });
-      navigation.navigate("Login");
-    } catch (e) {
-      Toast.show({
-        type: "error",
-        position: "bottom",
-        text1: "Logout failed. Please try again.",
-      });
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>

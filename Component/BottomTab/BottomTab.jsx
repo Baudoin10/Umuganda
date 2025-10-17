@@ -25,7 +25,6 @@ const BottomTab = ({
           ]}
           onPress={() => onTabPress(tab.id)}
         >
-          {/* Use IconComponent instead of hardcoded Feather */}
           <IconComponent
             name={tab.icon}
             size={24}

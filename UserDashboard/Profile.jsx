@@ -183,35 +183,7 @@ const Profile = () => {
             />
             <Text style={styles.editButtonText}>Edit Profile</Text>
           </TouchableOpacity>
-        </View>
-
-        {/* About Section */}
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>About</Text>
-
-          <TouchableOpacity style={styles.aboutItem}>
-            <Icon name="file-text" size={20} color="#26366C" />
-            <Text style={styles.aboutItemText}>Terms and Privacy</Text>
-            <Icon name="chevron-right" size={20} color="#ccc" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.aboutItem}>
-            <Icon name="shield" size={20} color="#26366C" />
-            <Text style={styles.aboutItemText}>Usage of Information</Text>
-            <Icon name="chevron-right" size={20} color="#ccc" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.aboutItem}>
-            <Icon name="help-circle" size={20} color="#26366C" />
-            <Text style={styles.aboutItemText}>Help and Support</Text>
-            <Icon name="chevron-right" size={20} color="#ccc" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Icon name="log-out" size={20} color="#E53935" />
-            <Text style={styles.logoutButtonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
+        </View>  
       </ScrollView>
 
       {/* Bottom Tabs */}
@@ -249,7 +221,7 @@ const Profile = () => {
 const styles = StyleSheet.create({
   scrollContainer: {
      padding: 16,
-     paddingBottom: 120
+     marginTop: 45
      },
   loadingContainer: {
     flex: 1,
@@ -342,32 +314,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  aboutItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
-  },
-  aboutItemText: {
-    flex: 1,
-    fontSize: 15,
-    color: "#222e4c",
-    fontWeight: "500",
-    marginLeft: 12,
-  },
-  logoutButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 14,
-    marginTop: 8,
-  },
-  logoutButtonText: {
-    fontSize: 15,
-    color: "#E53935",
-    fontWeight: "600",
-    marginLeft: 12,
-  },
+ 
   bottomTabContainer: {
     position: "absolute",
     bottom: 0,

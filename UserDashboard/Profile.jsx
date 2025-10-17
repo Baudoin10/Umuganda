@@ -14,6 +14,8 @@ import {
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
 import { getMe } from "../Services/meAPI";
+import BottomTab from "../Component/BottomTab/BottomTab";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -183,37 +185,17 @@ const Profile = () => {
             />
             <Text style={styles.editButtonText}>Edit Profile</Text>
           </TouchableOpacity>
-        </View>  
+        </View>
       </ScrollView>
 
       {/* Bottom Tabs */}
-      <View style={styles.bottomTabContainer}>
-        {bottomTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={[
-              styles.tabButton,
-              activeTab === tab.id && styles.activeTabButton,
-            ]}
-            onPress={() => handleTabPress(tab.id)}
-          >
-            <Icon
-              name={tab.icon}
-              size={24}
-              color={activeTab === tab.id ? "#26366C" : "#999"}
-            />
-
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab.id && styles.activeTabText,
-              ]}
-            >
-              {tab.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <BottomTab
+        tabs={bottomTabs}
+        activeTab={activeTab}
+        onTabPress={handleTabPress}
+        activeColor="#999"
+        iconComponent={MaterialIcons}
+      />
     </View>
   );
 };
@@ -315,35 +297,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
  
-  bottomTabContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    backgroundColor: "#FFF",
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderTopWidth: 1,
-    borderTopColor: "#E9ECEF",
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  activeTabButton: {
-    backgroundColor: "rgba(38, 54, 108, 0.1)",
-    borderRadius: 8,
-  },
-  tabText: { fontSize: 11, color: "#999", marginTop: 4, fontWeight: "500" },
-  activeTabText: { color: "#26366C", fontWeight: "600" },
 });
 
 export default Profile;

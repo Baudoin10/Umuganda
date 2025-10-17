@@ -14,6 +14,7 @@ import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { fetchEvents } from "../Services/eventAPI";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const EventCard = ({ event, navigation }) => (
   <View style={styles.card}>
@@ -119,37 +120,18 @@ const JoinEvent = ({ navigation }) => {
         renderItem={({ item }) => (
           <EventCard event={item} navigation={navigation} />
         )}
-        contentContainerStyle={{ paddingBottom: 120 }} 
-        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ paddingBottom: 120 }}
+        showsVerticalScrollIndicator={false}
       />
 
       {/* Bottom Tabs */}
-      <View style={styles.bottomTabContainer}>
-        {bottomTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={[
-              styles.tabButton,
-              activeTab === tab.id && styles.activeTabButton,
-            ]}
-            onPress={() => handleTabPress(tab.id)}
-          >
-            <MaterialIcon
-              name={tab.icon}
-              size={24}
-              color={activeTab === tab.id ? "#4CAF50" : "#999"}
-            />
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab.id && styles.activeTabText,
-              ]}
-            >
-              {tab.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <BottomTab
+        tabs={bottomTabs}
+        activeTab={activeTab}
+        onTabPress={handleTabPress}
+        activeColor="#999"
+        iconComponent={MaterialIcons}
+      />
     </SafeAreaView>
   );
 };
@@ -223,43 +205,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  bottomTabContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    backgroundColor: "#FFF",
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderTopWidth: 1,
-    borderTopColor: "#E9ECEF",
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  activeTabButton: {
-    backgroundColor: "rgba(76, 175, 80, 0.1)",
-    borderRadius: 8,
-  },
-  tabText: {
-    fontSize: 11,
-    color: "#999",
-    marginTop: 4,
-    fontWeight: "500",
-  },
-  activeTabText: {
-    color: "#4CAF50",
-    fontWeight: "600",
-  },
+ 
 });
 
 export default JoinEvent;

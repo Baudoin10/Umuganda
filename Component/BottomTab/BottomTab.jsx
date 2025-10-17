@@ -1,13 +1,16 @@
+
+
 // BottomTab.js
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/Feather";
+import Feather from "react-native-vector-icons/Feather"; 
 
 const BottomTab = ({
   tabs,
   activeTab,
   onTabPress,
   activeColor = "#26366C",
+  iconComponent: IconComponent = Feather, 
 }) => {
   return (
     <View style={styles.bottomTabContainer}>
@@ -23,7 +26,8 @@ const BottomTab = ({
           ]}
           onPress={() => onTabPress(tab.id)}
         >
-          <Icon
+          {/* Use IconComponent instead of hardcoded Feather */}
+          <IconComponent
             name={tab.icon}
             size={24}
             color={activeTab === tab.id ? activeColor : "#999"}

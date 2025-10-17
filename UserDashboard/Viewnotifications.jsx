@@ -12,6 +12,8 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { fetchNotifications as apiFetchNotifications } from "../Services/viewNotificationAPI";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import BottomTab from "../Component/BottomTab/BottomTab";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const Viewnotifications = () => {
   const navigation = useNavigation();
@@ -110,7 +112,7 @@ const Viewnotifications = () => {
       />
 
       {/* Bottom Tabs */}
-      <View style={styles.bottomTabContainer}>
+      {/* <View style={styles.bottomTabContainer}>
         {bottomTabs.map((tab) => (
           <TouchableOpacity
             key={tab.id}
@@ -135,7 +137,15 @@ const Viewnotifications = () => {
             </Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </View> */}
+
+      <BottomTab
+        tabs={bottomTabs}
+        activeTab={activeTab}
+        onTabPress={handleTabPress}
+        activeColor="#4CAF50"
+        iconComponent={MaterialIcons}
+      />
     </SafeAreaView>
   );
 };
@@ -192,43 +202,43 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
   },
-  bottomTabContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    backgroundColor: "#FFF",
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderTopWidth: 1,
-    borderTopColor: "#E9ECEF",
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  activeTabButton: {
-    backgroundColor: "rgba(76, 175, 80, 0.1)",
-    borderRadius: 8,
-  },
-  tabText: {
-    fontSize: 11,
-    color: "#999",
-    marginTop: 4,
-    fontWeight: "500",
-  },
-  activeTabText: {
-    color: "#4CAF50",
-    fontWeight: "600",
-  },
+  // bottomTabContainer: {
+  //   position: "absolute",
+  //   bottom: 0,
+  //   left: 0,
+  //   right: 0,
+  //   flexDirection: "row",
+  //   backgroundColor: "#FFF",
+  //   paddingVertical: 12,
+  //   paddingHorizontal: 8,
+  //   borderTopWidth: 1,
+  //   borderTopColor: "#E9ECEF",
+  //   elevation: 8,
+  //   shadowColor: "#000",
+  //   shadowOffset: { width: 0, height: -2 },
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 4,
+  // },
+  // tabButton: {
+  //   flex: 1,
+  //   alignItems: "center",
+  //   paddingVertical: 8,
+  //   paddingHorizontal: 4,
+  // },
+  // activeTabButton: {
+  //   backgroundColor: "rgba(76, 175, 80, 0.1)",
+  //   borderRadius: 8,
+  // },
+  // tabText: {
+  //   fontSize: 11,
+  //   color: "#999",
+  //   marginTop: 4,
+  //   fontWeight: "500",
+  // },
+  // activeTabText: {
+  //   color: "#4CAF50",
+  //   fontWeight: "600",
+  // },
 });
 
 export default Viewnotifications;

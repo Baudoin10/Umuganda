@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -7,14 +8,13 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Image,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
+import Icon from "react-native-vector-icons/Feather";
 import { getMe } from "../Services/meAPI";
 import { updateUserProfile } from "../Services/profileAPI";
-
 
 const EditProfile = () => {
   const navigation = useNavigation();
@@ -27,7 +27,6 @@ const EditProfile = () => {
   const [phone, setPhone] = useState("");
   const [sector, setSector] = useState("");
   const [address, setAddress] = useState("");
-  const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -40,7 +39,6 @@ const EditProfile = () => {
         setPhone(data.phone || "");
         setSector(data.sector || "");
         setAddress(data.address || "");
-        setAvatar(data.avatar || null); 
       } catch (err) {
         const msg =
           err?.response?.data?.message ||
@@ -54,26 +52,6 @@ const EditProfile = () => {
 
     loadUser();
   }, []);
-
-  const pickImage = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      Alert.alert("Permission required", "Please allow access to your photos.");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.7,
-    });
-
-    if (!result.cancelled) {
-      setAvatar(result.uri);
-    }
-  };
 
   const handleSave = async () => {
     try {
@@ -98,10 +76,6 @@ const EditProfile = () => {
         address: address.trim(),
       };
 
-      if (avatar) {
-        updateData.avatar = avatar; 
-      }
-
       await updateUserProfile(user._id, updateData);
 
       Alert.alert("Success", "Profile updated successfully!", [
@@ -116,98 +90,206 @@ const EditProfile = () => {
     }
   };
 
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently removed.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              // Add your delete account API call here
+              // await deleteUserAccount(user._id);
+
+              Alert.alert(
+                "Account Deleted",
+                "Your account has been successfully deleted.",
+                [
+                  {
+                    text: "OK",
+                    onPress: () =>
+                      navigation.reset({
+                        index: 0,
+                        routes: [{ name: "Login" }],
+                      }),
+                  },
+                ]
+              );
+            } catch (error) {
+              Alert.alert(
+                "Error",
+                "Failed to delete account. Please try again."
+              );
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   if (loading) {
     return (
       <View style={[styles.container, styles.centered]}>
-        <ActivityIndicator size="large" color="#4CAF50" />
+        <ActivityIndicator size="large" color="#26366C" />
         <Text style={styles.loadingText}>Loading profile data...</Text>
       </View>
     );
   }
 
-  const avatarUrl =
-    avatar ||
-    `https://ui-avatars.com/api/?name=${encodeURIComponent(
-      firstName + " " + lastName
-    )}&background=4f8cff&color=fff&size=128&rounded=true`;
+  const avatarInitials =
+    (firstName?.[0] || "").toUpperCase() + (lastName?.[0] || "").toUpperCase();
 
   return (
     <View style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
-             <TouchableOpacity
-               style={styles.backButton}
-               onPress={() => navigation.goBack()}
-             >
-               <Ionicons name="chevron-back" size={24} color="#000" />
-             </TouchableOpacity>
-             <Text style={styles.headerTitle}>Edit Profile</Text>
-             <View style={{ width: 32 }} />
-           </View>
-
-      <View style={styles.avatarContainer}>
-        <Image source={{ uri: avatarUrl }} style={styles.avatar} />
-         
-        <TouchableOpacity onPress={pickImage}>
-          <Text style={styles.changeImageText}>Change Image</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back" size={28} color="#26366C" />
         </TouchableOpacity>
+        <Text style={styles.headerTitle}>Edit Profile</Text>
+        <View style={{ width: 32 }} />
       </View>
 
-      <View style={styles.formCard}>
-        <TextInput
-          style={styles.input}
-          value={firstName}
-          onChangeText={setFirstName}
-          placeholder="First Name"
-          autoCapitalize="words"
-          placeholderTextColor="#b1b5c9"
-        />
-        <TextInput
-          style={styles.input}
-          value={lastName}
-          onChangeText={setLastName}
-          placeholder="Last Name"
-          autoCapitalize="words"
-          placeholderTextColor="#b1b5c9"
-        />
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholderTextColor="#b1b5c9"
-        />
-        <TextInput
-          style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="Phone Number"
-          keyboardType="phone-pad"
-          placeholderTextColor="#b1b5c9"
-        />
-        <TextInput
-          style={styles.input}
-          value={sector}
-          onChangeText={setSector}
-          placeholder="Sector"
-          autoCapitalize="words"
-          placeholderTextColor="#b1b5c9"
-        />
-        <TextInput
-          style={styles.input}
-          value={address}
-          onChangeText={setAddress}
-          placeholder="Address"
-          autoCapitalize="words"
-          placeholderTextColor="#b1b5c9"
-        />
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Avatar Section */}
+        <View style={styles.avatarContainer}>
+          <View style={styles.avatarWrapper}>
+            <Text style={styles.avatarText}>{avatarInitials}</Text>
+          </View>
+          <Text style={styles.userName}>
+            {firstName} {lastName}
+          </Text>
+        </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleSave}>
-          <Text style={styles.buttonText}>Save Changes</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Form Card */}
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Personal Information</Text>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>First Name *</Text>
+            <TextInput
+              style={styles.input}
+              value={firstName}
+              onChangeText={setFirstName}
+              placeholder="Enter your first name"
+              autoCapitalize="words"
+              placeholderTextColor="#b1b5c9"
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Last Name *</Text>
+            <TextInput
+              style={styles.input}
+              value={lastName}
+              onChangeText={setLastName}
+              placeholder="Enter your last name"
+              autoCapitalize="words"
+              placeholderTextColor="#b1b5c9"
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Email *</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholderTextColor="#b1b5c9"
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Phone Number *</Text>
+            <TextInput
+              style={styles.input}
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="Enter your phone number"
+              keyboardType="phone-pad"
+              placeholderTextColor="#b1b5c9"
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Sector *</Text>
+            <TextInput
+              style={styles.input}
+              value={sector}
+              onChangeText={setSector}
+              placeholder="Enter your sector"
+              autoCapitalize="words"
+              placeholderTextColor="#b1b5c9"
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Address *</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              value={address}
+              onChangeText={setAddress}
+              placeholder="Enter your address"
+              autoCapitalize="words"
+              multiline
+              numberOfLines={3}
+              placeholderTextColor="#b1b5c9"
+            />
+          </View>
+
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Icon
+              name="check"
+              size={20}
+              color="#fff"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.saveButtonText}>Save Changes</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Delete Account Section */}
+        <View style={styles.dangerCard}>
+          <View style={styles.dangerHeader}>
+            <Icon name="alert-circle" size={20} color="#E53935" />
+            <Text style={styles.dangerTitle}>Danger Zone</Text>
+          </View>
+
+          <Text style={styles.dangerText}>
+            Deleting your account is permanent and cannot be undone. All your
+            data will be lost.
+          </Text>
+
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={handleDeleteAccount}
+          >
+            <Icon
+              name="trash-2"
+              size={18}
+              color="#fff"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.deleteButtonText}>Delete Account</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ height: 20 }} />
+      </ScrollView>
     </View>
   );
 };
@@ -215,7 +297,7 @@ const EditProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFF",
+    backgroundColor: "#F8FAFB",
   },
   header: {
     flexDirection: "row",
@@ -223,15 +305,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginTop: "15%",
+    marginTop: "5%",
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E9ECEF",
   },
   backButton: {
-    padding: 4,
+    padding: 8,
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#222e4c",
+  },
+  scrollContainer: {
+    padding: 16,
+    paddingBottom: 20,
   },
   centered: {
     justifyContent: "center",
@@ -239,61 +328,136 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: "#4f8cff",
+    color: "#26366C",
     fontWeight: "500",
-  },
-  backRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
+    marginTop: 12,
   },
   avatarContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 24,
+    paddingTop: 8,
   },
-  avatar: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    marginBottom: 10,
-  },
-  changeImageText: {
-    color: "#26366C",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-  formCard: {
-    backgroundColor: "#fff",
-    borderRadius: 18,
-    padding: 28,
-    shadowColor: "#2d3142",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.09,
+  avatarWrapper: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#26366C",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: 5,
   },
-  input: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#e3e7ed",
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 18,
-    fontSize: 16,
+  avatarText: {
+    fontSize: 36,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: "600",
     color: "#222e4c",
   },
-  button: {
-    backgroundColor: "#26366C",
-    paddingVertical: 16,
-    borderRadius: 30,
-    marginTop: 10,
-    elevation: 3,
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  buttonText: {
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#222e4c",
+    marginBottom: 18,
+  },
+  formGroup: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#222e4c",
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: "#F8FAFB",
+    borderWidth: 1.5,
+    borderColor: "#E3E7ED",
+    borderRadius: 10,
+    padding: 12,
+    fontSize: 15,
+    color: "#222e4c",
+  },
+  textArea: {
+    height: 90,
+    paddingTop: 12,
+    textAlignVertical: "top",
+  },
+  saveButton: {
+    backgroundColor: "#26366C",
+    flexDirection: "row",
+    paddingVertical: 14,
+    borderRadius: 10,
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+  },
+  saveButtonText: {
     color: "#fff",
-    textAlign: "center",
-    fontSize: 17,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  dangerCard: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    borderLeftWidth: 4,
+    borderLeftColor: "#E53935",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  dangerHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  dangerTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#E53935",
+    marginLeft: 8,
+  },
+  dangerText: {
+    fontSize: 13,
+    color: "#666",
+    lineHeight: 20,
+    marginBottom: 16,
+  },
+  deleteButton: {
+    backgroundColor: "#E53935",
+    flexDirection: "row",
+    paddingVertical: 12,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "600",
   },
 });
 

@@ -178,7 +178,7 @@ const ViewTask = () => {
         navigation.navigate("view");
         break;
       case "Settings":
-        navigation.navigate("Profile");
+        navigation.navigate("Setting");
         break;
       default:
         break;

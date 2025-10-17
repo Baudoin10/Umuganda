@@ -70,7 +70,7 @@ const EventJoinForm = () => {
       setJoining(true);
       await joinEvent(selectedEventId, userId);
 
-      Toast.show({ type: "success", text1: "Joined the event successfully!" });
+      Toast.show({ type: "success", text1: "Hi you have join the event!" });
       const data = await fetchEvents();
       setEvents(Array.isArray(data) ? data : []);
       setSelectedEventId(null);

@@ -123,10 +123,9 @@ const ViewEvent = () => {
           </Text>
         }
         contentContainerStyle={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false} // ✅ hides the vertical line
+        showsVerticalScrollIndicator={false}
       />
-
-      {/* Bottom Tabs */}
+      
       <BottomTab
         tabs={bottomTabs}
         activeTab={activeTab}

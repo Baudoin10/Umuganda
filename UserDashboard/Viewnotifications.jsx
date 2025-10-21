@@ -109,8 +109,7 @@ const Viewnotifications = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
       />
-
-      {/* Bottom Tabs */}
+      
       <BottomTab
         tabs={bottomTabs}
         activeTab={activeTab}
